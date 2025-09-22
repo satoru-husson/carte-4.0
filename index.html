@@ -4,8 +4,28 @@
     <meta charset="UTF-8">
     <title>Carte Interactive Minimaliste</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-    <style>
-        html, body { height: 100%; margin: 0; padding: 0; }
+    <style>        #sidebar.expanded .capability-tag {
+            padding: 6px 9px;
+            font-size: 9px;
+        }
+        /* Affichage des applications en deux colonnes quand la sidebar est élargie */
+        #sidebar.expanded #info-panel {
+            column-count: 2;
+            column-gap: 15px;
+            column-fill: balance;
+        }
+        #sidebar.expanded .sidebar-item {
+            break-inside: avoid;
+            margin-bottom: 4px;
+        }
+        #sidebar.expanded .search-result {
+            break-inside: avoid;
+            margin-bottom: 6px;
+        }
+        /* Empêcher la coupure des groupes de catégories */
+        #sidebar.expanded #info-panel > div {
+            break-inside: avoid;
+        }      html, body { height: 100%; margin: 0; padding: 0; }
         body { height: 100vh; width: 100vw; }
         #sidebar {
             position: absolute;
@@ -17,6 +37,10 @@
             z-index: 1100;
             box-shadow: 2px 0 8px rgba(0,0,0,0.07);
             padding: 20px 10px 20px 20px;
+            transition: width 0.3s ease;
+        }
+        #sidebar.expanded {
+            width: 28vw;
         }
         #sidebar h3 { margin-top: 0; color: #1a237e; }
         #map {
@@ -24,6 +48,11 @@
             top: 0; left: 18vw; right: 0; bottom: 0;
             width: 82vw;
             height: 100vh;
+            transition: left 0.3s ease, width 0.3s ease;
+        }
+        #map.expanded {
+            left: 28vw;
+            width: 72vw;
         }
         .selected {
             background: #e3e6f5;
@@ -31,17 +60,222 @@
             color: #1a237e;
             border-radius: 4px;
         }
+        .capability-checkbox {
+            margin-right: 8px;
+        }
+        .capability-category {
+            margin-bottom: 15px;
+        }
+        .capability-item {
+            margin-left: 10px;
+            margin-bottom: 4px;
+        }
+        .capability-item label {
+            cursor: pointer;
+            padding: 2px 0;
+            display: block;
+        }
+        .capability-item label:hover {
+            background-color: #f0f4ff;
+            border-radius: 3px;
+            padding-left: 4px;
+        }
+        #search-input:focus {
+            outline: none;
+            border-color: #1a237e;
+            box-shadow: 0 0 5px rgba(26, 35, 126, 0.3);
+        }
+        .search-result {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .search-result:hover {
+            background-color: #fff1b3;
+        }
+        .search-result.selected {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .category-checkbox {
+            margin-right: 8px;
+        }
+        .category-checkbox:indeterminate {
+            background-color: #1a237e;
+        }
+        .capability-category {
+            margin-bottom: 20px;
+        }
+        .capability-item {
+            margin-left: 20px;
+            margin-bottom: 4px;
+        }
+        #expand-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            z-index: 1200;
+        }
+        #expand-button:hover {
+            background: #303f9f;
+            transform: scale(1.1);
+        }
+        #expand-button:active {
+            transform: scale(0.95);
+        }
+        /* Styles pour le système hybride slider + tags amélioré */
+        .category-section {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        .category-section.active {
+            background: #f0f4ff;
+            border-color: #1a237e;
+        }
+        .category-slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 7px;
+        }
+        .category-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a237e;
+            margin: 0;
+            flex: 1;
+        }
+        .slider-switch {
+            position: relative;
+            width: 70px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+        .slider-switch.position-1 {
+            background: #ccc;
+        }
+        .slider-switch.position-2 {
+            background: #2196f3;
+        }
+        .slider-switch.position-3 {
+            background: #0d47a1;
+        }
+        .slider-switch::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .slider-switch.position-1::before {
+            transform: translateX(0px);
+        }
+        .slider-switch.position-2::before {
+            transform: translateX(23px);
+        }
+        .slider-switch.position-3::before {
+            transform: translateX(46px);
+        }
+        .capabilities-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        .capabilities-container.expanded {
+            max-height: 576px;
+            opacity: 1;
+        }
+        .capability-tags-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        /* Layout adaptatif pour sidebar élargie */
+        #sidebar.expanded .capability-tags-container {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        #sidebar.expanded .category-section {
+            padding: 10px;
+        }
+        #sidebar.expanded .capability-tag {
+            padding: 6px 9px;
+            font-size: 15px;
+        }
+        .capability-tag {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            user-select: none;
+            text-align: left;
+            line-height: 1.1;
+            min-height: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .capability-tag:hover {
+            background: #bbdefb;
+            transform: translateX(3px);
+        }
+        .capability-tag.active {
+            background: #0d47a1;
+            color: white;
+            border-color: #0d47a1;
+        }
+        .capability-tag.active:hover {
+            background: #1565c0;
+        }
+
+
     </style>
 </head>
 <body>
     <div id="sidebar">
-        <h3>Filtrer par Business Capabilities</h3>
-        <form id="capabilities-form" style="margin-bottom:20px; max-height:30vh; overflow-y:auto;">
+        <button id="expand-button" title="Agrandir/Réduire la barre latérale">⇄</button>
+        <form id="capabilities-form" style="margin-bottom:3px; max-height:42vh; overflow-y:auto;">
             <!-- Cases à cocher générées dynamiquement -->
         </form>
-        <div style="border-top: 3px solid #388e3c; margin: 18px 0 10px 0;"></div>
-        <h3 style="color:#1a237e; font-weight:bold; margin-bottom:8px;">List of Applications by Country</h3>
-        <div id="info-panel" style="max-height: 40vh; overflow-y: auto; background:#f0f4ff; padding:10px; border-radius:6px;"></div>
+        <div style="border-top: 2px solid #ddd; margin: 3px 0 5px 0;"></div>
+        <input type="text" id="search-input" placeholder="Tapez le nom d'une application..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 7px; font-size: 13px; box-sizing: border-box;">
+        <div id="info-panel" style="max-height: 46vh; overflow-y: auto; background:#f0f4ff; padding:10px; border-radius:6px;"></div>
     </div>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -55,7 +289,7 @@
             attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
         }).addTo(map);
 
-        function showCountryMarkers(items) {
+        function showCountryMarkers(items, allApps) {
             countryMarkers.forEach(marker => map.removeLayer(marker));
             countryMarkers = [];
 
@@ -89,51 +323,52 @@
                     interactive: true
                 }).addTo(map);
 
-                marker.on('click', function () {
-                    const uniqueItems = [];
-                    const seen = new Set();
-                    filtered.forEach(item => {
-                        if (!seen.has(item.name)) {
-                            uniqueItems.push(item);
-                            seen.add(item.name);
-                        }
+                // Rendre le marqueur cliquable pour afficher les applications du pays
+                marker.on('click', function() {
+                    const infoPanel = document.getElementById('info-panel');
+                    
+                    // Grouper les applications par catégorie
+                    const groupedApps = {};
+                    filtered.forEach(app => {
+                        const cat = app.category || "Autre";
+                        if (!groupedApps[cat]) groupedApps[cat] = [];
+                        groupedApps[cat].push(app.name);
                     });
 
-                    const grouped = {};
-                    uniqueItems.forEach(item => {
-                        const cat = item.category || "Autre";
-                        if (!grouped[cat]) grouped[cat] = [];
-                        grouped[cat].push(item);
-                    });
-
-                    let popupHtml = `<b>${country}</b><br>`;
-                    Object.keys(grouped).forEach(cat => {
-                        popupHtml += `<div style="margin-bottom:8px;">
+                    // Créer le HTML pour afficher les applications
+                    let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${country}</h4>`;
+                    Object.keys(groupedApps).forEach(cat => {
+                        html += `<div style="margin-bottom:10px;">
                             <span style="font-weight:bold;">${cat}</span><br>
-                            ${grouped[cat].map(item =>
-                                `<span class="popup-item" data-name="${item.name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${item.name}</span>`
+                            ${groupedApps[cat].map(name =>
+                                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
                             ).join('<br>')}
                         </div>`;
                     });
+                    html += `<div style="height: 10px;"></div>`;
 
-                    L.popup()
-                        .setLatLng(center)
-                        .setContent(popupHtml)
-                        .openOn(map);
+                    infoPanel.innerHTML = html;
 
-                    setTimeout(() => {
-                        document.querySelectorAll('.popup-item').forEach(elem => {
-                            elem.onclick = function() {
-                                document.querySelectorAll('.popup-item').forEach(e => {
-                                    e.style.fontWeight = (e === this) ? 'bold' : 'normal';
-                                });
-
-                                resetCountryColors();
-
-                                const itemName = this.getAttribute('data-name');
-                                const item = uniqueItems.find(i => i.name === itemName);
+                    // Ajouter les événements de clic sur les applications
+                    infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
+                        elem.onclick = function() {
+                            const itemName = this.getAttribute('data-name');
+                            const isCurrentlySelected = this.style.fontWeight === 'bold';
+                            
+                            // Réinitialiser tous les styles
+                            infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
+                                e.style.fontWeight = 'normal';
+                            });
+                            
+                            // Si l'élément n'était pas sélectionné, le sélectionner
+                            if (!isCurrentlySelected) {
+                                this.style.fontWeight = 'bold';
+                                
+                                // Trouver l'application dans la liste complète
+                                const item = allApps.find(i => i.name === itemName);
                                 if (!item || !item.countries) return;
-
+                                
+                                resetCountryColors();
                                 item.countries.forEach(countryName => {
                                     if (countryLayers[countryName]) {
                                         countryLayers[countryName].setStyle({
@@ -144,80 +379,10 @@
                                         });
                                     }
                                 });
-
-                                countryMarkers.forEach(marker => {
-                                    const markerLatLng = marker.getLatLng();
-                                    if (!(markerLatLng.lat === center[0] && markerLatLng.lng === center[1])) {
-                                        map.removeLayer(marker);
-                                    }
-                                });
-                                countryMarkers = countryMarkers.filter(marker => {
-                                    const markerLatLng = marker.getLatLng();
-                                    return markerLatLng.lat === center[0] && markerLatLng.lng === center[1];
-                                });
-                            };
-                        });
-                    }, 100);
-
-                    // Sidebar dynamique pour le pays
-                    let allItems = [];
-                    items.forEach(item => {
-                        if (item.countries && item.countries.includes(country)) {
-                            allItems.push(item);
-                        }
-                    });
-
-                    const groupedSidebar = {};
-                    allItems.forEach(item => {
-                        const cat = item.category || "Autre";
-                        if (!groupedSidebar[cat]) groupedSidebar[cat] = [];
-                        groupedSidebar[cat].push(item.name);
-                    });
-
-                    let html = `<h4 style="margin-bottom:10px;">${country}</h4>`;
-                    Object.keys(groupedSidebar).forEach(cat => {
-                        html += `<div style="margin-bottom:10px;">
-                            <span style="font-weight:bold;">${cat}</span><br>
-                            ${groupedSidebar[cat].map(name =>
-                                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
-                            ).join('<br>')}
-                        </div>`;
-                    });
-                    html += `<div style="height: 10px;"></div>`;
-
-                    let infoPanel = document.getElementById('info-panel');
-                    if (!infoPanel) {
-                        infoPanel = document.createElement('div');
-                        infoPanel.id = 'info-panel';
-                        infoPanel.style.maxHeight = '40vh';
-                        infoPanel.style.overflowY = 'auto';
-                        infoPanel.style.marginTop = '20px';
-                        document.getElementById('sidebar').appendChild(infoPanel);
-                    }
-                    infoPanel.innerHTML = html;
-
-                    infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
-                        elem.onclick = function() {
-                            const itemName = this.getAttribute('data-name');
-                            infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
-                                e.style.fontWeight = (e === this) ? 'bold' : 'normal';
-                            });
-
-                            const item = allItems.find(i => i.name === itemName);
-                            if (!item || !item.countries) return;
-                            resetCountryColors();
-                            item.countries.forEach(countryName => {
-                                if (countryLayers[countryName]) {
-                                    countryLayers[countryName].setStyle({
-                                        fillColor: "#1976d2",
-                                        fillOpacity: 0.5,
-                                        color: "#1976d2",
-                                        weight: 2
-                                    });
-                                }
-                            });
-                            countryMarkers.forEach(marker => map.removeLayer(marker));
-                            countryMarkers = [];
+                            } else {
+                                // Si l'élément était déjà sélectionné, le désélectionner
+                                resetCountryColors();
+                            }
                         };
                     });
                 });
@@ -245,20 +410,66 @@
                     }
                 });
 
-                // Génère la liste des cases à cocher capabilities
+                // Génère l'interface hybride slider + tags avec noms complets
                 const capabilitiesForm = document.getElementById('capabilities-form');
+                
+                // Groupe les capabilities par catégorie
+                const categorizedCaps = {};
                 Object.keys(capData).forEach(capId => {
                     const cap = capData[capId];
-                    const label = `${cap.l1_name} / ${cap.l2_name}`;
-                    const div = document.createElement('div');
-                    div.style.marginBottom = '6px';
-                    div.innerHTML = `
-                        <label>
-                            <input type="checkbox" value="${capId}" class="capability-checkbox">
-                            ${label}
-                        </label>
-                    `;
-                    capabilitiesForm.appendChild(div);
+                    const categoryName = cap.l1_name;
+                    if (!categorizedCaps[categoryName]) {
+                        categorizedCaps[categoryName] = [];
+                    }
+                    categorizedCaps[categoryName].push({ id: capId, ...cap });
+                });
+
+                // Affiche chaque catégorie avec slider et tags
+                Object.keys(categorizedCaps).forEach(categoryName => {
+                    // Crée la section de catégorie
+                    const categorySection = document.createElement('div');
+                    categorySection.className = 'category-section';
+                    categorySection.setAttribute('data-category', categoryName);
+                    
+                    // Crée le container du slider
+                    const sliderContainer = document.createElement('div');
+                    sliderContainer.className = 'category-slider-container';
+                    
+                    // Titre de la catégorie
+                    const categoryTitle = document.createElement('h4');
+                    categoryTitle.className = 'category-title';
+                    categoryTitle.textContent = categoryName;
+                    
+                    // Slider switch
+                    const sliderSwitch = document.createElement('div');
+                    sliderSwitch.className = 'slider-switch';
+                    sliderSwitch.setAttribute('data-category', categoryName);
+                    
+                    sliderContainer.appendChild(categoryTitle);
+                    sliderContainer.appendChild(sliderSwitch);
+                    categorySection.appendChild(sliderContainer);
+                    
+                    // Container pour les capabilities (masqué par défaut)
+                    const capabilitiesContainer = document.createElement('div');
+                    capabilitiesContainer.className = 'capabilities-container';
+                    
+                    // Container pour les tags de capabilities
+                    const tagsContainer = document.createElement('div');
+                    tagsContainer.className = 'capability-tags-container';
+                    
+                    // Crée les tags pour chaque capability avec noms complets seulement
+                    categorizedCaps[categoryName].forEach(cap => {
+                        const tag = document.createElement('div');
+                        tag.className = 'capability-tag';
+                        tag.textContent = cap.l2_name;
+                        tag.setAttribute('data-capability', cap.id);
+                        tag.setAttribute('data-category', categoryName);
+                        tagsContainer.appendChild(tag);
+                    });
+                    
+                    capabilitiesContainer.appendChild(tagsContainer);
+                    categorySection.appendChild(capabilitiesContainer);
+                    capabilitiesForm.appendChild(categorySection);
                 });
 
                 // Structure pour filtrage rapide
@@ -267,18 +478,18 @@
                     allApps.push(app);
                 });
 
-                // Filtre et affiche les markers selon les capabilities cochées
+                // Filtre et affiche les markers selon les capabilities sélectionnées (tags actifs)
                 function filterAndShowMarkersByCapabilities() {
-                    const checked = Array.from(document.querySelectorAll('.capability-checkbox:checked')).map(cb => cb.value);
+                    const activeTags = Array.from(document.querySelectorAll('.capability-tag.active')).map(tag => tag.getAttribute('data-capability'));
                     let filteredApps = [];
-                    if (checked.length === 0) {
+                    if (activeTags.length === 0) {
                         filteredApps = allApps;
                     } else {
                         filteredApps = allApps.filter(app =>
-                            app.capabilities.some(cap => checked.includes(cap))
+                            app.capabilities.some(cap => activeTags.includes(cap))
                         );
                     }
-                    showCountryMarkers(filteredApps);
+                    showCountryMarkers(filteredApps, allApps);
 
                     // Affiche la liste des applications monde par catégorie dans la sidebar
                     const groupedSidebar = {};
@@ -288,7 +499,7 @@
                         groupedSidebar[cat].push(item.name);
                     });
 
-                    let html = `<h4 style="margin-bottom:10px;">Toutes les applications monde</h4>`;
+                    let html = '';
                     Object.keys(groupedSidebar).forEach(cat => {
                         html += `<div style="margin-bottom:10px;">
                             <span style="font-weight:bold;">${cat}</span><br>
@@ -305,30 +516,262 @@
                     infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
                         elem.onclick = function() {
                             const itemName = this.getAttribute('data-name');
+                            const isCurrentlySelected = this.style.fontWeight === 'bold';
+                            
+                            // Réinitialiser tous les styles
                             infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
-                                e.style.fontWeight = (e === this) ? 'bold' : 'normal';
+                                e.style.fontWeight = 'normal';
                             });
-                            const item = filteredApps.find(i => i.name === itemName);
-                            if (!item || !item.countries) return;
-                            resetCountryColors();
-                            item.countries.forEach(countryName => {
-                                if (countryLayers[countryName]) {
-                                    countryLayers[countryName].setStyle({
-                                        fillColor: "#1976d2",
-                                        fillOpacity: 0.5,
-                                        color: "#1976d2",
-                                        weight: 2
-                                    });
-                                }
-                            });
-                            countryMarkers.forEach(marker => map.removeLayer(marker));
-                            countryMarkers = [];
+                            
+                            // Si l'élément n'était pas sélectionné, le sélectionner
+                            if (!isCurrentlySelected) {
+                                this.style.fontWeight = 'bold';
+                                
+                                const item = filteredApps.find(i => i.name === itemName);
+                                if (!item || !item.countries) return;
+                                resetCountryColors();
+                                item.countries.forEach(countryName => {
+                                    if (countryLayers[countryName]) {
+                                        countryLayers[countryName].setStyle({
+                                            fillColor: "#1976d2",
+                                            fillOpacity: 0.5,
+                                            color: "#1976d2",
+                                            weight: 2
+                                        });
+                                    }
+                                });
+                            } else {
+                                // Si l'élément était déjà sélectionné, le désélectionner
+                                resetCountryColors();
+                            }
                         };
                     });
                 }
 
+                // Gestion du système hybride slider + tags amélioré
+                function setupHybridControls() {
+                    // Gestion des sliders de catégorie
+                    document.querySelectorAll('.slider-switch').forEach(slider => {
+                        slider.addEventListener('click', function() {
+                            const categoryName = this.getAttribute('data-category');
+                            const categorySection = document.querySelector(`.category-section[data-category="${categoryName}"]`);
+                            const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
+                            const categoryTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"]`);
+                            
+                            // Déterminer la position actuelle et passer à la suivante
+                            let currentPosition = 1;
+                            if (this.classList.contains('position-2')) currentPosition = 2;
+                            else if (this.classList.contains('position-3')) currentPosition = 3;
+                            
+                            // Calculer la prochaine position (cycle 1 -> 2 -> 3 -> 1)
+                            const nextPosition = currentPosition === 3 ? 1 : currentPosition + 1;
+                            
+                            // Nettoyer toutes les classes de position
+                            this.classList.remove('position-1', 'position-2', 'position-3');
+                            this.classList.add(`position-${nextPosition}`);
+                            
+                            // Appliquer la logique selon la position
+                            switch(nextPosition) {
+                                case 1: // Liste non dépliée
+                                    categorySection.classList.remove('active');
+                                    capabilitiesContainer.classList.remove('expanded');
+                                    categoryTags.forEach(tag => tag.classList.remove('active'));
+                                    break;
+                                    
+                                case 2: // Liste dépliée, rien sélectionné (gris)
+                                    categorySection.classList.add('active');
+                                    capabilitiesContainer.classList.add('expanded');
+                                    categoryTags.forEach(tag => tag.classList.remove('active'));
+                                    break;
+                                    
+                                case 3: // Liste dépliée, tout sélectionné (bleu foncé)
+                                    categorySection.classList.add('active');
+                                    capabilitiesContainer.classList.add('expanded');
+                                    categoryTags.forEach(tag => tag.classList.add('active'));
+                                    break;
+                            }
+                            
+                            // Déclencher le filtrage
+                            filterAndShowMarkersByCapabilities();
+                        });
+                    });
+                    
+                    // Gestion des tags individuels
+                    document.querySelectorAll('.capability-tag').forEach(tag => {
+                        tag.addEventListener('click', function() {
+                            const categoryName = this.getAttribute('data-category');
+                            const categorySection = document.querySelector(`.category-section[data-category="${categoryName}"]`);
+                            const slider = document.querySelector(`.slider-switch[data-category="${categoryName}"]`);
+                            const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
+                            
+                            // Vérifier si la catégorie est visible (position 2 ou 3)
+                            if (slider.classList.contains('position-1')) {
+                                // Si fermée, ouvrir en position 2 (dépliée, rien sélectionné)
+                                slider.classList.remove('position-1');
+                                slider.classList.add('position-2');
+                                categorySection.classList.add('active');
+                                capabilitiesContainer.classList.add('expanded');
+                            }
+                            
+                            // Basculer l'état du tag
+                            this.classList.toggle('active');
+                            
+                            // Mettre à jour la position du slider selon l'état des tags
+                            const activeTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"].active`);
+                            const totalTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"]`);
+                            
+                            if (activeTags.length === 0) {
+                                // Aucun tag actif -> Position 2 (gris)
+                                slider.classList.remove('position-3');
+                                slider.classList.add('position-2');
+                            } else if (activeTags.length === totalTags.length) {
+                                // Tous les tags actifs -> Position 3 (bleu foncé)
+                                slider.classList.remove('position-2');
+                                slider.classList.add('position-3');
+                            } else {
+                                // Certains tags actifs -> Rester en position 2 (état intermédiaire)
+                                slider.classList.remove('position-3');
+                                slider.classList.add('position-2');
+                            }
+                            
+                            // Déclencher le filtrage
+                            filterAndShowMarkersByCapabilities();
+                        });
+                    });
+                }
+                
+                setupHybridControls();
                 capabilitiesForm.onchange = filterAndShowMarkersByCapabilities;
+                
+                // Fonctionnalité de recherche d'applications
+                const searchInput = document.getElementById('search-input');
+                let searchResults = [];
+                
+                function searchApplications(searchTerm) {
+                    if (!searchTerm.trim()) {
+                        searchResults = [];
+                        filterAndShowMarkersByCapabilities();
+                        return;
+                    }
+                    
+                    const term = searchTerm.toLowerCase();
+                    searchResults = allApps.filter(app => 
+                        app.name.toLowerCase().includes(term)
+                    );
+                    
+                    showCountryMarkers(searchResults, allApps);
+                    displaySearchResults(searchResults, searchTerm);
+                }
+                
+                function displaySearchResults(results, searchTerm) {
+                    const infoPanel = document.getElementById('info-panel');
+                    
+                    if (results.length === 0) {
+                        infoPanel.innerHTML = `<div style="padding: 10px; text-align: center; color: #666;">Aucune application trouvée pour "${searchTerm}"</div>`;
+                        return;
+                    }
+                    
+                    let html = `<h4 style="margin-bottom:10px;">Résultats de recherche (${results.length})</h4>`;
+                    
+                    results.forEach(app => {
+                        const countriesList = app.countries ? app.countries.join(', ') : 'Aucun pays';
+                        html += `
+                            <div class="search-result" data-name="${app.name}">
+                                <div style="font-weight: bold; margin-bottom: 4px;">${app.name}</div>
+                                <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Catégorie: ${app.category || 'Non définie'}</div>
+                                <div style="font-size: 12px; color: #666;">Pays: ${countriesList}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    infoPanel.innerHTML = html;
+                    
+                    // Ajouter les événements de clic sur les résultats de recherche
+                    infoPanel.querySelectorAll('.search-result').forEach(elem => {
+                        elem.onclick = function() {
+                            const itemName = this.getAttribute('data-name');
+                            const isCurrentlySelected = this.classList.contains('selected');
+                            
+                            // Réinitialiser les styles des autres résultats
+                            infoPanel.querySelectorAll('.search-result').forEach(e => {
+                                e.classList.remove('selected');
+                            });
+                            
+                            // Si l'élément n'était pas sélectionné, le sélectionner
+                            if (!isCurrentlySelected) {
+                                this.classList.add('selected');
+                                
+                                const item = searchResults.find(i => i.name === itemName);
+                                if (!item || !item.countries) return;
+                                
+                                resetCountryColors();
+                                item.countries.forEach(countryName => {
+                                    if (countryLayers[countryName]) {
+                                        countryLayers[countryName].setStyle({
+                                            fillColor: "#1976d2",
+                                            fillOpacity: 0.5,
+                                            color: "#1976d2",
+                                            weight: 2
+                                        });
+                                    }
+                                });
+                            } else {
+                                // Si l'élément était déjà sélectionné, le désélectionner
+                                resetCountryColors();
+                            }
+
+                        };
+                    });
+                }
+                
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value;
+                    searchApplications(searchTerm);
+                });
+                
+                // Effacer la recherche quand on change les capabilities
+                function clearSearchOnCapabilityChange() {
+                    if (searchInput.value) {
+                        searchInput.value = '';
+                        searchResults = [];
+                    }
+                }
+                
+                // Associer la fonction aux événements des sliders et tags
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('slider-switch') || e.target.classList.contains('capability-tag')) {
+                        setTimeout(clearSearchOnCapabilityChange, 50);
+                    }
+                });
+                
                 filterAndShowMarkersByCapabilities();
+                
+                // Gestion du bouton d'agrandissement de la sidebar
+                const expandButton = document.getElementById('expand-button');
+                const sidebar = document.getElementById('sidebar');
+                const mapElement = document.getElementById('map');
+                let isExpanded = false;
+                
+                expandButton.addEventListener('click', function() {
+                    isExpanded = !isExpanded;
+                    
+                    if (isExpanded) {
+                        sidebar.classList.add('expanded');
+                        mapElement.classList.add('expanded');
+                        expandButton.innerHTML = '⇇';
+                        expandButton.title = 'Réduire la barre latérale';
+                    } else {
+                        sidebar.classList.remove('expanded');
+                        mapElement.classList.remove('expanded');
+                        expandButton.innerHTML = '⇄';
+                        expandButton.title = 'Agrandir la barre latérale';
+                    }
+                    
+                    // Redimensionner la carte après l'animation
+                    setTimeout(() => {
+                        map.invalidateSize();
+                    }, 300);
+                });
             });
 
             fetch('countries.geojson')
