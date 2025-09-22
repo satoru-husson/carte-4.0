@@ -1,0 +1,127 @@
+{
+  "OM1": {
+    "l1": "OM",
+    "l1_name": "Order Management",
+    "l2_name": "Create and Manage Accounts and Contacts"
+  },
+  "OM2": {
+    "l1": "OM",
+    "l1_name": "Order Management",
+    "l2_name": "Provide Proposal and Quotes"
+  },
+  "OM3": {
+    "l1": "OM",
+    "l1_name": "Order Management",
+    "l2_name": "Convert Prospect to Customer"
+  },
+  "OM4": {
+    "l1": "OM",
+    "l1_name": "Order Management",
+    "l2_name": "Manage Operational Sales"
+  },
+  "OM5": {
+    "l1": "OM",
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order"
+  },
+  "TM1": {
+    "l1": "TM",
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Booking with Carrier"
+  },
+  "TM2": {
+    "l1": "TM",
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Pick-up and Delivery"
+  },
+  "TM3": {
+    "l1": "TM",
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations"
+  },
+  "TM4": {
+    "l1": "TM",
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Customs Clearance & Regulatory Requirements"
+  },
+  "TM5": {
+    "l1": "TM",
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment"
+  },
+  "TM6": {
+    "l1": "TM",
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Performance for Customers"
+  },
+  "TM7": {
+    "l1": "TM",
+    "l1_name": "Transport Management",
+    "l2_name": "Provide Customer Service"
+  },
+  "CM1": {
+    "l1": "CM",
+    "l1_name": "Carrier Management",
+    "l2_name": "Source, Certify, Onboard Carriers"
+  },
+  "CM2": {
+    "l1": "CM",
+    "l1_name": "Carrier Management",
+    "l2_name": "Implement Carriers"
+  },
+  "CM3": {
+    "l1": "CM",
+    "l1_name": "Carrier Management",
+    "l2_name": "Maintain Carriers Contracts and Items"
+  },
+  "CM4": {
+    "l1": "CM",
+    "l1_name": "Carrier Management",
+    "l2_name": "Purchase to Carriers"
+  },
+  "CM5": {
+    "l1": "CM",
+    "l1_name": "Carrier Management",
+    "l2_name": "Manage Carrier Performance"
+  },
+  "CM6": {
+    "l1": "CM",
+    "l1_name": "Carrier Management",
+    "l2_name": "Manage Carrier Relationship"
+  },
+  "ANM1": {
+    "l1": "ANM",
+    "l1_name": "Asset & Network Management",
+    "l2_name": "Define Transportation Network Strategy and Planning"
+  },
+  "ANM2": {
+    "l1": "ANM",
+    "l1_name": "Asset & Network Management",
+    "l2_name": "Manage Assets"
+  },
+  "ANM3": {
+    "l1": "ANM",
+    "l1_name": "Asset & Network Management",
+    "l2_name": "Monitor and Manage Exceptions"
+  },
+  "ANM4": {
+    "l1": "ANM",
+    "l1_name": "Asset & Network Management",
+    "l2_name": "Monitor and Manage Network Performance"
+  },
+  "OP1": {
+    "l1": "OP",
+    "l1_name": "From Offering to Pricing",
+    "l2_name": "Define and Manage Products"
+  },
+  "OP2": {
+    "l1": "OP",
+    "l1_name": "From Offering to Pricing",
+    "l2_name": "Define and manage Pricing"
+  },
+  "FM1": {
+    "l1": "FM",
+    "l1_name": "Finance Management",
+    "l2_name": "Manage Operational Finance"
+  }
+}

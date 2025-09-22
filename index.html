@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Carte Interactive Minimaliste</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body { height: 100vh; width: 100vw; }
+        #sidebar {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100vh;
+            width: 18vw;
+            background: #f7f7f7;
+            overflow-y: auto;
+            z-index: 1100;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.07);
+            padding: 20px 10px 20px 20px;
+        }
+        #sidebar h3 { margin-top: 0; color: #1a237e; }
+        #map {
+            position: absolute;
+            top: 0; left: 18vw; right: 0; bottom: 0;
+            width: 82vw;
+            height: 100vh;
+        }
+        .selected {
+            background: #e3e6f5;
+            font-weight: bold;
+            color: #1a237e;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h3>Filtrer par Business Capabilities</h3>
+        <form id="capabilities-form" style="margin-bottom:20px; max-height:30vh; overflow-y:auto;">
+            <!-- Cases à cocher générées dynamiquement -->
+        </form>
+        <div style="border-top: 3px solid #388e3c; margin: 18px 0 10px 0;"></div>
+        <h3 style="color:#1a237e; font-weight:bold; margin-bottom:8px;">List of Applications by Country</h3>
+        <div id="info-panel" style="max-height: 40vh; overflow-y: auto; background:#f0f4ff; padding:10px; border-radius:6px;"></div>
+    </div>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script type="module">
+        import { countries } from './countriesList.js';
+
+        let countryMarkers = [];
+        let countryLayers = {};
+        const map = L.map('map').setView([20, 0], 2);
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+        }).addTo(map);
+
+        function showCountryMarkers(items) {
+            countryMarkers.forEach(marker => map.removeLayer(marker));
+            countryMarkers = [];
+
+            countries.forEach(countryObj => {
+                const country = countryObj.name;
+                const center = countryObj.center;
+                const filtered = items.filter(item => item.countries && item.countries.includes(country));
+                if (filtered.length === 0) return;
+
+                const marker = L.marker(center, {
+                    icon: L.divIcon({
+                        className: 'country-count-icon',
+                        html: `<div style="
+                            background: #388e3c;
+                            color: white;
+                            border-radius: 50%;
+                            width: 32px;
+                            height: 32px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: bold;
+                            font-size: 1.1em;
+                            border: 2px solid #fff;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                            cursor: pointer;
+                        ">${filtered.length}</div>`,
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 16]
+                    }),
+                    interactive: true
+                }).addTo(map);
+
+                marker.on('click', function () {
+                    const uniqueItems = [];
+                    const seen = new Set();
+                    filtered.forEach(item => {
+                        if (!seen.has(item.name)) {
+                            uniqueItems.push(item);
+                            seen.add(item.name);
+                        }
+                    });
+
+                    const grouped = {};
+                    uniqueItems.forEach(item => {
+                        const cat = item.category || "Autre";
+                        if (!grouped[cat]) grouped[cat] = [];
+                        grouped[cat].push(item);
+                    });
+
+                    let popupHtml = `<b>${country}</b><br>`;
+                    Object.keys(grouped).forEach(cat => {
+                        popupHtml += `<div style="margin-bottom:8px;">
+                            <span style="font-weight:bold;">${cat}</span><br>
+                            ${grouped[cat].map(item =>
+                                `<span class="popup-item" data-name="${item.name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${item.name}</span>`
+                            ).join('<br>')}
+                        </div>`;
+                    });
+
+                    L.popup()
+                        .setLatLng(center)
+                        .setContent(popupHtml)
+                        .openOn(map);
+
+                    setTimeout(() => {
+                        document.querySelectorAll('.popup-item').forEach(elem => {
+                            elem.onclick = function() {
+                                document.querySelectorAll('.popup-item').forEach(e => {
+                                    e.style.fontWeight = (e === this) ? 'bold' : 'normal';
+                                });
+
+                                resetCountryColors();
+
+                                const itemName = this.getAttribute('data-name');
+                                const item = uniqueItems.find(i => i.name === itemName);
+                                if (!item || !item.countries) return;
+
+                                item.countries.forEach(countryName => {
+                                    if (countryLayers[countryName]) {
+                                        countryLayers[countryName].setStyle({
+                                            fillColor: "#1976d2",
+                                            fillOpacity: 0.5,
+                                            color: "#1976d2",
+                                            weight: 2
+                                        });
+                                    }
+                                });
+
+                                countryMarkers.forEach(marker => {
+                                    const markerLatLng = marker.getLatLng();
+                                    if (!(markerLatLng.lat === center[0] && markerLatLng.lng === center[1])) {
+                                        map.removeLayer(marker);
+                                    }
+                                });
+                                countryMarkers = countryMarkers.filter(marker => {
+                                    const markerLatLng = marker.getLatLng();
+                                    return markerLatLng.lat === center[0] && markerLatLng.lng === center[1];
+                                });
+                            };
+                        });
+                    }, 100);
+
+                    // Sidebar dynamique pour le pays
+                    let allItems = [];
+                    items.forEach(item => {
+                        if (item.countries && item.countries.includes(country)) {
+                            allItems.push(item);
+                        }
+                    });
+
+                    const groupedSidebar = {};
+                    allItems.forEach(item => {
+                        const cat = item.category || "Autre";
+                        if (!groupedSidebar[cat]) groupedSidebar[cat] = [];
+                        groupedSidebar[cat].push(item.name);
+                    });
+
+                    let html = `<h4 style="margin-bottom:10px;">${country}</h4>`;
+                    Object.keys(groupedSidebar).forEach(cat => {
+                        html += `<div style="margin-bottom:10px;">
+                            <span style="font-weight:bold;">${cat}</span><br>
+                            ${groupedSidebar[cat].map(name =>
+                                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
+                            ).join('<br>')}
+                        </div>`;
+                    });
+                    html += `<div style="height: 10px;"></div>`;
+
+                    let infoPanel = document.getElementById('info-panel');
+                    if (!infoPanel) {
+                        infoPanel = document.createElement('div');
+                        infoPanel.id = 'info-panel';
+                        infoPanel.style.maxHeight = '40vh';
+                        infoPanel.style.overflowY = 'auto';
+                        infoPanel.style.marginTop = '20px';
+                        document.getElementById('sidebar').appendChild(infoPanel);
+                    }
+                    infoPanel.innerHTML = html;
+
+                    infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
+                        elem.onclick = function() {
+                            const itemName = this.getAttribute('data-name');
+                            infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
+                                e.style.fontWeight = (e === this) ? 'bold' : 'normal';
+                            });
+
+                            const item = allItems.find(i => i.name === itemName);
+                            if (!item || !item.countries) return;
+                            resetCountryColors();
+                            item.countries.forEach(countryName => {
+                                if (countryLayers[countryName]) {
+                                    countryLayers[countryName].setStyle({
+                                        fillColor: "#1976d2",
+                                        fillOpacity: 0.5,
+                                        color: "#1976d2",
+                                        weight: 2
+                                    });
+                                }
+                            });
+                            countryMarkers.forEach(marker => map.removeLayer(marker));
+                            countryMarkers = [];
+                        };
+                    });
+                });
+
+                countryMarkers.push(marker);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            Promise.all([
+                fetch('capabilities.json').then(r => r.json()),
+                fetch('data.json').then(r => r.json())
+            ]).then(([capData, appData]) => {
+                // Fusionne les pays si countriesRef est présent
+                appData.forEach(app => {
+                    if (app.countriesRef) {
+                        const refApp = appData.find(a => a.name === app.countriesRef);
+                        if (refApp && refApp.countries) {
+                            let countries = [...refApp.countries, ...(app.countries || [])];
+                            if (app.excludeCountries) {
+                                countries = countries.filter(c => !app.excludeCountries.includes(c));
+                            }
+                            app.countries = Array.from(new Set(countries));
+                        }
+                    }
+                });
+
+                // Génère la liste des cases à cocher capabilities
+                const capabilitiesForm = document.getElementById('capabilities-form');
+                Object.keys(capData).forEach(capId => {
+                    const cap = capData[capId];
+                    const label = `${cap.l1_name} / ${cap.l2_name}`;
+                    const div = document.createElement('div');
+                    div.style.marginBottom = '6px';
+                    div.innerHTML = `
+                        <label>
+                            <input type="checkbox" value="${capId}" class="capability-checkbox">
+                            ${label}
+                        </label>
+                    `;
+                    capabilitiesForm.appendChild(div);
+                });
+
+                // Structure pour filtrage rapide
+                let allApps = [];
+                appData.forEach(app => {
+                    allApps.push(app);
+                });
+
+                // Filtre et affiche les markers selon les capabilities cochées
+                function filterAndShowMarkersByCapabilities() {
+                    const checked = Array.from(document.querySelectorAll('.capability-checkbox:checked')).map(cb => cb.value);
+                    let filteredApps = [];
+                    if (checked.length === 0) {
+                        filteredApps = allApps;
+                    } else {
+                        filteredApps = allApps.filter(app =>
+                            app.capabilities.some(cap => checked.includes(cap))
+                        );
+                    }
+                    showCountryMarkers(filteredApps);
+
+                    // Affiche la liste des applications monde par catégorie dans la sidebar
+                    const groupedSidebar = {};
+                    filteredApps.forEach(item => {
+                        const cat = item.category || "Autre";
+                        if (!groupedSidebar[cat]) groupedSidebar[cat] = [];
+                        groupedSidebar[cat].push(item.name);
+                    });
+
+                    let html = `<h4 style="margin-bottom:10px;">Toutes les applications monde</h4>`;
+                    Object.keys(groupedSidebar).forEach(cat => {
+                        html += `<div style="margin-bottom:10px;">
+                            <span style="font-weight:bold;">${cat}</span><br>
+                            ${groupedSidebar[cat].map(name =>
+                                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
+                            ).join('<br>')}
+                        </div>`;
+                    });
+                    html += `<div style="height: 10px;"></div>`;
+
+                    let infoPanel = document.getElementById('info-panel');
+                    infoPanel.innerHTML = html;
+
+                    infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
+                        elem.onclick = function() {
+                            const itemName = this.getAttribute('data-name');
+                            infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
+                                e.style.fontWeight = (e === this) ? 'bold' : 'normal';
+                            });
+                            const item = filteredApps.find(i => i.name === itemName);
+                            if (!item || !item.countries) return;
+                            resetCountryColors();
+                            item.countries.forEach(countryName => {
+                                if (countryLayers[countryName]) {
+                                    countryLayers[countryName].setStyle({
+                                        fillColor: "#1976d2",
+                                        fillOpacity: 0.5,
+                                        color: "#1976d2",
+                                        weight: 2
+                                    });
+                                }
+                            });
+                            countryMarkers.forEach(marker => map.removeLayer(marker));
+                            countryMarkers = [];
+                        };
+                    });
+                }
+
+                capabilitiesForm.onchange = filterAndShowMarkersByCapabilities;
+                filterAndShowMarkersByCapabilities();
+            });
+
+            fetch('countries.geojson')
+                .then(r => r.json())
+                .then(geojson => {
+                    L.geoJSON(geojson, {
+                        style: {
+                            color: "#888",
+                            weight: 1,
+                            fillOpacity: 0.1
+                        },
+                        onEachFeature: function (feature, layer) {
+                            const name = feature.properties.ADMIN || feature.properties.name;
+                            countryLayers[name] = layer;
+                            layer.addTo(map);
+                        }
+                    });
+                });
+        });
+
+        function resetCountryColors() {
+            Object.values(countryLayers).forEach(layer => {
+                layer.setStyle({
+                    fillColor: "#888",
+                    fillOpacity: 0.1,
+                    color: "#888",
+                    weight: 1
+                });
+            });
+        }
+    </script>
+</body>
+</html>
