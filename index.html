@@ -142,7 +142,7 @@
         .category-section {
             background: #f9f9f9;
             border-radius: 8px;
-            padding: 5px;
+            padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #e0e0e0;
             transition: all 0.3s ease;
@@ -156,13 +156,6 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 7px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
-        }
-        .category-slider-container:hover {
-            background-color: #f0f4ff;
         }
         .category-title {
             font-size: 14px;
@@ -170,11 +163,10 @@
             color: #1a237e;
             margin: 0;
             flex: 1;
-            pointer-events: none;
         }
         .slider-switch {
             position: relative;
-            width: 50px;
+            width: 70px;
             height: 24px;
             background: #ccc;
             border-radius: 12px;
@@ -186,6 +178,9 @@
             background: #ccc;
         }
         .slider-switch.position-2 {
+            background: #2196f3;
+        }
+        .slider-switch.position-3 {
             background: #0d47a1;
         }
         .slider-switch::before {
@@ -204,7 +199,10 @@
             transform: translateX(0px);
         }
         .slider-switch.position-2::before {
-            transform: translateX(26px);
+            transform: translateX(23px);
+        }
+        .slider-switch.position-3::before {
+            transform: translateX(46px);
         }
         .capabilities-container {
             max-height: 0;
@@ -230,7 +228,7 @@
             gap: 8px;
         }
         #sidebar.expanded .category-section {
-            padding: 5px;
+            padding: 10px;
         }
         #sidebar.expanded .capability-tag {
             padding: 6px 9px;
@@ -283,6 +281,7 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script type="module">
         import { countries } from './countriesList.js';
+        import { expandRegions } from './regions.js';
 
         let countryMarkers = [];
         let countryLayers = {};
@@ -398,6 +397,13 @@
                 fetch('capabilities.json').then(r => r.json()),
                 fetch('data.json').then(r => r.json())
             ]).then(([capData, appData]) => {
+                // Expander les régions dans toutes les applications
+                appData.forEach(app => {
+                    if (app.countries) {
+                        app.countries = expandRegions(app.countries);
+                    }
+                });
+
                 // Fusionne les pays si countriesRef est présent
                 appData.forEach(app => {
                     if (app.countriesRef) {
@@ -479,9 +485,6 @@
                 appData.forEach(app => {
                     allApps.push(app);
                 });
-                
-                // Initialiser les applications filtrées avec toutes les applications
-                let currentFilteredApps = [...allApps];
 
                 // Filtre et affiche les markers selon les capabilities sélectionnées (tags actifs)
                 function filterAndShowMarkersByCapabilities() {
@@ -494,10 +497,6 @@
                             app.capabilities.some(cap => activeTags.includes(cap))
                         );
                     }
-                    
-                    // Mettre à jour la liste des applications filtrées pour la recherche
-                    currentFilteredApps = filteredApps;
-                    
                     showCountryMarkers(filteredApps, allApps);
 
                     // Affiche la liste des applications monde par catégorie dans la sidebar
@@ -557,66 +556,47 @@
                     });
                 }
 
-                // Gestion du nouveau système : container cliquable + slider 2 positions
+                // Gestion du système hybride slider + tags amélioré
                 function setupHybridControls() {
-                    // Gestion du clic sur le container de catégorie pour afficher/masquer
-                    document.querySelectorAll('.category-slider-container').forEach(container => {
-                        container.addEventListener('click', function(e) {
-                            // Ignorer le clic si c'est sur le slider
-                            if (e.target.classList.contains('slider-switch') || e.target.closest('.slider-switch')) {
-                                return;
-                            }
-                            
-                            const categoryName = this.querySelector('.slider-switch').getAttribute('data-category');
-                            const categorySection = document.querySelector(`.category-section[data-category="${categoryName}"]`);
-                            const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
-                            
-                            // Basculer la visibilité des sous-capabilities
-                            const isExpanded = capabilitiesContainer.classList.contains('expanded');
-                            
-                            if (isExpanded) {
-                                // Masquer les sous-capabilities
-                                categorySection.classList.remove('active');
-                                capabilitiesContainer.classList.remove('expanded');
-                            } else {
-                                // Afficher les sous-capabilities
-                                categorySection.classList.add('active');
-                                capabilitiesContainer.classList.add('expanded');
-                            }
-                        });
-                    });
-                    
-                    // Gestion des sliders de catégorie (2 positions : rien/tout sélectionné)
+                    // Gestion des sliders de catégorie
                     document.querySelectorAll('.slider-switch').forEach(slider => {
-                        slider.addEventListener('click', function(e) {
-                            e.stopPropagation(); // Empêcher la propagation vers le container
-                            
+                        slider.addEventListener('click', function() {
                             const categoryName = this.getAttribute('data-category');
                             const categorySection = document.querySelector(`.category-section[data-category="${categoryName}"]`);
                             const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
                             const categoryTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"]`);
                             
-                            // S'assurer que la catégorie est visible
-                            if (!capabilitiesContainer.classList.contains('expanded')) {
-                                categorySection.classList.add('active');
-                                capabilitiesContainer.classList.add('expanded');
-                            }
+                            // Déterminer la position actuelle et passer à la suivante
+                            let currentPosition = 1;
+                            if (this.classList.contains('position-2')) currentPosition = 2;
+                            else if (this.classList.contains('position-3')) currentPosition = 3;
                             
-                            // Basculer entre position 1 (rien) et position 2 (tout sélectionné)
-                            let currentPosition = this.classList.contains('position-2') ? 2 : 1;
-                            const nextPosition = currentPosition === 1 ? 2 : 1;
+                            // Calculer la prochaine position (cycle 1 -> 2 -> 3 -> 1)
+                            const nextPosition = currentPosition === 3 ? 1 : currentPosition + 1;
                             
-                            // Nettoyer et appliquer la nouvelle position
-                            this.classList.remove('position-1', 'position-2');
+                            // Nettoyer toutes les classes de position
+                            this.classList.remove('position-1', 'position-2', 'position-3');
                             this.classList.add(`position-${nextPosition}`);
                             
                             // Appliquer la logique selon la position
-                            if (nextPosition === 1) {
-                                // Position 1: désélectionner tous les tags
-                                categoryTags.forEach(tag => tag.classList.remove('active'));
-                            } else {
-                                // Position 2: sélectionner tous les tags
-                                categoryTags.forEach(tag => tag.classList.add('active'));
+                            switch(nextPosition) {
+                                case 1: // Liste non dépliée
+                                    categorySection.classList.remove('active');
+                                    capabilitiesContainer.classList.remove('expanded');
+                                    categoryTags.forEach(tag => tag.classList.remove('active'));
+                                    break;
+                                    
+                                case 2: // Liste dépliée, rien sélectionné (gris)
+                                    categorySection.classList.add('active');
+                                    capabilitiesContainer.classList.add('expanded');
+                                    categoryTags.forEach(tag => tag.classList.remove('active'));
+                                    break;
+                                    
+                                case 3: // Liste dépliée, tout sélectionné (bleu foncé)
+                                    categorySection.classList.add('active');
+                                    capabilitiesContainer.classList.add('expanded');
+                                    categoryTags.forEach(tag => tag.classList.add('active'));
+                                    break;
                             }
                             
                             // Déclencher le filtrage
@@ -632,8 +612,11 @@
                             const slider = document.querySelector(`.slider-switch[data-category="${categoryName}"]`);
                             const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
                             
-                            // S'assurer que la catégorie est visible
-                            if (!capabilitiesContainer.classList.contains('expanded')) {
+                            // Vérifier si la catégorie est visible (position 2 ou 3)
+                            if (slider.classList.contains('position-1')) {
+                                // Si fermée, ouvrir en position 2 (dépliée, rien sélectionné)
+                                slider.classList.remove('position-1');
+                                slider.classList.add('position-2');
                                 categorySection.classList.add('active');
                                 capabilitiesContainer.classList.add('expanded');
                             }
@@ -646,17 +629,17 @@
                             const totalTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"]`);
                             
                             if (activeTags.length === 0) {
-                                // Aucun tag actif -> Position 1
-                                slider.classList.remove('position-2');
-                                slider.classList.add('position-1');
-                            } else if (activeTags.length === totalTags.length) {
-                                // Tous les tags actifs -> Position 2
-                                slider.classList.remove('position-1');
+                                // Aucun tag actif -> Position 2 (gris)
+                                slider.classList.remove('position-3');
                                 slider.classList.add('position-2');
-                            } else {
-                                // Certains tags actifs -> Position 1 (état partiel = désactivé)
+                            } else if (activeTags.length === totalTags.length) {
+                                // Tous les tags actifs -> Position 3 (bleu foncé)
                                 slider.classList.remove('position-2');
-                                slider.classList.add('position-1');
+                                slider.classList.add('position-3');
+                            } else {
+                                // Certains tags actifs -> Rester en position 2 (état intermédiaire)
+                                slider.classList.remove('position-3');
+                                slider.classList.add('position-2');
                             }
                             
                             // Déclencher le filtrage
@@ -680,8 +663,7 @@
                     }
                     
                     const term = searchTerm.toLowerCase();
-                    // Rechercher seulement dans les applications actuellement filtrées
-                    searchResults = currentFilteredApps.filter(app => 
+                    searchResults = allApps.filter(app => 
                         app.name.toLowerCase().includes(term)
                     );
                     
