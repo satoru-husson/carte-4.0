@@ -283,6 +283,7 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script type="module">
         import { countries } from './countriesList.js';
+        import { expandRegions } from './regions.js';
 
         let countryMarkers = [];
         let countryLayers = {};
@@ -398,6 +399,13 @@
                 fetch('capabilities.json').then(r => r.json()),
                 fetch('data.json').then(r => r.json())
             ]).then(([capData, appData]) => {
+                // Expander les régions dans toutes les applications
+                appData.forEach(app => {
+                    if (app.countries) {
+                        app.countries = expandRegions(app.countries);
+                    }
+                });
+
                 // Fusionne les pays si countriesRef est présent
                 appData.forEach(app => {
                     if (app.countriesRef) {
