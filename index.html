@@ -412,11 +412,15 @@
                         const refApp = appData.find(a => a.name === app.countriesRef);
                         if (refApp && refApp.countries) {
                             let countries = [...refApp.countries, ...(app.countries || [])];
-                            if (app.excludeCountries) {
-                                countries = countries.filter(c => !app.excludeCountries.includes(c));
-                            }
                             app.countries = Array.from(new Set(countries));
                         }
+                    }
+                });
+
+                // Applique excludeCountries à toutes les applications
+                appData.forEach(app => {
+                    if (app.excludeCountries && app.countries) {
+                        app.countries = app.countries.filter(c => !app.excludeCountries.includes(c));
                     }
                 });
 
