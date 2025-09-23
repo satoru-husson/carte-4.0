@@ -1,43 +1,13 @@
 [
   {
     "name": "2IC Pallet",
-    "countries": [
-      "Australia",
-      "New Zealand"
-    ],
+    "countries": ["Anz"],
     "category": "Asset & Fleet Management",
     "capabilities": ["TM2"]
   },
   {
     "name": "4flow",
-    "countries": [
-      "Austria",
-      "Bulgaria",
-      "Croatia",
-      "Czech Republic",
-      "France",
-      "Germany",
-      "Greece",
-      "Hungary",
-      "Italy",
-      "Netherlands",
-      "Poland",
-      "Romania",
-      "Slovakia",
-      "Slovenia",
-      "Spain",
-      "Switzerland",
-      "United Kingdom",
-      "Sweden",
-      "Belgium",
-      "Estonia",
-      "Latvia",
-      "Lithuania",
-      "Denmark",
-      "Ireland",
-      "Portugal",
-      "Luxembourg"
-    ],
+    "countries": ["Europe+"],
     "category": "Integration & Middleware",
     "capabilities": ["TM6"]
   },
@@ -49,23 +19,25 @@
   },
   {
     "name": "ADT TMS",
-    "countries": [
-      "Argentina",
-      "Uruguay"
-    ],
+    "countries": ["Argentina","Uruguay"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
   {
+    "name": "Allo",
+    "countries": ["Nortam"],
+    "category": "Route & Load Optimization",
+    "capabilities": ["TM3"]
+  },
+  {
     "name": "Alpega",
-    "countriesRef": "4flow",
+    "countries": ["Europe"],
     "category": "Integration & Middleware",
     "capabilities": ["OM5"]
   },
   {
     "name": "ASTAG GU (Ground)",
-    "countriesRef": "4flow",
-    "countries": ["Morocco", "Tunisia", "Turkey"],
+    "countries": ["Europe+"],
     "category": "Financial & Settlement Systems",
     "capabilities": ["TM4"]
   },
@@ -95,7 +67,7 @@
   },
   {
     "name": "CADIS (R4)",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["OM5"]
   },
@@ -125,16 +97,13 @@
   },
   {
     "name": "Car-O",
-    "countries": [
-      "Austria",
-      "Germany"
-    ],
+    "countries": ["Austria", "Germany"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
   {
     "name": "Centiro (CLL)",
-    "countriesRef": "4flow",
+    "countries": ["Europe"],
     "category": "Integration & Middleware",
     "capabilities": ["OM5"]
   },
@@ -146,13 +115,7 @@
   },
   {
     "name": "CEVA Smart",
-    "countries": [
-      "Chile",
-      "Columbia",
-      "Ecuador",
-      "Peru",
-      "Turkey"
-    ],
+    "countries": ["Europe","Chile","Colombia","Ecuador","Peru","Turkey","Asia"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM1"]
   },
@@ -193,43 +156,37 @@
   },
   {
     "name": "CEVASSETS (BEXTER Trackonline)",
-    "countriesRef": "4flow",
+    "countries": ["Europe"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM2"]
   },
   {
     "name": "CEVATrack mailing",
-    "countries": [
-      "United Kingdom"
-    ],
+    "countries": ["United Kingdom", "Ireland"],
     "category": "Collaboration & Project Management",
     "capabilities": ["OM5"]
   },
   {
     "name": "Cevatrack-Responsive",
-    "countries": [
-      "United Kingdom"
-    ],
+    "countries": ["United Kingdom", "Ireland"],
     "category": "CRM/PFS",
     "capabilities": ["OM5"]
   },
   {
     "name": "Chronotruck",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Sales & Marketing",
     "capabilities": ["TM1"]
   },
   {
     "name": "ClaimOVL",
-    "countries": [
-      "Turkey"
-    ],
+    "countries": ["Turkey"],
     "category": "Asset & Fleet Management",
     "capabilities": ["TM6"]
   },
   {
     "name": "CMS",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Freight Marketplaces & Tendering",
     "capabilities": ["TM1"]
   },
@@ -283,7 +240,7 @@
   },
   {
     "name": "DC BRAIN",
-    "countriesRef": "4flow",
+    "countries": ["Europe"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM3"]
   },
@@ -301,7 +258,7 @@
   },
   {
     "name": "Dispatch",
-    "countries": ["France", "Portugal", "Spain"],
+    "countries": ["France", "Portugal", "Spain","Italy"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
@@ -319,7 +276,7 @@
   },
   {
     "name": "EDICOM iPaaS",
-    "countriesRef": "4flow",
+    "countries": ["Europe"],
     "category": "Application",
     "capabilities": ["OM5"]
   },
@@ -343,13 +300,19 @@
   },
   {
     "name": "ELO ANZ",
-    "countries": ["Australia", "Germany", "New Zealand"],
+    "countries": ["Australia", "New Zealand"],
+    "category": "Collaboration & Project Management",
+    "capabilities": ["OM5"]
+  },
+  {
+    "name": "ELO DE",
+    "countries": ["Germany"],
     "category": "Collaboration & Project Management",
     "capabilities": ["OM5"]
   },
   {
     "name": "Fleetwave",
-    "countries": ["United States of America"],
+    "countries": ["Nortam","Europe"],
     "category": "Asset & Fleet Management",
     "capabilities": ["TM2"]
   },
@@ -373,25 +336,25 @@
   },
   {
     "name": "Gefcopack",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Asset & Fleet Management",
     "capabilities": ["TM2"]
   },
   {
     "name": "Genio",
-    "countries": ["United States of America"],
+    "countries": ["Genio"],
     "category": "Collaboration & Project Management",
     "capabilities": ["OM5"]
   },
   {
     "name": "Geoserver",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Collaboration & Project Management",
     "capabilities": ["TM3"]
   },
   {
     "name": "GLT",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM1"]
   },
@@ -421,7 +384,7 @@
   },
   {
     "name": "INES",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "excludeCountries": ["United Kingdom"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM1","TM2","TM3","TM4","TM4","TM5","TM6","TM7","OM1","OM2","OM3","OM4","OM5"]
@@ -434,13 +397,13 @@
   },
   {
     "name": "Inter Site Journaling",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland"],
     "category": "Financial & Settlement Systems",
     "capabilities": ["TM6"]
   },
   {
     "name": "Jasper Reports",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland","Benelux"],
     "category": "Financial & Settlement Systems",
     "capabilities": ["TM6"]
   },
@@ -452,7 +415,7 @@
   },
   {
     "name": "Leopard",
-    "countriesRef": "2IC Pallet",
+    "countriesRef": "Anz",
     "category": "Track & Trace",
     "capabilities": ["TM2"]
   },
@@ -470,49 +433,49 @@
   },
   {
     "name": "Map&Guide",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Track & Trace",
     "capabilities": ["TM3"]
   },
   {
     "name": "Matrix EAI SCM",
-    "countries": ["Netherlands"],
+    "countries": ["Benelux"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
   {
     "name": "Matrix FSS",
-    "countries": ["United States of America"],
+    "countries": ["Americas","Asia"],
     "category": "Customer Service",
     "capabilities": ["TM4"]
   },
   {
     "name": "Matrix SCI",
-    "countries": ["United States of America"],
+    "countries": ["Americas","Asia"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["OM5"]
   },
   {
     "name": "Matrix SCM",
-    "countries": ["United States of America"],
+    "countries": ["Americas","Asia"],
     "category": "Customer Service",
     "capabilities": ["TM1"]
   },
   {
     "name": "Matrix TMS",
-    "countries": ["United States of America"],
+    "countries": ["Americas","Asia"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1","TM2","TM3","OM1","OP1"]
   },
   {
     "name": "Matrix TMS - Core+",
-    "countries": ["United States of America"],
+    "countries": ["Turkey","Nortam","Asia Pacific"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
   {
     "name": "Matrix TMS Mobile",
-    "countries": ["United States of America"],
+    "countries": ["Americas","Asia"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM2"]
   },
@@ -530,19 +493,19 @@
   },
   {
     "name": "Metis",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Freight Marketplaces & Tendering",
     "capabilities": ["TM1"]
   },
   {
     "name": "Microlise POD",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM5"]
   },
   {
     "name": "MiQuest",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland"],
     "category": "Asset & Fleet Management",
     "capabilities": ["TM2"]
   },
@@ -572,7 +535,7 @@
   },
   {
     "name": "MS Dynamics",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM2"]
   },
@@ -590,7 +553,7 @@
   },
   {
     "name": "Nike Scanning",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland"],
     "category": "Financial & Settlement Systems",
     "capabilities": ["TM2"]
   },
@@ -602,13 +565,13 @@
   },
   {
     "name": "Omprompt",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland","Benelux"],
     "category": "Collaboration & Project Management",
     "capabilities": ["OM5"]
   },
   {
     "name": "OMS 3PL (PFS)",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "CRM/PFS",
     "capabilities": ["OM5"]
   },
@@ -620,7 +583,7 @@
   },
   {
     "name": "Oplus",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Routing & Scheduling",
     "capabilities": ["TM1"]
   },
@@ -656,7 +619,7 @@
   },
   {
     "name": "ORION ANZ",
-    "countriesRef": "2IC Pallet",
+    "countries": ["Anz"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
@@ -680,19 +643,19 @@
   },
   {
     "name": "Panoptes (Ex Neopost)",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Track & Trace",
     "capabilities": ["TM5"]
   },
   {
     "name": "Paragon UKIN",
-    "countries": ["United States of America"],
+    "countries": ["United States of America","United Kingdom","Ireland","Italy"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM2"]
   },
   {
     "name": "PARTS",
-    "countriesRef": "2IC Pallet",
+    "countries": ["Anz"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM1"]
   },
@@ -704,7 +667,7 @@
   },
   {
     "name": "PC Miler",
-    "countries": ["United States of America"],
+    "countries": ["Americas","Asia"],
     "category": "Financial & Settlement Systems",
     "capabilities": ["TM4"]
   },
@@ -722,19 +685,19 @@
   },
   {
     "name": "Project 44 (Ground)",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Track & Trace",
     "capabilities": ["TM5"]
   },
   {
     "name": "PTV OptiFlow",
-    "countriesRef": "2IC Pallet",
+    "countries": ["Anz"],
     "category": "Track & Trace",
     "capabilities": ["TM5"]
   },
   {
     "name": "PTV OptiFlow",
-    "countries": ["Australia", "New Zealand"],
+    "countries": ["Anz"],
     "category": "Routing & Scheduling",
     "capabilities": ["TM3"]
   },
@@ -746,13 +709,13 @@
   },
   {
     "name": "PTV Xserver",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Track & Trace",
     "capabilities": ["TM3"]
   },
   {
     "name": "Raal Trans",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Freight Marketplaces & Tendering",
     "capabilities": ["TM1"]
   },
@@ -776,13 +739,13 @@
   },
   {
     "name": "RouteMax",
-    "countries": ["United States of America"],
+    "countries": ["Nortam"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM2"]
   },
   {
     "name": "Samsara MyFleet",
-    "countries": ["United States of America"],
+    "countries": ["United States of America","Europe"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM5"]
   },
@@ -800,13 +763,13 @@
   },
   {
     "name": "Sharenet",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland"],
     "category": "Asset & Fleet Management",
     "capabilities": ["TM2","ANM1","ANM2","ANM3","ANM4"]
   },
   {
     "name": "Sherlock Waste",
-    "countriesRef": "4flow",
+    "countries": ["Europe"],
     "category": "Collaboration & Project Management",
     "capabilities": ["OM5"]
   },
@@ -818,7 +781,7 @@
   },
   {
     "name": "Shiplify",
-    "countries": ["United States of America"],
+    "countries": ["Nortam"],
     "category": "Passengers & Commodities",
     "capabilities": ["TM6"]
   },
@@ -830,19 +793,19 @@
   },
   {
     "name": "Smartsheet",
-    "countriesRef": "2IC Pallet",
+    "countries": ["Anz"],
     "category": "Strategy & Planning",
     "capabilities": ["OM5"]
   },
   {
     "name": "SOTI MobiControl",
-    "countriesRef": "2IC Pallet",
+    "countries": ["Anz"],
     "category": "Track & Trace",
     "capabilities": ["TM5"]
   },
   {
     "name": "Speed TMS",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
@@ -866,13 +829,13 @@
   },
   {
     "name": "Surgere",
-    "countries": ["United States of America"],
+    "countries": ["Nortam"],
     "category": "Routing & Scheduling",
     "capabilities": ["TM5"]
   },
   {
     "name": "Tarot Analytics",
-    "countries": ["United Kingdom"],
+    "countries": ["United Kingdom","Ireland","Benelux"],
     "category": "Last Mile Distribution",
     "capabilities": ["OM5"]
   },
@@ -890,13 +853,13 @@
   },
   {
     "name": "Teranalytics-Linehaul Scheduler",
-    "countries": ["United States of America"],
+    "countries": ["Nortam"],
     "category": "Route & Load Optimization",
     "capabilities": ["TM3"]
   },
   {
     "name": "Teranalytics-Station Gravity",
-    "countries": ["United States of America"],
+    "countries": ["Nortam"],
     "category": "Financial & Settlement Systems",
     "capabilities": ["TM6"]
   },
@@ -908,7 +871,7 @@
   },
   {
     "name": "Timocom",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Freight Marketplaces & Tendering",
     "capabilities": ["TM1","OP1","OP2"]
   },
@@ -920,13 +883,13 @@
   },
   {
     "name": "TMS Portal",
-    "countriesRef": "2IC Pallet",
+    "countries": ["Anz"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM5"]
   },
   {
     "name": "TOSCA",
-    "countriesRef": "4flow",
+    "countries": ["Europe"],
     "category": "Integration & Middleware",
     "capabilities": ["OM5"]
   },
@@ -938,7 +901,7 @@
   },
   {
     "name": "TransNET",
-    "countries": ["United Kingdom","Ireland","Belgium","Netherlands","Luxembourg"],
+    "countries": ["United Kingdom","Ireland","Benelux"],
     "category": "Transport Management Systems (TMS)",
     "capabilities": ["TM1"]
   },
@@ -986,7 +949,7 @@
   },
   {
     "name": "Vision +",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Track & Trace",
     "capabilities": ["TM5"]
   },
@@ -1004,7 +967,7 @@
   },
   {
     "name": "Winroute",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["France"],
     "category": "Route & Load Optimization",
     "capabilities": ["TM3"]
   },
@@ -1016,7 +979,7 @@
   },
   {
     "name": "Xcargo",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Freight Marketplaces & Tendering",
     "capabilities": ["TM3"]
   },
@@ -1028,7 +991,7 @@
   },
   {
     "name": "XPlanis xGU",
-    "countriesRef": "ASTAG GU (Ground)",
+    "countries": ["Europe+"],
     "category": "Financial & Settlement Systems",
     "capabilities": ["TM4"]
   },
