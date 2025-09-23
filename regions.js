@@ -9,6 +9,13 @@ export const regionMapping = {
         "Norway", "Iceland", "Albania", "Bosnia and Herzegovina", "Montenegro", 
         "North Macedonia", "Serbia"
     ],
+    "Europe+": [
+        "Greece", "Morocco", "Belgium", "Netherlands", "Luxembourg", "Germany", 
+        "France", "Spain", "Portugal", "Italy", "United Kingdom", "Ireland", 
+        "Turkey", "Slovakia", "Switzerland", "Bulgaria", "Croatia", "Hungary", 
+        "Latvia", "Portugal", "Romania", "Serbia", "Slovenia", "Czech Republic", 
+        "Tunisia", "Austria", "Poland", "Sweden","Finland","Denmark"
+    ],
     "Nortam": [
         "United States of America", "Canada", "Mexico"
     ],
@@ -22,10 +29,24 @@ export const regionMapping = {
         "Chile", "Colombia", "Peru", "Venezuela", "Ecuador", "Bolivia", 
         "Paraguay", "Uruguay", "Guyana", "Suriname"
     ],
-    "Africa": [
-        "South Africa", "Nigeria", "Egypt", "Kenya", "Ghana", "Morocco", 
-        "Algeria", "Tunisia", "Libya", "Ethiopia", "Tanzania", "Uganda", 
-        "Zimbabwe", "Zambia", "Botswana", "Namibia"
+    "Genio": [
+        "Greece", "South Africa", "Cambodia", "Morocco", "Russia", 
+        "United Arab Emirates", "United States of America", "Mexico", "Brazil", 
+        "Argentina", "Uruguay", "Chile", "Belgium", "Netherlands", "Luxembourg", 
+        "Estonia", "Latvia", "Lithuania", "Czech Republic", "Slovakia", "Hungary", 
+        "Poland", "Slovenia", "Croatia", "Austria", "Germany", "France", 
+        "Spain", "Portugal", "Italy", "United Kingdom", "Ireland", "Turkey", 
+        "China", "India", "Australia", "New Zealand", "Poland"
+    ],
+    "Anz": [
+        "Australia", "New Zealand"
+    ],
+    "Asia": [
+        "China (Mainland)", "India", "Indonesia", "Philippines", "Vietnam", 
+        "Thailand", "Singapore", "Malaysia"
+    ],
+    "Benelux": [
+        "Belgium", "Netherlands", "Luxembourg"
     ]
 };
 
