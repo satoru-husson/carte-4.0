@@ -463,13 +463,13 @@
   },
   {
     "name": "Matrix TMS",
-    "countries": ["Americas","Asia"],
+    "countries": ["Nortam","Asia","Peru","Chile","Colombia","Ecuador","Turkey"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1","TM2","TM3","OM1","OP1"]
   },
   {
     "name": "Matrix TMS - Core+",
-    "countries": ["Turkey","Nortam","Asia Pacific"],
+    "countries": ["Turkey","Nortam","Apac"],
     "category": "Manufacturing & Delivery",
     "capabilities": ["TM1"]
   },
