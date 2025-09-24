@@ -1,126 +1,456 @@
 {
   "OM1": {
-    "l1": "OM",
     "l1_name": "Order Management",
     "l2_name": "Create and Manage Accounts and Contacts"
   },
+  "CMAC1": {
+    "l1_name": "Order Management",
+    "l2_name": "Create and Manage Accounts and Contacts",
+    "l3_name": "Identify and select key customers/accounts"
+  },
+  "CMAC2": {
+    "l1_name": "Order Management",
+    "l2_name": "Create and Manage Accounts and Contacts",
+    "l3_name": "Develop and manage sales plan"
+  },
+  "CMAC3": {
+    "l1_name": "Order Management",
+    "l2_name": "Create and Manage Accounts and Contacts",
+    "l3_name": "Manage customer relationship"
+  },
   "OM2": {
-    "l1": "OM",
     "l1_name": "Order Management",
     "l2_name": "Provide Proposal and Quotes"
   },
+  "PPQ1": {
+    "l1_name": "Order Management",
+    "l2_name": "Provide Proposal and Quotes",
+    "l3_name": "Execute Solution Design"
+  },
+  "PPQ2": {
+    "l1_name": "Order Management",
+    "l2_name": "Provide Proposal and Quotes",
+    "l3_name": "Perform Solution Pricing"
+  },
+  "PPQ3": {
+    "l1_name": "Order Management",
+    "l2_name": "Provide Proposal and Quotes",
+    "l3_name": "Manage sales negotiation and approval"
+  },
+  "PPQ4": {
+    "l1_name": "Order Management",
+    "l2_name": "Provide Proposal and Quotes",
+    "l3_name": "Conduct profitability analysis"
+  },
   "OM3": {
-    "l1": "OM",
     "l1_name": "Order Management",
     "l2_name": "Convert Prospect to Customer"
   },
+  "CPTC1": {
+    "l1_name": "Order Management",
+    "l2_name": "Convert Prospect to Customer",
+    "l3_name": "Review and validate customer information"
+  },
+  "CPTC2": {
+    "l1_name": "Order Management",
+    "l2_name": "Convert Prospect to Customer",
+    "l3_name": "Set up customer contract and rates"
+  },
+  "CPTC3": {
+    "l1_name": "Order Management",
+    "l2_name": "Convert Prospect to Customer",
+    "l3_name": "Set up customer instructions"
+  },
   "OM4": {
-    "l1": "OM",
     "l1_name": "Order Management",
     "l2_name": "Manage Operational Sales"
   },
+  
+"MOS1": {
+    "l1_name": "Order Management",
+    "l2_name": "Manage Operational Sales",
+    "l3_name": "Manage sales channels"
+  },
+  "MOS2": {
+    "l1_name": "Order Management",
+    "l2_name": "Manage Operational Sales",
+    "l3_name": "Perform request matching, service configuration, upselling"
+  },
+  "MOS3": {
+    "l1_name": "Order Management",
+    "l2_name": "Manage Operational Sales",
+    "l3_name": "Handle ad-hoc quotations"
+  },
+  "MOS4": {
+    "l1_name": "Order Management",
+    "l2_name": "Manage Operational Sales",
+    "l3_name": "Manage customer contracts and rates"
+  },
+  "MOS5": {
+    "l1_name": "Order Management",
+    "l2_name": "Manage Operational Sales",
+    "l3_name": "Track and display customer interactions"
+  },
+
   "OM5": {
-    "l1": "OM",
     "l1_name": "Order Management",
     "l2_name": "Configure and Capture Customer Order"
   },
+  
+"CCCO1": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Customer Order Channels"
+  },
+  "CCCO2": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage WMS Integration"
+  },
+  "CCCO3": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Cross-mode Integration"
+  },
+  "CCCO4": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Capture Shipment Order and Attributes"
+  },
+  "CCCO5": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Match Order to Service and Check Feasibility"
+  },
+  "CCCO6": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Match Order to Contract/Convert Quote to Order"
+  },
+  "CCCO7": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Customer Instructions"
+  },
+  "CCCO8": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Shipment Documentation"
+  },
+  "CCCO9": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Customer References"
+  },
+  "CCCO10": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Handle Physical Shipment Matching and Exceptions"
+  },
+  "CCCO11": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Non-Standard Flows"
+  },
+  "CCCO12": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Additional Services"
+  },
+  "CCCO13": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Invoice Customer - Business Capabilities"
+  },
+  "CCCO14": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Shipment Profitability (Rating and Costing)"
+  },
+  "CCCO15": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Manage Overseas Station Integration"
+  },
+  "CCCO16": {
+    "l1_name": "Order Management",
+    "l2_name": "Configure and Capture Customer Order",
+    "l3_name": "Assign Order"
+  },
+
   "TM1": {
-    "l1": "TM",
     "l1_name": "Transport Management",
     "l2_name": "Manage Booking with Carrier"
   },
+  
+"MBC1": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Booking with Carrier",
+    "l3_name": "Select Carrier"
+  },
+  "MBC2": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Booking with Carrier",
+    "l3_name": "Issue and Manage Carrier Booking"
+  },
+  "MBC3": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Booking with Carrier",
+    "l3_name": "Manage Carrier Instructions and Documentation"
+  },
+  "MBC4": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Booking with Carrier",
+    "l3_name": "Manage Exceptions"
+  },
+
   "TM2": {
-    "l1": "TM",
     "l1_name": "Transport Management",
     "l2_name": "Manage Pick-up and Delivery"
   },
+  
+  "MPD1": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Pick-up and Delivery",
+    "l3_name": "Plan PU/D Routes"
+  },
+  "MPD2": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Pick-up and Delivery",
+    "l3_name": "Manage Shipment Acceptance"
+  },
+  "MPD3": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Pick-up and Delivery",
+    "l3_name": "Manage Shipment Release"
+  },
+  "MPD4": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Pick-up and Delivery",
+    "l3_name": "Manage integration with first/last mile providers"
+  },
+  "MPD5": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Pick-up and Delivery",
+    "l3_name": "Monitor and Manage Exceptions"
+  },
+
   "TM3": {
-    "l1": "TM",
     "l1_name": "Transport Management",
     "l2_name": "Manage Terminal and Transit Facility Operations"
   },
+  "MTTFO1": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Perform Scanning and Labelling"
+  },
+  "MTTFO2": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Execute Cubing and Weighing"
+  },
+  "MTTFO3": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Merge Documents with Shipment"
+  },
+  "MTTFO4": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Manage Security Screening and Status"
+  },
+  "MTTFO5": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Handle Instruction Display and Activity Recording"
+  },
+  "MTTFO6": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Manage Load Breakdown and Build-up"
+  },
+  "MTTFO7": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Manage Load Plans and Manifesting"
+  },
+  "MTTFO8": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Manage Upstream Insertions"
+  },
+  "MTTFO9": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Sort for last-Mile Delivery"
+  },
+  "MTTFO10": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Manage Yard and Ramps"
+  },
+  "MTTFO11": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Perform Capacity Planning and Scheduling"
+  },
+  "MTTFO12": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Record and manage exceptions"
+  },
+  "MTTFO13": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Manage non-standard flows"
+  },
+  "MTTFO14": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Terminal and Transit Facility Operations",
+    "l3_name": "Provide Value-added Services"
+  },
+
   "TM4": {
-    "l1": "TM",
     "l1_name": "Transport Management",
     "l2_name": "Manage Customs Clearance & Regulatory Requirements"
   },
+  "MCCRR1": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Customs Clearance & Regulatory Requirements",
+    "l3_name": "Manage Brokerage and Clearance"
+  },
+  "MCCRR2": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Customs Clearance & Regulatory Requirements",
+    "l3_name": "Manage In-bond / Transit"
+  },
+  "MCCRR3": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Customs Clearance & Regulatory Requirements",
+    "l3_name": "Pre-advice Shipment"
+  },
   "TM5": {
-    "l1": "TM",
     "l1_name": "Transport Management",
     "l2_name": "Track Shipments and Equipment"
   },
+  "TSE1": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Generate Estimated Milestones"
+  },
+  "TSE2": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Capture and process Status Events"
+  },
+  "TSE3": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Capture and process Sensor Data"
+  },
+  "TSE4": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Record POD / Changes in Custody"
+  },
+  "TSE5": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Manage Load Hierarchy"
+  },
+  "TSE6": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Manage Visibility and Tracking Integrations"
+  },
+  "TSE7": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Monitor and Manage Exceptions"
+  },
+  "TSE8": {
+    "l1_name": "Transport Management",
+    "l2_name": "Track Shipments and Equipment",
+    "l3_name": "Provide Shipment Visibility"
+  },
+  
   "TM6": {
-    "l1": "TM",
     "l1_name": "Transport Management",
     "l2_name": "Manage Performance for Customers"
   },
+  "MPC1": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Performance for Customers",
+    "l3_name": "Monitor and Manage service performance"
+  },
+  "MPC2": {
+    "l1_name": "Transport Management",
+    "l2_name": "Manage Performance for Customers",
+    "l3_name": "Manage Customer SLAs"
+  },
   "TM7": {
-    "l1": "TM",
     "l1_name": "Transport Management",
     "l2_name": "Provide Customer Service"
   },
+   "PCS1": {
+    "l1_name": "Transport Management",
+    "l2_name": "Provide Customer Service",
+    "l3_name": "Perform Customer Service"
+  },
+  "PCS2": {
+    "l1_name": "Transport Management",
+    "l2_name": "Provide Customer Service",
+    "l3_name": "Manage Claims and Disputes"
+  },
   "CM1": {
-    "l1": "CM",
     "l1_name": "Carrier Management",
     "l2_name": "Source, Certify, Onboard Carriers"
   },
   "CM2": {
-    "l1": "CM",
     "l1_name": "Carrier Management",
     "l2_name": "Implement Carriers"
   },
   "CM3": {
-    "l1": "CM",
     "l1_name": "Carrier Management",
     "l2_name": "Maintain Carriers Contracts and Items"
   },
   "CM4": {
-    "l1": "CM",
     "l1_name": "Carrier Management",
     "l2_name": "Purchase to Carriers"
   },
   "CM5": {
-    "l1": "CM",
     "l1_name": "Carrier Management",
     "l2_name": "Manage Carrier Performance"
   },
   "CM6": {
-    "l1": "CM",
     "l1_name": "Carrier Management",
     "l2_name": "Manage Carrier Relationship"
   },
   "ANM1": {
-    "l1": "ANM",
     "l1_name": "Asset & Network Management",
     "l2_name": "Define Transportation Network Strategy and Planning"
   },
   "ANM2": {
-    "l1": "ANM",
     "l1_name": "Asset & Network Management",
     "l2_name": "Manage Assets"
   },
   "ANM3": {
-    "l1": "ANM",
     "l1_name": "Asset & Network Management",
     "l2_name": "Monitor and Manage Exceptions"
   },
   "ANM4": {
-    "l1": "ANM",
     "l1_name": "Asset & Network Management",
     "l2_name": "Monitor and Manage Network Performance"
   },
   "OP1": {
-    "l1": "OP",
     "l1_name": "From Offering to Pricing",
     "l2_name": "Define and Manage Products"
   },
   "OP2": {
-    "l1": "OP",
     "l1_name": "From Offering to Pricing",
     "l2_name": "Define and manage Pricing"
   },
   "FM1": {
-    "l1": "FM",
     "l1_name": "Finance Management",
     "l2_name": "Manage Operational Finance"
   }
