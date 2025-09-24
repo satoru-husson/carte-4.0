@@ -31,28 +31,49 @@
             position: absolute;
             top: 0; left: 0;
             height: 100vh;
-            width: 18vw;
+            width: 14.4vw; /* Réduit de 20% : 18vw * 0.8 = 14.4vw */
             background: #f7f7f7;
-            overflow-y: auto;
             z-index: 1100;
             box-shadow: 2px 0 8px rgba(0,0,0,0.07);
             padding: 20px 10px 20px 20px;
             transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Niveaux d'élargissement de la sidebar - largeurs réduites de 20% */
+        #sidebar.l1-expanded {
+            width: 22.4vw; /* Réduit de 20% : 28vw * 0.8 = 22.4vw */
+        }
+        #sidebar.l2-expanded {
+            width: 25.6vw; /* Réduit de 20% : 32vw * 0.8 = 25.6vw */
         }
         #sidebar.expanded {
-            width: 28vw;
+            width: 22.4vw; /* Ancien niveau pour compatibilité */
         }
+        
         #sidebar h3 { margin-top: 0; color: #1a237e; }
+        
         #map {
             position: absolute;
-            top: 0; left: 18vw; right: 0; bottom: 0;
-            width: 82vw;
+            top: 0; left: 14.4vw; right: 0; bottom: 0; /* Ajusté pour nouvelle largeur sidebar */
+            width: 85.6vw; /* 100vw - 14.4vw = 85.6vw */
             height: 100vh;
             transition: left 0.3s ease, width 0.3s ease;
         }
+        
+        /* Ajustements de la carte selon le niveau d'élargissement - largeurs ajustées (-20%) */
+        #map.l1-expanded {
+            left: 22.4vw;
+            width: 77.6vw; /* 100vw - 22.4vw = 77.6vw */
+        }
+        #map.l2-expanded {
+            left: 25.6vw;
+            width: 74.4vw; /* 100vw - 25.6vw = 74.4vw */
+        }
         #map.expanded {
-            left: 28vw;
-            width: 72vw;
+            left: 22.4vw;
+            width: 77.6vw;
         }
         .selected {
             background: #e3e6f5;
@@ -113,31 +134,7 @@
             margin-left: 20px;
             margin-bottom: 4px;
         }
-        #expand-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 30px;
-            height: 30px;
-            background: #1a237e;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: background-color 0.2s ease, transform 0.2s ease;
-            z-index: 1200;
-        }
-        #expand-button:hover {
-            background: #303f9f;
-            transform: scale(1.1);
-        }
-        #expand-button:active {
-            transform: scale(0.95);
-        }
+        /* Bouton d'expansion supprimé - élargissement automatique sur clic L1/L2 */
         /* Styles pour le système hybride slider + tags amélioré */
         .category-section {
             background: #f9f9f9;
@@ -151,61 +148,156 @@
             background: #f0f4ff;
             border-color: #1a237e;
         }
-        .category-slider-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 7px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
-        }
-        .category-slider-container:hover {
-            background-color: #f0f4ff;
-        }
+        /* Containers de sliders supprimés */
         .category-title {
             font-size: 14px;
             font-weight: bold;
             color: #1a237e;
             margin: 0;
             flex: 1;
-            pointer-events: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
-        .slider-switch {
-            position: relative;
-            width: 50px;
-            height: 24px;
-            background: #ccc;
-            border-radius: 12px;
+        
+        .category-title.clickable {
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            flex-shrink: 0;
+            user-select: none;
+            pointer-events: auto;
         }
-        .slider-switch.position-1 {
-            background: #ccc;
+        
+        .category-title.clickable:hover {
+            background: #e3f2fd;
+            transform: translateX(2px);
         }
-        .slider-switch.position-2 {
-            background: #0d47a1;
+        
+        /* Container pour le slider spécifique */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 8px;
         }
-        .slider-switch::before {
-            content: '';
+        
+        .slider-label {
+            font-size: 12px;
+            color: #1a237e;
+            font-weight: bold;
+        }
+        
+        /* Styles pour le switch slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
             position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: white;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: #28a745; /* Vert quand activé */
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px #28a745;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .slider.round {
+            border-radius: 24px;
+        }
+        
+        .slider.round:before {
             border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .slider-switch.position-1::before {
-            transform: translateX(0px);
+        
+        /* Container pour titre L1 + slider */
+        .l1-title-with-slider {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 8px;
         }
-        .slider-switch.position-2::before {
-            transform: translateX(26px);
+        
+        /* Container pour tag L2 + slider */
+        .l2-tag-with-all {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 0; /* Pas d'espacement entre le tag et le slider */
         }
+        
+        .l2-tag-with-all .l2-tag {
+            flex: 1; /* Le tag prend tout l'espace disponible */
+            margin-right: 0; /* Pas de marge à droite */
+            border-top-right-radius: 0; /* Supprimer l'arrondi à droite */
+            border-bottom-right-radius: 0; /* Supprimer l'arrondi à droite */
+        }
+        
+        .l2-tag-with-all .switch {
+            border-top-left-radius: 0; /* Supprimer l'arrondi à gauche du slider */
+            border-bottom-left-radius: 0; /* Supprimer l'arrondi à gauche du slider */
+        }
+        
+        /* Bouton All spécifique au-dessus du tag */
+        .all-button-specific {
+            background: #6c757d; /* Gris par défaut */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .all-button-specific:hover {
+            background: #5a6268;
+            transform: scale(1.02);
+        }
+        
+        .all-button-specific.active {
+            background: #28a745; /* Vert quand actif */
+        }
+        
+        .all-button-specific.active:hover {
+            background: #218838;
+        }
+        /* Sliders supprimés - élargissement direct sur clic */
         .capabilities-container {
             max-height: 0;
             overflow: hidden;
@@ -213,9 +305,13 @@
             opacity: 0;
         }
         .capabilities-container.expanded {
-            max-height: 576px;
+            max-height: none; /* Pas de limite de hauteur */
             opacity: 1;
+            overflow: visible; /* Pas de défilement individuel */
+            padding-right: 0; /* Pas d'espace pour scrollbar */
         }
+        
+        /* Styles de scrollbar supprimés - défilement uniquement sur le formulaire principal */
         .capability-tags-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -223,6 +319,8 @@
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid #ddd;
+            /* Largeur normale - pas de forçage horizontal */
+            width: 100%;
         }
         /* Layout adaptatif pour sidebar élargie */
         #sidebar.expanded .capability-tags-container {
@@ -265,37 +363,381 @@
         .capability-tag.active:hover {
             background: #1565c0;
         }
+        
+        /* Styles pour l'affichage hiérarchique des L3 */
+        .l2-tag {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid transparent;
+            position: relative;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .l2-tag:hover {
+            background: #bbdefb;
+            transform: translateX(3px);
+        }
+        .l2-tag.active {
+            background: #0d47a1;
+            color: white;
+            border-color: #0d47a1;
+        }
+        .l2-tag.active:hover {
+            background: #1565c0;
+        }
+        .l2-tag.expanded {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .l2-slider-container {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            z-index: 10;
+        }
+        
+        .l2-slider {
+            width: 36px;
+            height: 20px;
+            background: #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .l2-slider.active {
+            background: #0d47a1;
+        }
+        .l2-slider::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .l2-slider.active::before {
+            transform: translateX(16px);
+        }
+        
+        .l3-container {
+            background: #f0f4ff;
+            border: 1px solid #e3f2fd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            padding: 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            /* Affichage en liste verticale pour les checkboxes */
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-start;
+        }
+        .l3-container.expanded {
+            max-height: none; /* Pas de limite de hauteur */
+            padding: 12px;
+            overflow: visible; /* Pas de défilement individuel */
+        }
+        
+        /* Styles de scrollbar L3 supprimés - défilement uniquement sur le formulaire principal */
+        
+        .l3-checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            margin: 2px 0;
+            cursor: pointer;
+            /* Largeur flexible pour s'adapter au contenu */
+            width: 100%;
+            max-width: none;
+        }
+        
+        .l3-checkbox {
+            margin-right: 8px;
+            margin-top: 2px; /* Alignement avec la première ligne du texte */
+            cursor: pointer;
+            /* Style personnalisé pour la checkbox */
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        
+        .l3-label {
+            color: #1565c0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.3;
+            cursor: pointer;
+            /* Permettre le retour à la ligne */
+            word-wrap: break-word;
+            flex: 1;
+        }
+        
+        .l3-label:hover {
+            color: #0d47a1;
+            text-decoration: underline;
+        }
+        /* Styles supprimés - remplacés par les checkboxes */
+        
+        
+        /* Styles pour le bouton toggle et la nouvelle structure */
+        .search-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        #toggle-apps-button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: #1565c0;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        #toggle-apps-button:hover {
+            background: #0d47a1;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        #info-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+        
+        #info-panel.expanded {
+            max-height: 50vh;
+            opacity: 1;
+            overflow-y: auto; /* Barre de défilement verticale pour la liste des applications */
+            overflow-x: hidden; /* Pas de défilement horizontal */
+        }
+        
+        /* Styles personnalisés pour la barre de défilement du panneau d'applications */
+        #info-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+        #info-panel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        #info-panel::-webkit-scrollbar-thumb {
+            background: #1976d2;
+            border-radius: 4px;
+            border: 1px solid #1565c0;
+        }
+        #info-panel::-webkit-scrollbar-thumb:hover {
+            background: #1565c0;
+        }
+        
+        #capabilities-form {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        #deselect-button:hover {
+            opacity: 1 !important;
+            background: rgba(255,255,255,0.3) !important;
+        }
 
 
     </style>
 </head>
 <body>
     <div id="sidebar">
-        <button id="expand-button" title="Agrandir/Réduire la barre latérale">⇄</button>
-        <form id="capabilities-form" style="margin-bottom:3px; max-height:42vh; overflow-y:auto;">
+        <!-- Bouton d'expansion supprimé -->
+        <form id="capabilities-form" style="margin-bottom: 10px;">
             <!-- Cases à cocher générées dynamiquement -->
         </form>
-        <div style="border-top: 2px solid #ddd; margin: 3px 0 5px 0;"></div>
-        <input type="text" id="search-input" placeholder="Tapez le nom d'une application..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 7px; font-size: 13px; box-sizing: border-box;">
-        <div id="info-panel" style="max-height: 46vh; overflow-y: auto; background:#f0f4ff; padding:10px; border-radius:6px;"></div>
+        <div style="border-top: 2px solid #ddd; margin: 10px 0;"></div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Tapez le nom d'une application..." style="width: 100%; padding: 8px 35px 8px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
+            <button id="toggle-apps-button" title="Afficher/Masquer les applications">+</button>
+        </div>
+        <div id="info-panel" style="background:#f0f4ff; padding:10px; border-radius:6px; margin-top: 10px;"></div>
     </div>
-    <div id="map"></div>
+    <div id="map">
+        <div id="selected-app-container" style="
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: none;
+        ">
+            <div id="selected-app-button" style="
+                background: #1976d2;
+                color: white;
+                padding: 12px 18px;
+                border-radius: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 14px;
+                font-weight: bold;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                white-space: nowrap;
+                min-width: 200px;
+            ">
+                <span id="selected-app-name"></span>
+                <span id="deselect-button" style="
+                    margin-left: 12px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    opacity: 0.8;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.2);
+                " title="Désélectionner">✕</span>
+            </div>
+        </div>
+    </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script type="module">
         import { countries } from './countriesList.js';
-        import { expandRegions } from './regions.js';
+        import { expandRegions, regionCenters } from './regions.js';
 
         let countryMarkers = [];
         let countryLayers = {};
+        let currentItems = [];
+        let currentAllApps = [];
+        const ZOOM_THRESHOLD = 4; // Niveau de zoom pour dégrouper
+        
         const map = L.map('map').setView([20, 0], 2);
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
         }).addTo(map);
 
         function showCountryMarkers(items, allApps) {
+            // Sauvegarder les données pour le re-render lors du zoom
+            currentItems = items;
+            currentAllApps = allApps;
+            
             countryMarkers.forEach(marker => map.removeLayer(marker));
             countryMarkers = [];
 
+            const currentZoom = map.getZoom();
+            
+            if (currentZoom < ZOOM_THRESHOLD) {
+                // Mode regroupé : afficher les markers régionaux
+                showGroupedMarkers(items, allApps);
+            } else {
+                // Mode dégroupé : afficher les markers individuels par pays
+                showIndividualMarkers(items, allApps);
+            }
+        }
+
+        function showGroupedMarkers(items, allApps) {
+            // Grouper les pays par région
+            const regionGroups = {
+                nortam: [],
+                europe: [],
+                apac: [],
+                latam: [],
+                imea: []
+            };
+
+            // Classifier chaque pays dans sa région
+            countries.forEach(countryObj => {
+                const country = countryObj.name;
+                const filtered = items.filter(item => item.countries && item.countries.includes(country));
+                if (filtered.length === 0) return;
+
+                const countryData = { country, center: countryObj.center, apps: filtered };
+                
+                // Déterminer la région du pays
+                if (['United States of America', 'Canada', 'Mexico'].includes(country)) {
+                    regionGroups.nortam.push(countryData);
+                } else if (['Brazil', 'Argentina', 'Chile', 'Colombia', 'Peru', 'Venezuela', 'Ecuador', 'Bolivia', 'Paraguay', 'Uruguay', 'Guyana', 'Suriname'].includes(country)) {
+                    regionGroups.latam.push(countryData);
+                } else if (['China', 'Japan', 'South Korea', 'Singapore', 'Malaysia', 'Thailand', 'Indonesia', 'Philippines', 'Vietnam', 'Australia', 'New Zealand', 'Cambodia', 'Laos', 'Myanmar', 'Brunei', 'China (Mainland)'].includes(country)) {
+                    regionGroups.apac.push(countryData);
+                } else if (['India', 'United Arab Emirates', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman', 'Jordan', 'Lebanon', 'Israel', 'Turkey', 'Iran', 'Iraq', 'Syria', 'Yemen', 'South Africa', 'Nigeria', 'Kenya', 'Ghana', 'Ethiopia', 'Tanzania', 'Uganda'].includes(country)) {
+                    regionGroups.imea.push(countryData);
+                } else if (['Morocco', 'Algeria', 'Tunisia', 'Libya', 'Egypt'].includes(country)) {
+                    // Maghreb fait partie de l'Europe
+                    regionGroups.europe.push(countryData);
+                } else {
+                    // Par défaut, Europe
+                    regionGroups.europe.push(countryData);
+                }
+            });
+
+            // Créer des markers pour chaque région
+            Object.keys(regionGroups).forEach(regionName => {
+                const regionCountries = regionGroups[regionName];
+                if (regionCountries.length === 0) return;
+
+                // Calculer le nombre d'applications distinctes dans la région
+                const uniqueApps = new Set();
+                regionCountries.forEach(countryData => {
+                    countryData.apps.forEach(app => {
+                        uniqueApps.add(app.name);
+                    });
+                });
+                const totalApps = uniqueApps.size;
+                const regionCenter = regionCenters[regionName];
+                if (!regionCenter) return;
+
+                const marker = L.marker(regionCenter, {
+                    icon: L.divIcon({
+                        className: 'region-count-icon',
+                        html: `<div style="
+                            background: #d32f2f;
+                            color: white;
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: bold;
+                            font-size: 1.2em;
+                            border: 3px solid #fff;
+                            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                            cursor: pointer;
+                        ">${totalApps}</div>`,
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 20]
+                    }),
+                    interactive: true
+                }).addTo(map);
+
+                // Clic pour une région
+                marker.on('click', function() {
+                    showRegionApps(regionName.toUpperCase(), regionCountries, allApps);
+                });
+
+                countryMarkers.push(marker);
+            });
+        }
+
+        function showIndividualMarkers(items, allApps) {
             countries.forEach(countryObj => {
                 const country = countryObj.name;
                 const center = countryObj.center;
@@ -326,71 +768,149 @@
                     interactive: true
                 }).addTo(map);
 
-                // Rendre le marqueur cliquable pour afficher les applications du pays
+                // Clic pour un pays
                 marker.on('click', function() {
-                    const infoPanel = document.getElementById('info-panel');
-                    
-                    // Grouper les applications par catégorie
-                    const groupedApps = {};
-                    filtered.forEach(app => {
-                        const cat = app.category || "Autre";
-                        if (!groupedApps[cat]) groupedApps[cat] = [];
-                        groupedApps[cat].push(app.name);
-                    });
-
-                    // Créer le HTML pour afficher les applications
-                    let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${country}</h4>`;
-                    Object.keys(groupedApps).forEach(cat => {
-                        html += `<div style="margin-bottom:10px;">
-                            <span style="font-weight:bold;">${cat}</span><br>
-                            ${groupedApps[cat].map(name =>
-                                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
-                            ).join('<br>')}
-                        </div>`;
-                    });
-                    html += `<div style="height: 10px;"></div>`;
-
-                    infoPanel.innerHTML = html;
-
-                    // Ajouter les événements de clic sur les applications
-                    infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
-                        elem.onclick = function() {
-                            const itemName = this.getAttribute('data-name');
-                            const isCurrentlySelected = this.style.fontWeight === 'bold';
-                            
-                            // Réinitialiser tous les styles
-                            infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
-                                e.style.fontWeight = 'normal';
-                            });
-                            
-                            // Si l'élément n'était pas sélectionné, le sélectionner
-                            if (!isCurrentlySelected) {
-                                this.style.fontWeight = 'bold';
-                                
-                                // Trouver l'application dans la liste complète
-                                const item = allApps.find(i => i.name === itemName);
-                                if (!item || !item.countries) return;
-                                
-                                resetCountryColors();
-                                item.countries.forEach(countryName => {
-                                    if (countryLayers[countryName]) {
-                                        countryLayers[countryName].setStyle({
-                                            fillColor: "#1976d2",
-                                            fillOpacity: 0.5,
-                                            color: "#1976d2",
-                                            weight: 2
-                                        });
-                                    }
-                                });
-                            } else {
-                                // Si l'élément était déjà sélectionné, le désélectionner
-                                resetCountryColors();
-                            }
-                        };
-                    });
+                    showCountryApps(country, filtered, allApps);
                 });
 
                 countryMarkers.push(marker);
+            });
+        }
+
+        // Fonction pour afficher les applications d'un pays
+        function showCountryApps(country, apps, allApps) {
+            const infoPanel = document.getElementById('info-panel');
+            
+            // Grouper les applications par catégorie
+            const groupedApps = {};
+            apps.forEach(app => {
+                const cat = app.category || "Autre";
+                if (!groupedApps[cat]) groupedApps[cat] = [];
+                groupedApps[cat].push(app.name);
+            });
+
+            // Créer le HTML pour afficher les applications
+            let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${country}</h4>`;
+            Object.keys(groupedApps).forEach(cat => {
+                html += `<div style="margin-bottom:10px;">
+                    <span style="font-weight:bold;">${cat}</span><br>
+                    ${groupedApps[cat].map(name =>
+                        `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
+                    ).join('<br>')}
+                </div>`;
+            });
+            html += `<div style="height: 10px;"></div>`;
+
+            infoPanel.innerHTML = html;
+            addAppClickEvents(infoPanel, allApps);
+        }
+
+        // Fonction pour afficher les applications d'une région
+        function showRegionApps(regionName, regionCountries, allApps) {
+            const infoPanel = document.getElementById('info-panel');
+            
+            let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${regionName}</h4>`;
+            
+            regionCountries.forEach(countryData => {
+                if (countryData.apps.length === 0) return;
+                
+                // Grouper les applications par catégorie pour ce pays
+                const groupedApps = {};
+                countryData.apps.forEach(app => {
+                    const cat = app.category || "Autre";
+                    if (!groupedApps[cat]) groupedApps[cat] = [];
+                    groupedApps[cat].push(app.name);
+                });
+
+                html += `<div style="margin-bottom:15px; border-left: 3px solid #1976d2; padding-left: 8px;">
+                    <h5 style="margin: 0 0 5px 0; color: #1976d2;">${countryData.country}</h5>`;
+                
+                Object.keys(groupedApps).forEach(cat => {
+                    html += `<div style="margin-bottom:5px;">
+                        <span style="font-weight:bold; font-size: 0.9em;">${cat}</span><br>
+                        ${groupedApps[cat].map(name =>
+                            `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 0.85em;">${name}</span>`
+                        ).join('<br>')}
+                    </div>`;
+                });
+                
+                html += `</div>`;
+            });
+            
+            html += `<div style="height: 10px;"></div>`;
+            infoPanel.innerHTML = html;
+            addAppClickEvents(infoPanel, allApps);
+        }
+
+        // Fonction pour afficher le bouton de sélection
+        function showSelectedAppButton(appName) {
+            const container = document.getElementById('selected-app-container');
+            const nameSpan = document.getElementById('selected-app-name');
+            const deselectButton = document.getElementById('deselect-button');
+            
+            nameSpan.textContent = appName;
+            container.style.display = 'block';
+            
+            // Ajouter l'événement de désélection
+            deselectButton.onclick = function() {
+                hideSelectedAppButton();
+                resetCountryColors();
+                // Réinitialiser tous les styles des applications
+                document.querySelectorAll('.sidebar-item').forEach(e => {
+                    e.style.fontWeight = 'normal';
+                });
+                document.querySelectorAll('.search-result').forEach(e => {
+                    e.classList.remove('selected');
+                });
+            };
+        }
+        
+        // Fonction pour masquer le bouton de sélection
+        function hideSelectedAppButton() {
+            const container = document.getElementById('selected-app-container');
+            container.style.display = 'none';
+        }
+
+        // Fonction pour ajouter les événements de clic sur les applications
+        function addAppClickEvents(infoPanel, allApps) {
+            infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
+                elem.onclick = function() {
+                    const itemName = this.getAttribute('data-name');
+                    const isCurrentlySelected = this.style.fontWeight === 'bold';
+                    
+                    // Réinitialiser tous les styles
+                    infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
+                        e.style.fontWeight = 'normal';
+                    });
+                    
+                    // Si l'élément n'était pas sélectionné, le sélectionner
+                    if (!isCurrentlySelected) {
+                        this.style.fontWeight = 'bold';
+                        
+                        // Afficher le bouton de sélection
+                        showSelectedAppButton(itemName);
+                        
+                        // Trouver l'application dans la liste complète
+                        const item = allApps.find(i => i.name === itemName);
+                        if (!item || !item.countries) return;
+                        
+                        resetCountryColors();
+                        item.countries.forEach(countryName => {
+                            if (countryLayers[countryName]) {
+                                countryLayers[countryName].setStyle({
+                                    fillColor: "#1976d2",
+                                    fillOpacity: 0.5,
+                                    color: "#1976d2",
+                                    weight: 2
+                                });
+                            }
+                        });
+                    } else {
+                        // Si l'élément était déjà sélectionné, le désélectionner
+                        hideSelectedAppButton();
+                        resetCountryColors();
+                    }
+                };
             });
         }
 
@@ -445,23 +965,35 @@
                     categorySection.className = 'category-section';
                     categorySection.setAttribute('data-category', categoryName);
                     
-                    // Crée le container du slider
-                    const sliderContainer = document.createElement('div');
-                    sliderContainer.className = 'category-slider-container';
+                    // Container pour titre L1 + slider
+                    const titleContainer = document.createElement('div');
+                    titleContainer.className = 'l1-title-with-slider';
                     
-                    // Titre de la catégorie
+                    // Titre de la catégorie (cliquable pour élargir)
                     const categoryTitle = document.createElement('h4');
-                    categoryTitle.className = 'category-title';
+                    categoryTitle.className = 'category-title clickable';
                     categoryTitle.textContent = categoryName;
+                    categoryTitle.setAttribute('data-category', categoryName);
+                    categoryTitle.style.cursor = 'pointer';
                     
-                    // Slider switch
-                    const sliderSwitch = document.createElement('div');
-                    sliderSwitch.className = 'slider-switch';
-                    sliderSwitch.setAttribute('data-category', categoryName);
+                    // Slider pour L1
+                    const sliderWrapper = document.createElement('label');
+                    sliderWrapper.className = 'switch';
                     
-                    sliderContainer.appendChild(categoryTitle);
-                    sliderContainer.appendChild(sliderSwitch);
-                    categorySection.appendChild(sliderContainer);
+                    const sliderInput = document.createElement('input');
+                    sliderInput.type = 'checkbox';
+                    sliderInput.className = 'slider-checkbox-l1';
+                    sliderInput.setAttribute('data-category', categoryName);
+                    
+                    const sliderSpan = document.createElement('span');
+                    sliderSpan.className = 'slider round';
+                    
+                    sliderWrapper.appendChild(sliderInput);
+                    sliderWrapper.appendChild(sliderSpan);
+                    
+                    titleContainer.appendChild(categoryTitle);
+                    titleContainer.appendChild(sliderWrapper);
+                    categorySection.appendChild(titleContainer);
                     
                     // Container pour les capabilities (masqué par défaut)
                     const capabilitiesContainer = document.createElement('div');
@@ -471,14 +1003,167 @@
                     const tagsContainer = document.createElement('div');
                     tagsContainer.className = 'capability-tags-container';
                     
-                    // Crée les tags pour chaque capability avec noms complets seulement
+                    // Créer la structure hiérarchique L2 → L3
+                    const l2Groups = new Map();
                     categorizedCaps[categoryName].forEach(cap => {
-                        const tag = document.createElement('div');
-                        tag.className = 'capability-tag';
-                        tag.textContent = cap.l2_name;
-                        tag.setAttribute('data-capability', cap.id);
-                        tag.setAttribute('data-category', categoryName);
-                        tagsContainer.appendChild(tag);
+                        if (!l2Groups.has(cap.l2_name)) {
+                            l2Groups.set(cap.l2_name, {
+                                l2Capabilities: [],
+                                l3Capabilities: []
+                            });
+                        }
+                        
+                        if (cap.l3_name) {
+                            // Capacité L3
+                            l2Groups.get(cap.l2_name).l3Capabilities.push({
+                                id: cap.id,
+                                name: cap.l3_name
+                            });
+                        } else {
+                            // Capacité L2 seulement
+                            l2Groups.get(cap.l2_name).l2Capabilities.push(cap.id);
+                        }
+                    });
+                    
+                    // Créer les tags L2 avec leurs L3
+                    l2Groups.forEach((group, l2Name) => {
+                        const l2Container = document.createElement('div');
+                        l2Container.className = 'l2-tag-container';
+                        
+                        // Vérifier si c'est le tag qui a besoin d'un slider
+                        if (l2Name === 'Create and manage accounts and contacts') {
+                            // Container pour le slider
+                            const sliderContainer = document.createElement('div');
+                            sliderContainer.className = 'slider-container';
+                            
+                            // Label pour le slider
+                            const sliderLabel = document.createElement('label');
+                            sliderLabel.textContent = 'Select All: ';
+                            sliderLabel.className = 'slider-label';
+                            
+                            // Slider switch
+                            const sliderWrapper = document.createElement('label');
+                            sliderWrapper.className = 'switch';
+                            
+                            const sliderInput = document.createElement('input');
+                            sliderInput.type = 'checkbox';
+                            sliderInput.className = 'slider-checkbox';
+                            sliderInput.setAttribute('data-l2-name', l2Name);
+                            
+                            const sliderSpan = document.createElement('span');
+                            sliderSpan.className = 'slider round';
+                            
+                            sliderWrapper.appendChild(sliderInput);
+                            sliderWrapper.appendChild(sliderSpan);
+                            
+                            sliderContainer.appendChild(sliderLabel);
+                            sliderContainer.appendChild(sliderWrapper);
+                            
+                            l2Container.appendChild(sliderContainer);
+                            
+                            // Container pour tag L2 + bouton All
+                            const tagContainer = document.createElement('div');
+                            tagContainer.className = 'l2-tag-with-all';
+                            
+                            // Tag L2 principal
+                            const l2Tag = document.createElement('div');
+                            l2Tag.className = 'capability-tag l2-tag';
+                            l2Tag.textContent = l2Name;
+                            
+                            const allL2Ids = [...group.l2Capabilities, ...group.l3Capabilities.map(l3 => l3.id)];
+                            l2Tag.setAttribute('data-capabilities', allL2Ids.join(','));
+                            l2Tag.setAttribute('data-category', categoryName);
+                            l2Tag.setAttribute('data-l2-name', l2Name);
+                            
+                            // Slider à droite
+                            const sliderWrapper2 = document.createElement('label');
+                            sliderWrapper2.className = 'switch';
+                            
+                            const sliderInput2 = document.createElement('input');
+                            sliderInput2.type = 'checkbox';
+                            sliderInput2.className = 'slider-checkbox';
+                            sliderInput2.setAttribute('data-l2-name', l2Name);
+                            
+                            const sliderSpan2 = document.createElement('span');
+                            sliderSpan2.className = 'slider round';
+                            
+                            sliderWrapper2.appendChild(sliderInput2);
+                            sliderWrapper2.appendChild(sliderSpan2);
+                            
+                            tagContainer.appendChild(l2Tag);
+                            tagContainer.appendChild(sliderWrapper2);
+                            l2Container.appendChild(tagContainer);
+                        } else {
+                            // Container pour tag L2 + slider
+                            const tagContainer = document.createElement('div');
+                            tagContainer.className = 'l2-tag-with-all';
+                            
+                            // Tag L2 normal
+                            const l2Tag = document.createElement('div');
+                            l2Tag.className = 'capability-tag l2-tag';
+                            l2Tag.textContent = l2Name;
+                            
+                            const allL2Ids = [...group.l2Capabilities, ...group.l3Capabilities.map(l3 => l3.id)];
+                            l2Tag.setAttribute('data-capabilities', allL2Ids.join(','));
+                            l2Tag.setAttribute('data-category', categoryName);
+                            l2Tag.setAttribute('data-l2-name', l2Name);
+                            
+                            // Slider à droite
+                            const sliderWrapper = document.createElement('label');
+                            sliderWrapper.className = 'switch';
+                            
+                            const sliderInput = document.createElement('input');
+                            sliderInput.type = 'checkbox';
+                            sliderInput.className = 'slider-checkbox';
+                            sliderInput.setAttribute('data-l2-name', l2Name);
+                            
+                            const sliderSpan = document.createElement('span');
+                            sliderSpan.className = 'slider round';
+                            
+                            sliderWrapper.appendChild(sliderInput);
+                            sliderWrapper.appendChild(sliderSpan);
+                            
+                            tagContainer.appendChild(l2Tag);
+                            tagContainer.appendChild(sliderWrapper);
+                            l2Container.appendChild(tagContainer);
+                        }
+                        
+                        // Container pour les L3 (masqué par défaut)
+                        if (group.l3Capabilities.length > 0) {
+                            const l3Container = document.createElement('div');
+                            l3Container.className = 'l3-container';
+                            l3Container.setAttribute('data-l2-name', l2Name);
+                            
+                            group.l3Capabilities.forEach(l3 => {
+                                // Créer le container pour checkbox + label
+                                const l3CheckboxContainer = document.createElement('div');
+                                l3CheckboxContainer.className = 'l3-checkbox-container';
+                                
+                                // Créer la checkbox
+                                const l3Checkbox = document.createElement('input');
+                                l3Checkbox.type = 'checkbox';
+                                l3Checkbox.className = 'l3-checkbox';
+                                l3Checkbox.id = `l3-${l3.id}`;
+                                l3Checkbox.setAttribute('data-capability', l3.id);
+                                l3Checkbox.setAttribute('data-category', categoryName);
+                                l3Checkbox.setAttribute('data-l2-name', l2Name);
+                                
+                                // Créer le label
+                                const l3Label = document.createElement('label');
+                                l3Label.className = 'l3-label';
+                                l3Label.htmlFor = `l3-${l3.id}`;
+                                l3Label.textContent = l3.name;
+                                
+                                // Assembler
+                                l3CheckboxContainer.appendChild(l3Checkbox);
+                                l3CheckboxContainer.appendChild(l3Label);
+                                l3Container.appendChild(l3CheckboxContainer);
+                            });
+                            
+                            l2Container.appendChild(l3Container);
+                        }
+                        
+                        tagsContainer.appendChild(l2Container);
                     });
                     
                     capabilitiesContainer.appendChild(tagsContainer);
@@ -497,13 +1182,35 @@
 
                 // Filtre et affiche les markers selon les capabilities sélectionnées (tags actifs)
                 function filterAndShowMarkersByCapabilities() {
-                    const activeTags = Array.from(document.querySelectorAll('.capability-tag.active')).map(tag => tag.getAttribute('data-capability'));
+                    let allActiveCapabilities = [];
+                    
+                    // Collecter les capacités des tags L2/L1 actifs
+                    const activeL2Tags = Array.from(document.querySelectorAll('.capability-tag.active'));
+                    activeL2Tags.forEach(tag => {
+                        const capabilities = tag.getAttribute('data-capabilities');
+                        if (capabilities) {
+                            allActiveCapabilities.push(...capabilities.split(','));
+                        }
+                    });
+                    
+                    // Collecter les capacités des checkboxes L3 cochées
+                    const checkedL3Checkboxes = Array.from(document.querySelectorAll('.l3-checkbox:checked'));
+                    checkedL3Checkboxes.forEach(checkbox => {
+                        const capability = checkbox.getAttribute('data-capability');
+                        if (capability) {
+                            allActiveCapabilities.push(capability);
+                        }
+                    });
+                    
+                    // Supprimer les doublons
+                    allActiveCapabilities = [...new Set(allActiveCapabilities)];
+                    
                     let filteredApps = [];
-                    if (activeTags.length === 0) {
+                    if (allActiveCapabilities.length === 0) {
                         filteredApps = allApps;
                     } else {
                         filteredApps = allApps.filter(app =>
-                            app.capabilities.some(cap => activeTags.includes(cap))
+                            app.capabilities.some(cap => allActiveCapabilities.includes(cap))
                         );
                     }
                     
@@ -548,6 +1255,9 @@
                             if (!isCurrentlySelected) {
                                 this.style.fontWeight = 'bold';
                                 
+                                // Afficher le bouton de sélection
+                                showSelectedAppButton(itemName);
+                                
                                 const item = filteredApps.find(i => i.name === itemName);
                                 if (!item || !item.countries) return;
                                 resetCountryColors();
@@ -563,6 +1273,7 @@
                                 });
                             } else {
                                 // Si l'élément était déjà sélectionné, le désélectionner
+                                hideSelectedAppButton();
                                 resetCountryColors();
                             }
                         };
@@ -571,15 +1282,10 @@
 
                 // Gestion du nouveau système : container cliquable + slider 2 positions
                 function setupHybridControls() {
-                    // Gestion du clic sur le container de catégorie pour afficher/masquer
-                    document.querySelectorAll('.category-slider-container').forEach(container => {
-                        container.addEventListener('click', function(e) {
-                            // Ignorer le clic si c'est sur le slider
-                            if (e.target.classList.contains('slider-switch') || e.target.closest('.slider-switch')) {
-                                return;
-                            }
-                            
-                            const categoryName = this.querySelector('.slider-switch').getAttribute('data-category');
+                    // Gestion du clic direct sur les titres de catégorie (L1)
+                    document.querySelectorAll('.category-title.clickable').forEach(title => {
+                        title.addEventListener('click', function() {
+                            const categoryName = this.getAttribute('data-category');
                             const categorySection = document.querySelector(`.category-section[data-category="${categoryName}"]`);
                             const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
                             
@@ -587,88 +1293,198 @@
                             const isExpanded = capabilitiesContainer.classList.contains('expanded');
                             
                             if (isExpanded) {
-                                // Masquer les sous-capabilities
+                                // Masquer les sous-capabilities et réduire la barre latérale
                                 categorySection.classList.remove('active');
                                 capabilitiesContainer.classList.remove('expanded');
+                                
+                                // Désactiver tous les tags de cette catégorie
+                                const categoryTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"], .l3-tag[data-category="${categoryName}"]`);
+                                categoryTags.forEach(tag => tag.classList.remove('active'));
+                                
+                                // Masquer tous les L3 de cette catégorie
+                                const l3Containers = categorySection.querySelectorAll('.l3-container');
+                                l3Containers.forEach(container => {
+                                    container.classList.remove('expanded');
+                                });
+                                
+                                // Vérifier s'il reste des catégories ouvertes
+                                const hasExpandedCategories = document.querySelector('.capabilities-container.expanded');
+                                if (!hasExpandedCategories) {
+                                    // Revenir à la largeur normale (18vw)
+                                    document.getElementById('sidebar').classList.remove('l1-expanded', 'l2-expanded');
+                                }
                             } else {
-                                // Afficher les sous-capabilities
+                                // Afficher les sous-capabilities et élargir au niveau L1
                                 categorySection.classList.add('active');
                                 capabilitiesContainer.classList.add('expanded');
+                                document.getElementById('sidebar').classList.add('l1-expanded');
+                                document.getElementById('sidebar').classList.remove('l2-expanded');
                             }
+                            
+                            filterAndShowMarkersByCapabilities();
                         });
                     });
                     
-                    // Gestion des sliders de catégorie (2 positions : rien/tout sélectionné)
-                    document.querySelectorAll('.slider-switch').forEach(slider => {
-                        slider.addEventListener('click', function(e) {
-                            e.stopPropagation(); // Empêcher la propagation vers le container
+                    // Sliders de catégorie supprimés - logique intégrée dans le clic sur titre
+                    
+                    // Gestion des tags L2 - uniquement pour ouvrir/fermer les L3 (sans activation)
+                    document.querySelectorAll('.l2-tag').forEach(l2Tag => {
+                        l2Tag.addEventListener('click', function() {
+                            const l2Name = this.getAttribute('data-l2-name');
+                            const l3Container = document.querySelector(`.l3-container[data-l2-name="${l2Name}"]`);
+                            const hasL3 = l3Container && l3Container.children.length > 0;
                             
+                            // PAS de sélection/désélection du tag L2 - juste ouvrir/fermer la liste
+                            
+                            if (l3Container && hasL3) {
+                                const isExpanded = l3Container.classList.contains('expanded');
+                                
+                                if (isExpanded) {
+                                    // Masquer les L3 et revenir au niveau L1
+                                    l3Container.classList.remove('expanded');
+                                    this.classList.remove('expanded');
+                                    document.getElementById('sidebar').classList.remove('l2-expanded');
+                                } else {
+                                    // Afficher les L3 et élargir la sidebar
+                                    l3Container.classList.add('expanded');
+                                    this.classList.add('expanded');
+                                    document.getElementById('sidebar').classList.add('l1-expanded', 'l2-expanded');
+                                }
+                            }
+                            
+                            // PAS de filtrage automatique - seules les checkboxes L3 déclenchent le filtrage
+                        });
+                    });
+                    
+                    // Sliders L2 supprimés - fonctionnalité intégrée dans le clic sur L2
+                    
+                    // Gestion des checkboxes L3 - activation automatique des L2 correspondants
+                    document.querySelectorAll('.l3-checkbox').forEach(l3Checkbox => {
+                        l3Checkbox.addEventListener('change', function() {
+                            const l2Name = this.getAttribute('data-l2-name');
+                            const l2Tag = document.querySelector(`.l2-tag[data-l2-name="${l2Name}"]`);
+                            const allL3Checkboxes = document.querySelectorAll(`.l3-checkbox[data-l2-name="${l2Name}"]`);
+                            const checkedL3Checkboxes = document.querySelectorAll(`.l3-checkbox[data-l2-name="${l2Name}"]:checked`);
+                            
+                            // AUTOMATIQUEMENT activer le L2 parent dès qu'une L3 est cochée
+                            if (checkedL3Checkboxes.length > 0) {
+                                // Au moins une L3 cochée → Activer le L2
+                                l2Tag.classList.add('active');
+                                console.log(`✅ L2 "${l2Name}" activé automatiquement (${checkedL3Checkboxes.length}/${allL3Checkboxes.length} L3 cochées)`);
+                            } else {
+                                // Aucune L3 cochée → Désactiver le L2
+                                l2Tag.classList.remove('active');
+                                console.log(`❌ L2 "${l2Name}" désactivé (aucune L3 cochée)`);
+                            }
+                            
+                            // Déclencher le filtrage pour afficher sur la carte
+                            filterAndShowMarkersByCapabilities();
+                        });
+                    });
+                    
+                    // Gestion des tags individuels (compatibilité)
+                    document.querySelectorAll('.capability-tag:not(.l2-tag)').forEach(tag => {
+                        tag.addEventListener('click', function() {
                             const categoryName = this.getAttribute('data-category');
                             const categorySection = document.querySelector(`.category-section[data-category="${categoryName}"]`);
                             const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
-                            const categoryTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"]`);
                             
-                            // S'assurer que la catégorie est visible
+                            // S'assurer que la catégorie est visible et élargir la barre
                             if (!capabilitiesContainer.classList.contains('expanded')) {
                                 categorySection.classList.add('active');
                                 capabilitiesContainer.classList.add('expanded');
+                                document.getElementById('sidebar').classList.add('l1-expanded');
                             }
                             
-                            // Basculer entre position 1 (rien) et position 2 (tout sélectionné)
-                            let currentPosition = this.classList.contains('position-2') ? 2 : 1;
-                            const nextPosition = currentPosition === 1 ? 2 : 1;
-                            
-                            // Nettoyer et appliquer la nouvelle position
-                            this.classList.remove('position-1', 'position-2');
-                            this.classList.add(`position-${nextPosition}`);
-                            
-                            // Appliquer la logique selon la position
-                            if (nextPosition === 1) {
-                                // Position 1: désélectionner tous les tags
-                                categoryTags.forEach(tag => tag.classList.remove('active'));
-                            } else {
-                                // Position 2: sélectionner tous les tags
-                                categoryTags.forEach(tag => tag.classList.add('active'));
-                            }
+                            // Basculer l'état du tag
+                            this.classList.toggle('active');
                             
                             // Déclencher le filtrage
                             filterAndShowMarkersByCapabilities();
                         });
                     });
                     
-                    // Gestion des tags individuels
-                    document.querySelectorAll('.capability-tag').forEach(tag => {
-                        tag.addEventListener('click', function() {
+                    // Gestion du bouton All spécifique
+                    document.querySelectorAll('.all-button-specific').forEach(button => {
+                        button.addEventListener('click', function(event) {
+                            // Empêcher la propagation
+                            event.stopPropagation();
+                            
+                            const l2Name = this.getAttribute('data-l2-name');
+                            const checkboxes = document.querySelectorAll(`.l3-checkbox[data-l2-name="${l2Name}"]`);
+                            
+                            // Basculer l'état du bouton
+                            this.classList.toggle('active');
+                            const isActive = this.classList.contains('active');
+                            
+                            // Cocher/décocher toutes les cases L3 correspondantes
+                            checkboxes.forEach(checkbox => {
+                                checkbox.checked = isActive;
+                            });
+                            
+                            // Déclencher le filtrage
+                            filterAndShowMarkersByCapabilities();
+                        });
+                    });
+                    
+                    // Gestion des sliders L1 (activent toutes les L3 de la catégorie)
+                    document.querySelectorAll('.slider-checkbox-l1').forEach(slider => {
+                        slider.addEventListener('change', function() {
                             const categoryName = this.getAttribute('data-category');
                             const categorySection = document.querySelector(`.category-section[data-category="${categoryName}"]`);
-                            const slider = document.querySelector(`.slider-switch[data-category="${categoryName}"]`);
-                            const capabilitiesContainer = categorySection.querySelector('.capabilities-container');
+                            const allL3Checkboxes = categorySection.querySelectorAll('.l3-checkbox');
+                            const allL2Tags = categorySection.querySelectorAll('.l2-tag');
+                            const isChecked = this.checked;
                             
-                            // S'assurer que la catégorie est visible
-                            if (!capabilitiesContainer.classList.contains('expanded')) {
-                                categorySection.classList.add('active');
-                                capabilitiesContainer.classList.add('expanded');
-                            }
+                            // Cocher/décocher toutes les cases L3 de la catégorie
+                            allL3Checkboxes.forEach(checkbox => {
+                                checkbox.checked = isChecked;
+                            });
                             
-                            // Basculer l'état du tag
-                            this.classList.toggle('active');
+                            // ACTIVER/DÉSACTIVER tous les tags L2 de la catégorie
+                            allL2Tags.forEach(l2Tag => {
+                                if (isChecked) {
+                                    l2Tag.classList.add('active');
+                                } else {
+                                    l2Tag.classList.remove('active');
+                                }
+                            });
                             
-                            // Mettre à jour la position du slider selon l'état des tags
-                            const activeTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"].active`);
-                            const totalTags = document.querySelectorAll(`.capability-tag[data-category="${categoryName}"]`);
+                            // Synchroniser les sliders L2 avec l'état du slider L1
+                            const allL2Sliders = categorySection.querySelectorAll('.slider-checkbox');
+                            allL2Sliders.forEach(l2Slider => {
+                                l2Slider.checked = isChecked;
+                            });
                             
-                            if (activeTags.length === 0) {
-                                // Aucun tag actif -> Position 1
-                                slider.classList.remove('position-2');
-                                slider.classList.add('position-1');
-                            } else if (activeTags.length === totalTags.length) {
-                                // Tous les tags actifs -> Position 2
-                                slider.classList.remove('position-1');
-                                slider.classList.add('position-2');
+                            console.log(`${isChecked ? '✅' : '❌'} Slider L1 "${categoryName}" ${isChecked ? 'activé' : 'désactivé'} → ${allL3Checkboxes.length} L3 et ${allL2Tags.length} L2 ${isChecked ? 'activés' : 'désactivés'}`);
+                            
+                            // Déclencher le filtrage
+                            filterAndShowMarkersByCapabilities();
+                        });
+                    });
+                    
+                    // Gestion unifiée de tous les sliders L2 (au-dessus et à droite des tags L2)
+                    document.querySelectorAll('.slider-checkbox').forEach(slider => {
+                        slider.addEventListener('change', function() {
+                            const l2Name = this.getAttribute('data-l2-name');
+                            const checkboxes = document.querySelectorAll(`.l3-checkbox[data-l2-name="${l2Name}"]`);
+                            const l2Tag = document.querySelector(`.l2-tag[data-l2-name="${l2Name}"]`);
+                            const isChecked = this.checked;
+                            
+                            // Cocher/décocher toutes les cases L3 correspondantes
+                            checkboxes.forEach(checkbox => {
+                                checkbox.checked = isChecked;
+                            });
+                            
+                            // ACTIVER/DÉSACTIVER le tag L2 selon l'état du slider
+                            if (isChecked) {
+                                // Slider activé → Cases L3 cochées → L2 activé
+                                l2Tag.classList.add('active');
+                                console.log(`✅ Slider L2 activé → L2 "${l2Name}" activé automatiquement`);
                             } else {
-                                // Certains tags actifs -> Position 1 (état partiel = désactivé)
-                                slider.classList.remove('position-2');
-                                slider.classList.add('position-1');
+                                // Slider désactivé → Cases L3 décochées → L2 désactivé
+                                l2Tag.classList.remove('active');
+                                console.log(`❌ Slider L2 désactivé → L2 "${l2Name}" désactivé automatiquement`);
                             }
                             
                             // Déclencher le filtrage
@@ -739,6 +1555,9 @@
                             if (!isCurrentlySelected) {
                                 this.classList.add('selected');
                                 
+                                // Afficher le bouton de sélection
+                                showSelectedAppButton(itemName);
+                                
                                 const item = searchResults.find(i => i.name === itemName);
                                 if (!item || !item.countries) return;
                                 
@@ -755,6 +1574,7 @@
                                 });
                             } else {
                                 // Si l'élément était déjà sélectionné, le désélectionner
+                                hideSelectedAppButton();
                                 resetCountryColors();
                             }
 
@@ -775,40 +1595,41 @@
                     }
                 }
                 
-                // Associer la fonction aux événements des sliders et tags
+                // Associer la fonction aux événements des tags (sliders supprimés)
                 document.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('slider-switch') || e.target.classList.contains('capability-tag')) {
+                    if (e.target.classList.contains('capability-tag')) {
                         setTimeout(clearSearchOnCapabilityChange, 50);
                     }
                 });
                 
                 filterAndShowMarkersByCapabilities();
                 
-                // Gestion du bouton d'agrandissement de la sidebar
-                const expandButton = document.getElementById('expand-button');
-                const sidebar = document.getElementById('sidebar');
-                const mapElement = document.getElementById('map');
-                let isExpanded = false;
+                // Gestion du bouton toggle pour afficher/masquer les applications
+                const toggleAppsButton = document.getElementById('toggle-apps-button');
+                const infoPanel = document.getElementById('info-panel');
+                let appsVisible = false;
                 
-                expandButton.addEventListener('click', function() {
-                    isExpanded = !isExpanded;
+                toggleAppsButton.addEventListener('click', function() {
+                    appsVisible = !appsVisible;
                     
-                    if (isExpanded) {
-                        sidebar.classList.add('expanded');
-                        mapElement.classList.add('expanded');
-                        expandButton.innerHTML = '⇇';
-                        expandButton.title = 'Réduire la barre latérale';
+                    if (appsVisible) {
+                        infoPanel.classList.add('expanded');
+                        this.textContent = '−';
+                        this.title = 'Masquer les applications';
                     } else {
-                        sidebar.classList.remove('expanded');
-                        mapElement.classList.remove('expanded');
-                        expandButton.innerHTML = '⇄';
-                        expandButton.title = 'Agrandir la barre latérale';
+                        infoPanel.classList.remove('expanded');
+                        this.textContent = '+';
+                        this.title = 'Afficher les applications';
                     }
-                    
-                    // Redimensionner la carte après l'animation
-                    setTimeout(() => {
-                        map.invalidateSize();
-                    }, 300);
+                });
+                
+                // Bouton d'expansion supprimé - élargissement automatique géré par les clics L1/L2
+                
+                // Ajouter l'événement de zoom pour regrouper/dégrouper les markers
+                map.on('zoomend', function() {
+                    if (currentItems.length > 0) {
+                        showCountryMarkers(currentItems, currentAllApps);
+                    }
                 });
             });
 
