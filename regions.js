@@ -19,9 +19,8 @@ export const regionMapping = {
     "Nortam": [
         "United States of America", "Canada", "Mexico"
     ],
-    "Asia Pacific": [
-        "Australia", "New Zealand", "Japan", "South Korea", "China", "India", 
-        "Singapore", "Malaysia", "Thailand", "Indonesia", "Philippines", 
+    "Apac": [
+        "Australia", "New Zealand", "Japan", "South Korea", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Philippines", 
         "Vietnam", "Cambodia", "Laos", "Myanmar", "Brunei"
     ],
     "Americas": [
@@ -47,7 +46,26 @@ export const regionMapping = {
     ],
     "Benelux": [
         "Belgium", "Netherlands", "Luxembourg"
+    ],
+    "Latam": [
+        "Brazil", "Argentina", "Chile", "Colombia", "Peru", "Venezuela", 
+        "Ecuador", "Bolivia", "Paraguay", "Uruguay", "Guyana", "Suriname"
+    ],
+    "Imea": [
+        "India", "United Arab Emirates", "Saudi Arabia", "Qatar", "Kuwait", 
+        "Bahrain", "Oman", "Jordan", "Lebanon", "Israel", "Turkey", 
+        "Iran", "Iraq", "Syria", "Yemen", "South Africa", "Nigeria", "Kenya", "Ghana", 
+        "Ethiopia", "Tanzania", "Uganda"
     ]
+};
+
+// Centres géographiques des régions principales
+export const regionCenters = {
+    "nortam": [45.0, -100.0],    // Centre de l'Amérique du Nord
+    "europe": [46.818188, 8.227512],  // Centre de l'Europe (Suisse)
+    "apac": [15.0, 120.0],       // Centre de l'Asie-Pacifique
+    "latam": [-15.0, -60.0],     // Centre de l'Amérique Latine
+    "imea": [20.0, 25.0]         // Centre de l'India, Middle East & Africa
 };
 
 // Fonction pour expander les régions vers les pays
