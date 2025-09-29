@@ -426,6 +426,91 @@
     "l1_name": "Carrier Management",
     "l2_name": "Manage Carrier Relationship"
   },
+"SCOC1": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Source, Certify, Onboard Carriers",
+  "l3_name": "Evaluate network requirements"
+},
+"SCOC2": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Source, Certify, Onboard Carriers",
+  "l3_name": "Source, qualify and certify carriers"
+},
+"SCOC3": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Source, Certify, Onboard Carriers",
+  "l3_name": "Manage RFQ processes"
+},
+"SCOC4": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Source, Certify, Onboard Carriers",
+  "l3_name": "Negotiate and contract with carrier"
+},
+"IC1": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Implement Carriers",
+  "l3_name": "Set-up Carrier contract and rates"
+},
+"IC2": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Implement Carriers",
+  "l3_name": "Integrate with Carriers"
+},
+"MCCI1": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Maintain Carriers Contracts and Items",
+  "l3_name": "Maintain Carriers Contracts and Financial Agreements"
+},
+"MCCI2": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Maintain Carriers Contracts and Items",
+  "l3_name": "Maintain Carriers Capability Inventory"
+},
+"PTC1": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Purchase to Carriers",
+  "l3_name": "Manage Buying Channels"
+},
+"PTC2": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Purchase to Carriers",
+  "l3_name": "Order services from carrier"
+},
+"PTC3": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Purchase to Carriers",
+  "l3_name": "Manage Ad-hoc Demand"
+},
+"PTC4": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Purchase to Carriers",
+  "l3_name": "Manage Spot-Sourcing"
+},
+"PTC5": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Purchase to Carriers",
+  "l3_name": "Process Vendor Item Receipts and Invoices"
+},
+"PTC6": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Purchase to Carriers",
+  "l3_name": "Pay Carriers"
+},
+"MCP1": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Manage Carrier Performance",
+  "l3_name": "Monitor and Manage Carrier Service Performance"
+},
+"MCP2": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Manage Carrier Performance",
+  "l3_name": "Manage Carrier SLAs (Service Level Agreement)"
+},
+"MCR1": {
+  "l1_name": "Carrier Management",
+  "l2_name": "Manage Carrier Relationship",
+  "l3_name": "Manage Carrier Relationship"
+},
   "ANM1": {
     "l1_name": "Asset & Network Management",
     "l2_name": "Define Transportation Network Strategy and Planning"
@@ -442,6 +527,101 @@
     "l1_name": "Asset & Network Management",
     "l2_name": "Monitor and Manage Network Performance"
   },
+  "DTNSP1": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Define Transportation Network Strategy and Planning",
+  "l3_name": "Forecast Demand"
+},
+"DTNSP2": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Define Transportation Network Strategy and Planning",
+  "l3_name": "Evaluate and plan network capacity"
+},
+"DTNSP3": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Define Transportation Network Strategy and Planning",
+  "l3_name": "Define network routing"
+},
+"DTNSP4": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Define Transportation Network Strategy and Planning",
+  "l3_name": "Create Schedules"
+},
+"DTNSP5": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Define Transportation Network Strategy and Planning",
+  "l3_name": "Manage Network Capability"
+},
+"DTNSP6": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Define Transportation Network Strategy and Planning",
+  "l3_name": "Manage cost allocation rules across network"
+},
+"MA1": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Manage Assets",
+  "l3_name": "Assign assets and personnel"
+},
+"MA2": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Manage Assets",
+  "l3_name": "Manage schedules"
+},
+"MA3": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Manage Assets",
+  "l3_name": "Manage Fuel"
+},
+"MA4": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Manage Assets",
+  "l3_name": "Manage Workforce/Drivers"
+},
+"MA5": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Manage Assets",
+  "l3_name": "Maintain assets"
+},
+"MA6": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Manage Assets",
+  "l3_name": "Manage Equipment Provision and Returns"
+},
+"MA7": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Manage Assets",
+  "l3_name": "Track & Manage Material Handling Units (MHU) /Pallets"
+},
+"MME1": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Monitor and Manage Exceptions",
+  "l3_name": "Monitor and Manage Exceptions"
+},
+"MMNP1": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Monitor and Manage Network Performance",
+  "l3_name": "Manage Standard Network and Network Flow"
+},
+"MMNP2": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Monitor and Manage Network Performance",
+  "l3_name": "Evaluate Network Costing and Cost Distribution"
+},
+"MMNP3": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Monitor and Manage Network Performance",
+  "l3_name": "Perform Trend Analysis"
+},
+"MMNP4": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Monitor and Manage Network Performance",
+  "l3_name": "Perform CO2 Analysis"
+},
+"MMNP5": {
+  "l1_name": "Asset & Network Management",
+  "l2_name": "Monitor and Manage Network Performance",
+  "l3_name": "Provide Load Visibility cross-instances / business units"
+},
   "OP1": {
     "l1_name": "From Offering to Pricing",
     "l2_name": "Define and Manage Products"
@@ -450,8 +630,49 @@
     "l1_name": "From Offering to Pricing",
     "l2_name": "Define and manage Pricing"
   },
+  "DMPRODUCTS": {
+  "l1_name": "From Offering to Pricing",
+  "l2_name": "Define and Manage Products",
+  "l3_name": "Develop sustainability offering"
+},
+"DMPRICING": {
+  "l1_name": "From Offering to Pricing",
+  "l2_name": "Define and manage Pricing",
+  "l3_name": "Define and Manage Pricing Rules and Configuration"
+},
   "FM1": {
     "l1_name": "Finance Management",
     "l2_name": "Manage Operational Finance"
-  }
+  },
+  "MOF1": {
+  "l1_name": "Finance Management",
+  "l2_name": "Manage Operational Finance",
+  "l3_name": "Measure and manage profitability"
+},
+"MOF2": {
+  "l1_name": "Finance Management",
+  "l2_name": "Manage Operational Finance",
+  "l3_name": "Manage I/C invoicing and profit sharing"
+},
+"MOF3": {
+  "l1_name": "Finance Management",
+  "l2_name": "Manage Operational Finance",
+  "l3_name": "Manage Credit and Credit Limits"
+},
+"MOF4": {
+  "l1_name": "Finance Management",
+  "l2_name": "Manage Operational Finance",
+  "l3_name": "Manage Accounts Receivables and Payables"
+},
+"MOF5": {
+  "l1_name": "Finance Management",
+  "l2_name": "Manage Operational Finance",
+  "l3_name": "Manage Collections"
+},
+"MOF6": {
+  "l1_name": "Finance Management",
+  "l2_name": "Manage Operational Finance",
+  "l3_name": "Manage Taxation and related governmental requirements"
+}
+
 }
