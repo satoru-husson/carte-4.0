@@ -26,7 +26,7 @@ function displayApplicationCapabilities(appName, appData) {
     // Générer le HTML pour afficher les capabilities
     let capabilitiesHTML = `
         <div style="margin-bottom: 15px;">
-            <h3 style="color: #1976d2; margin: 0 0 10px 0; font-size: 16px;">
+            <h3 style="color: #1976d2; margin: 0 0 10px 0; font-size: 18px;">
                 📋 Capabilities de ${appName}
             </h3>
             <button onclick="showAllApplications()" style="
@@ -35,7 +35,7 @@ function displayApplicationCapabilities(appName, appData) {
                 border: none; 
                 border-radius: 4px; 
                 padding: 4px 8px; 
-                font-size: 11px; 
+                font-size: 13px; 
                 cursor: pointer;
                 margin-bottom: 10px;
             ">← Retour à la liste</button>
@@ -58,24 +58,67 @@ function displayApplicationCapabilities(appName, appData) {
         // Générer le HTML hiérarchique
         Object.keys(l1Groups).forEach(l1Name => {
             capabilitiesHTML += `
-                <div style="margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; padding: 10px;">
-                    <h4 style="color: #1a237e; margin: 0 0 8px 0; font-size: 14px;">🎯 ${l1Name}</h4>
+                <div style="
+                    margin-bottom: 20px; 
+                    border: 2px solid #1a237e; 
+                    border-radius: 8px; 
+                    padding: 15px;
+                    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+                    box-shadow: 0 2px 8px rgba(26, 35, 126, 0.1);
+                ">
+                    <span style="
+                        color: white !important; 
+                        margin: 0 0 15px 0; 
+                        font-size: 1.2em !important;
+                        font-weight: bold;
+                        padding: 8px 12px;
+                        background: #1a237e;
+                        border-radius: 4px;
+                        text-align: center;
+                        display: block;
+                    ">🎯 ${l1Name}</span>
             `;
             
             Object.keys(l1Groups[l1Name]).forEach(l2Name => {
                 capabilitiesHTML += `
-                    <div style="margin-bottom: 8px; padding-left: 15px;">
-                        <h5 style="color: #1976d2; margin: 0 0 5px 0; font-size: 13px;">📌 ${l2Name}</h5>
-                        <ul style="margin: 0; padding-left: 20px;">
+                    <div style="
+                        margin-bottom: 12px; 
+                        padding: 10px 15px; 
+                        border-left: 4px solid #1976d2;
+                        background: rgba(25, 118, 210, 0.05);
+                        border-radius: 0 4px 4px 0;
+                    ">
+                        <h5 style="
+                            color: #1976d2; 
+                            margin: 0 0 8px 0; 
+                            font-size: 1.2em;
+                            font-weight: bold;
+                        ">📌 ${l2Name}</h5>
+                        <div style="padding-left: 20px;">
                 `;
                 
                 l1Groups[l1Name][l2Name].forEach(cap => {
                     if (cap.l3_name) {
-                        capabilitiesHTML += `<li style="color: #666; font-size: 12px; margin-bottom: 2px;">✓ ${cap.l3_name}</li>`;
+                        capabilitiesHTML += `
+                            <div style="
+                                color: #666; 
+                                font-size: 14px; 
+                                margin-bottom: 4px;
+                                padding: 4px 8px;
+                                background: white;
+                                border-radius: 3px;
+                                border-left: 3px solid #4caf50;
+                                display: flex;
+                                align-items: center;
+                            ">
+                                <span style="color: #4caf50; margin-right: 8px; font-weight: bold;">✓</span>
+                                <span>${cap.l3_name}</span>
+                            </div>
+                        `;
                     }
                 });
                 
-                capabilitiesHTML += `</ul></div>`;
+                capabilitiesHTML += `</div></div>`;
             });
             
             capabilitiesHTML += `</div>`;
@@ -147,14 +190,13 @@ function filterAndShowMarkersByCapabilities() {
 
     let html = '';
     Object.keys(groupedSidebar).forEach(cat => {
-        html += `<div style="margin-bottom:10px;">
-            <span style="font-weight:bold;">${cat}</span><br>
+        html += `<div style="margin-bottom:2px;">
+            <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
             ${groupedSidebar[cat].map(name =>
-                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
+                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
             ).join('<br>')}
         </div>`;
     });
-    html += `<div style="height: 10px;"></div>`;
 
     let infoPanel = document.getElementById('info-panel');
     infoPanel.innerHTML = html;
@@ -239,11 +281,20 @@ function generateCapabilitiesInterface(capData, capabilitiesForm) {
         titleContainer.className = 'l1-title-with-slider';
         
         // Titre de la catégorie (cliquable pour élargir)
-        const categoryTitle = document.createElement('h4');
+        const categoryTitle = document.createElement('span');
         categoryTitle.className = 'category-title clickable';
         categoryTitle.textContent = categoryName;
         categoryTitle.setAttribute('data-category', categoryName);
         categoryTitle.style.cursor = 'pointer';
+        categoryTitle.style.fontSize = '1.2em';
+        categoryTitle.style.fontWeight = 'bold';
+        categoryTitle.style.color = 'white';
+        categoryTitle.style.background = '#1a237e';
+        categoryTitle.style.padding = '8px 12px';
+        categoryTitle.style.borderRadius = '4px';
+        categoryTitle.style.display = 'block';
+        categoryTitle.style.textAlign = 'center';
+        categoryTitle.style.marginBottom = '15px';
         
         // Slider pour L1
         const sliderWrapper = document.createElement('label');
@@ -656,6 +707,9 @@ function initializeCapabilities(capData, appData) {
     const capabilitiesForm = document.getElementById('capabilities-form');
     generateCapabilitiesInterface(capData, capabilitiesForm);
     
+    // Initialiser la section des catégories
+    initializeCategoriesFilter();
+    
     // Initialiser les applications filtrées avec toutes les applications
     currentFilteredApps = [...allApplications];
     
@@ -711,8 +765,8 @@ function initializeSearch() {
             html += `
                 <div class="search-result" data-name="${app.name}">
                     <div style="font-weight: bold; margin-bottom: 4px;">${app.name}</div>
-                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Catégorie: ${app.category || 'Non définie'}</div>
-                    <div style="font-size: 12px; color: #666;">Pays: ${countriesList}</div>
+                    <div style="font-size: 14px; color: #666; margin-bottom: 4px;">Catégorie: ${app.category || 'Non définie'}</div>
+                    <div style="font-size: 14px; color: #666;">Pays: ${countriesList}</div>
                 </div>
             `;
         });
@@ -798,6 +852,170 @@ function initializeSearch() {
 
 // Exposer les fonctions nécessaires à la portée globale
 window.displayApplicationCapabilities = displayApplicationCapabilities;
+window.initializeCapabilities = initializeCapabilities;
+
+// Initialisation de la liste des catégories avec cases à cocher
+function initializeCategoriesFilter() {
+    const categories = [
+        "Transport Management Systems (TMS)", "Asset & Fleet Management", "Track & Trace", "Integration & Middleware", "Financial & Settlement Systems",
+        "Reporting & BI", "Route & Planning Optimization", "Customs",
+        "Freight Marketplace", "Customer Portal", "Documents & Collaboration",
+        "Digital Forwarding", "YMS", "Warehouse Management Systems (WMS)", "Customer Relationship Management (CRM)", "Order Management System (OMS)", "Last Mile Distribution",
+        "Claims & Damages", "Carriers Portal", "Control & Quality",
+        "Mobile App", "Legal Compliance"
+    ];
+    
+    const categoriesList = document.getElementById('categories-list');
+    
+    // Générer les cases à cocher pour chaque catégorie
+    categories.forEach(category => {
+        const checkboxContainer = document.createElement('div');
+        checkboxContainer.style.cssText = `
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: background 0.2s ease;
+        `;
+        
+        // Hover effect
+        checkboxContainer.addEventListener('mouseenter', function() {
+            this.style.background = '#f0f4ff';
+        });
+        checkboxContainer.addEventListener('mouseleave', function() {
+            this.style.background = 'transparent';
+        });
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `category-${category.replace(/[^a-zA-Z0-9]/g, '-')}`;
+        checkbox.value = category;
+        checkbox.className = 'category-checkbox';
+        checkbox.style.cssText = `
+            margin-right: 8px;
+            cursor: pointer;
+        `;
+        
+        const label = document.createElement('label');
+        label.htmlFor = checkbox.id;
+        label.textContent = category;
+        label.style.cssText = `
+            cursor: pointer;
+            font-size: 1.3em;
+            color: #333;
+            flex: 1;
+            user-select: none;
+        `;
+        
+        // Événement de changement pour filtrer
+        checkbox.addEventListener('change', filterBySelectedCategories);
+        
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(label);
+        categoriesList.appendChild(checkboxContainer);
+    });
+}
+
+// Fonction de filtrage par catégories sélectionnées
+function filterBySelectedCategories() {
+    const checkedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
+        .map(checkbox => checkbox.value);
+    
+    let filteredApps = [];
+    
+    if (checkedCategories.length === 0) {
+        // Aucune catégorie sélectionnée, utiliser le filtrage normal par capabilities
+        filterAndShowMarkersByCapabilities();
+        return;
+    } else {
+        // Filtrer par catégories sélectionnées
+        filteredApps = allApplications.filter(app => 
+            checkedCategories.includes(app.category)
+        );
+    }
+    
+    // Appliquer aussi le filtrage par capabilities si des capabilities sont sélectionnées
+    let allActiveCapabilities = [];
+    
+    // Collecter les capacités des tags L2/L1 actifs
+    const activeL2Tags = Array.from(document.querySelectorAll('.capability-tag.active'));
+    activeL2Tags.forEach(tag => {
+        const capabilities = tag.getAttribute('data-capabilities');
+        if (capabilities) {
+            allActiveCapabilities.push(...capabilities.split(','));
+        }
+    });
+    
+    // Collecter les capacités des checkboxes L3 cochées
+    const checkedL3Checkboxes = Array.from(document.querySelectorAll('.l3-checkbox:checked'));
+    checkedL3Checkboxes.forEach(checkbox => {
+        const capability = checkbox.getAttribute('data-capability');
+        if (capability) {
+            allActiveCapabilities.push(capability);
+        }
+    });
+    
+    // Supprimer les doublons
+    allActiveCapabilities = [...new Set(allActiveCapabilities)];
+    
+    if (allActiveCapabilities.length > 0) {
+        filteredApps = filteredApps.filter(app =>
+            app.capabilities.some(cap => allActiveCapabilities.includes(cap))
+        );
+    }
+    
+    // Mettre à jour la liste des applications filtrées
+    currentFilteredApps = filteredApps;
+    
+    // Afficher les résultats sur la carte
+    if (typeof window.showCountryMarkers === 'function') {
+        window.showCountryMarkers(filteredApps, allApplications);
+    }
+    
+    // Afficher la liste dans la sidebar
+    displayCategoryFilteredApplications(filteredApps, checkedCategories);
+}
+
+// Fonction pour afficher les applications filtrées par catégories dans la sidebar
+function displayCategoryFilteredApplications(apps, selectedCategories) {
+    const infoPanel = document.getElementById('info-panel');
+    
+    if (apps.length === 0) {
+        infoPanel.innerHTML = `
+            <div style="padding: 10px; text-align: center; color: #666;">
+                Aucune application trouvée pour les catégories sélectionnées
+            </div>
+        `;
+        return;
+    }
+    
+    // Grouper par catégorie
+    const groupedSidebar = {};
+    apps.forEach(item => {
+        const cat = item.category || "Autre";
+        if (!groupedSidebar[cat]) groupedSidebar[cat] = [];
+        groupedSidebar[cat].push(item.name);
+    });
+
+    let html = '';
+    
+    Object.keys(groupedSidebar).forEach(cat => {
+        html += `<div style="margin-bottom:2px;">
+            <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
+            ${groupedSidebar[cat].map(name =>
+                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
+            ).join('<br>')}
+        </div>`;
+    });
+
+    infoPanel.innerHTML = html;
+
+    // Ajouter les événements de clic
+    if (typeof window.addAppClickEvents === 'function') {
+        window.addAppClickEvents(infoPanel, allApplications);
+    }
+}
 window.initializeCapabilities = initializeCapabilities;
 window.initializeSearch = initializeSearch;
 window.filterAndShowMarkersByCapabilities = filterAndShowMarkersByCapabilities;
