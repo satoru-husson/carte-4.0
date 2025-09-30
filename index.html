@@ -9,24 +9,40 @@
 <body>
     <div id="sidebar">
         <!-- Bouton d'expansion supprimé -->
-        <form id="capabilities-form" style="margin-bottom: 10px;">
+        <form id="capabilities-form" style="margin-bottom: 0px;">
             <!-- Cases à cocher générées dynamiquement -->
         </form>
-        <div style="border-top: 2px solid #ddd; margin: 10px 0;"></div>
+        
+        <!-- Section Categories sous Finance Management -->
+        <div id="categories-filter-section" style="margin-bottom: 0px;">
+            <div id="categories-list" style="
+                max-height: 120px; 
+                overflow-y: auto; 
+                border: 1px solid #ddd; 
+                border-radius: 4px; 
+                padding: 8px;
+                background: white;
+            ">
+                <!-- Les catégories seront générées ici -->
+            </div>
+        </div>
+        
+        <div style="border-top: 2px solid #ddd; margin: 2px 0;"></div>
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Tapez le nom d'une application..." style="width: 100%; padding: 8px 35px 8px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
             <!-- Bouton toggle supprimé - panneau toujours visible -->
         </div>
-        <div id="info-panel" style="background:#f0f4ff; padding:10px; border-radius:6px; margin-top: 10px;"></div>
+        <div id="info-panel" style="background:#f0f4ff; padding:0px 10px 0px 10px; border-radius:6px; margin-top: 2px;"></div>
     </div>
     <div id="map">
         <div id="selected-app-container" style="
-            position: absolute;
-            top: 20px;
+            position: fixed;
+            top: max(20px, 5vh);
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
             display: none;
+            max-width: 90vw;
         ">
             <div id="selected-app-button" style="
                 background: #1976d2;
@@ -235,12 +251,12 @@
             });
 
             // Créer le HTML pour afficher les applications
-            let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${country}</h4>`;
+            let html = `<h4 style="margin-bottom:10px; color: #d32f2f; font-size: 1.4em; line-height: 1.2;">${country}</h4>`;
             Object.keys(groupedApps).forEach(cat => {
                 html += `<div style="margin-bottom:10px;">
-                    <span style="font-weight:bold;">${cat}</span><br>
+                    <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
                     ${groupedApps[cat].map(name =>
-                        `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
+                        `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
                     ).join('<br>')}
                 </div>`;
             });
@@ -254,7 +270,7 @@
         function showRegionApps(regionName, regionCountries, allApps) {
             const infoPanel = document.getElementById('info-panel');
             
-            let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${regionName}</h4>`;
+            let html = `<h4 style="margin-bottom:10px; color: #d32f2f; font-size: 1.6em; line-height: 1.2;">${regionName}</h4>`;
             
             regionCountries.forEach(countryData => {
                 if (countryData.apps.length === 0) return;
@@ -268,13 +284,13 @@
                 });
 
                 html += `<div style="margin-bottom:15px; border-left: 3px solid #1976d2; padding-left: 8px;">
-                    <h5 style="margin: 0 0 5px 0; color: #1976d2;">${countryData.country}</h5>`;
+                    <h5 style="margin: 0 0 5px 0; color: #1976d2; font-size: 1.4em; line-height: 1.2;">${countryData.country}</h5>`;
                 
                 Object.keys(groupedApps).forEach(cat => {
                     html += `<div style="margin-bottom:5px;">
-                        <span style="font-weight:bold; font-size: 0.9em;">${cat}</span><br>
+                        <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
                         ${groupedApps[cat].map(name =>
-                            `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 0.85em;">${name}</span>`
+                            `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
                         ).join('<br>')}
                     </div>`;
                 });
