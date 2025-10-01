@@ -54,8 +54,7 @@ export const regionMapping = {
     "Imea": [
         "India", "United Arab Emirates", "Saudi Arabia", "Qatar", "Kuwait", 
         "Bahrain", "Oman", "Jordan", "Lebanon", "Israel", "Turkey", 
-        "Iran", "Iraq", "Syria", "Yemen", "South Africa", "Nigeria", "Kenya", "Ghana", 
-        "Ethiopia", "Tanzania", "Uganda"
+        "Iran", "Iraq", "Syria", "Yemen", "South Africa","Kazakhstan"
     ]
 };
 

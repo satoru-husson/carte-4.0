@@ -5,129 +5,408 @@ let capabilities = {};
 let allApplications = [];
 let globalFilterFunction = null;
 let currentFilteredApps = [];
+let bcL4Mapping = {}; // Nouvelle variable pour stocker les mappings BC L4
+let bcL4Definitions = {}; // Variable pour stocker les définitions des BC L4
+
+// Variables pour le comparateur
+let comparatorApps = [];
+let currentDisplayedApp = null; // Pour stocker l'app actuellement affichée
+
+// Fonctions de gestion du comparateur
+function addCurrentAppToComparator() {
+    if (currentDisplayedApp) {
+        toggleAppInComparator(currentDisplayedApp.name, currentDisplayedApp.data);
+    }
+}
+
+function toggleAppInComparator(appName, appData) {
+    // Vérifier si l'app est déjà dans le comparateur
+    const existingIndex = comparatorApps.findIndex(app => app.name === appName);
+    
+    if (existingIndex !== -1) {
+        // L'app est déjà dans le comparateur, la retirer
+        comparatorApps.splice(existingIndex, 1);
+        console.log(`❌ ${appName} retiré du comparateur. Total: ${comparatorApps.length}`);
+    } else {
+        // L'app n'est pas dans le comparateur, l'ajouter
+        if (comparatorApps.length >= 4) {
+            alert('Le comparateur est limité à 4 applications maximum');
+            return;
+        }
+        
+        comparatorApps.push({
+            name: appName,
+            implementedL4: appData.implementedL4 || [],
+            capabilities: appData.capabilities || []
+        });
+        console.log(`✅ ${appName} ajouté au comparateur. Total: ${comparatorApps.length}`);
+    }
+    
+    // Mettre à jour l'affichage des boutons
+    updateComparatorButtons(appName);
+    
+    // Sauvegarder dans localStorage
+    localStorage.setItem('comparatorApps', JSON.stringify(comparatorApps));
+}
+
+function addToComparator(appName, appData) {
+    // Cette fonction est maintenant un alias pour toggleAppInComparator
+    toggleAppInComparator(appName, appData);
+}
+
+function openComparatorPage() {
+    // Sauvegarder les applications dans localStorage
+    localStorage.setItem('comparatorApps', JSON.stringify(comparatorApps));
+    
+    // Ouvrir le comparateur dans un nouvel onglet
+    window.open('comparateur.html', '_blank');
+}
+
+function updateComparatorButtons(currentAppName) {
+    const addButton = document.getElementById('add-to-comparator-btn');
+    const comparatorButton = document.getElementById('open-comparator-btn');
+    
+    if (addButton) {
+        // Vérifier si l'app actuelle est dans le comparateur
+        const isInComparator = comparatorApps.find(app => app.name === currentAppName);
+        if (isInComparator) {
+            // App dans le comparateur - bouton pour retirer
+            addButton.innerHTML = '−';
+            addButton.style.background = '#f44336';
+            addButton.title = 'Retirer du comparateur';
+            addButton.disabled = false;
+        } else {
+            // App pas dans le comparateur - bouton pour ajouter
+            addButton.innerHTML = '+';
+            addButton.style.background = '#2196F3';
+            addButton.title = 'Ajouter au comparateur';
+            addButton.disabled = false;
+        }
+    }
+    
+    if (comparatorButton) {
+        if (comparatorApps.length > 1) {
+            comparatorButton.style.display = 'inline-block';
+            comparatorButton.innerHTML = `⚖️ Comparateur (${comparatorApps.length})`;
+        } else {
+            comparatorButton.style.display = 'none';
+        }
+    }
+}
+
+// Charger les applications du comparateur depuis localStorage
+function loadComparatorFromStorage() {
+    try {
+        const saved = localStorage.getItem('comparatorApps');
+        if (saved) {
+            comparatorApps = JSON.parse(saved);
+            console.log(`📋 Comparateur chargé: ${comparatorApps.length} applications`);
+        }
+    } catch (error) {
+        console.warn('Erreur lors du chargement du comparateur:', error);
+        comparatorApps = [];
+    }
+}
+
+// Fonction pour charger les données BC L4
+async function loadBCL4Data() {
+    try {
+        // Charger le mapping L3 -> L4
+        const mappingResponse = await fetch('bc-l4-mapping.json');
+        if (mappingResponse.ok) {
+            bcL4Mapping = await mappingResponse.json();
+            console.log('Données BC L4 mapping chargées:', Object.keys(bcL4Mapping).length, 'L3 mappées');
+        } else {
+            console.warn('Impossible de charger bc-l4-mapping.json');
+        }
+        
+        // Charger les définitions des L4
+        const definitionsResponse = await fetch('bc-l4-definitions.json');
+        if (definitionsResponse.ok) {
+            bcL4Definitions = await definitionsResponse.json();
+            console.log('Définitions BC L4 chargées:', Object.keys(bcL4Definitions).length, 'L4 définis');
+        } else {
+            console.warn('Impossible de charger bc-l4-definitions.json');
+        }
+    } catch (error) {
+        console.warn('Erreur lors du chargement des données BC L4:', error);
+    }
+}
+
+// Fonction helper pour dériver automatiquement les L3 à partir des BC L4
+function deriveL3FromImplementedL4(implementedL4) {
+    if (!implementedL4 || implementedL4.length === 0) return [];
+    
+    const derivedL3 = new Set();
+    
+    // Pour chaque BC L4 implémenté, trouver le L3 parent
+    Object.keys(bcL4Mapping).forEach(l3Id => {
+        const l4List = bcL4Mapping[l3Id];
+        // Si au moins un BC L4 de ce L3 est implémenté, ajouter le L3
+        if (l4List.some(l4Id => implementedL4.includes(l4Id))) {
+            derivedL3.add(l3Id);
+        }
+    });
+    
+    return Array.from(derivedL3);
+}
+
+// Fonction pour obtenir la définition d'un L4 ou son nom par défaut
+function getL4DisplayName(l4Id) {
+    return bcL4Definitions[l4Id] || l4Id;
+}
+
+// Fonction helper pour créer les blocs L4
+function createL4Blocks(l3Id, implementedL4) {
+    if (!bcL4Mapping[l3Id]) return '';
+    
+    return bcL4Mapping[l3Id].map((l4Id, index) => {
+        const isImplemented = implementedL4.includes(l4Id);
+        const color = isImplemented ? '#4CAF50' : '#E0E0E0';
+        const cursor = isImplemented ? 'cursor: pointer;' : '';
+        const title = isImplemented ? 'Cliquez pour voir les détails des L4 implémentés' : '';
+        const dataAttrs = isImplemented ? `data-l3-id="${l3Id}" data-implemented-l4="${implementedL4.join(',')}" data-clickable="true"` : '';
+        
+        return `<span class="l4-block" 
+                      style="background-color: ${color}; ${cursor}" 
+                      ${dataAttrs}
+                      title="${title}"></span>`;
+    }).join('');
+}
+
+// Fonction pour afficher les détails des L4 implémentés
+function showL4Details(l3Id, implementedL4) {
+    console.log('showL4Details appelée avec:', l3Id, implementedL4); // Debug
+    
+    if (!bcL4Mapping[l3Id] || !bcL4Definitions) {
+        console.warn('Données manquantes:', { bcL4Mapping: !!bcL4Mapping[l3Id], bcL4Definitions: !!bcL4Definitions });
+        return;
+    }
+    
+    // Filtrer les L4 qui sont implémentés pour ce L3
+    const implementedL4ForL3 = bcL4Mapping[l3Id].filter(l4Id => implementedL4.includes(l4Id));
+    
+    console.log('L4 implémentés pour ce L3:', implementedL4ForL3); // Debug
+    
+    if (implementedL4ForL3.length === 0) {
+        console.warn('Aucun L4 implémenté trouvé pour ce L3');
+        return;
+    }
+    
+    // Créer le contenu simple avec bullet points
+    let popupContent = `<ul style="margin: 0; padding-left: 20px; list-style-type: disc;">`;
+    
+    implementedL4ForL3.forEach(l4Id => {
+        const l4Name = getL4DisplayName(l4Id);
+        popupContent += `<li style="margin: 8px 0; font-size: 0.9em; line-height: 1.4;">${l4Name}</li>`;
+    });
+    
+    popupContent += `</ul>`;
+    
+    // Afficher la fenêtre centrale
+    showCentralPopup(popupContent);
+}
+
+// Fonction pour afficher une fenêtre centrale simplifiée
+function showCentralPopup(content) {
+    // Supprimer toute popup existante
+    const existingPopup = document.getElementById('l4-popup');
+    const existingOverlay = document.getElementById('l4-popup-overlay');
+    if (existingPopup) existingPopup.remove();
+    if (existingOverlay) existingOverlay.remove();
+    
+    // Créer la popup
+    const popup = document.createElement('div');
+    popup.id = 'l4-popup';
+    popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 2px solid #1a237e;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        padding: 20px;
+        max-width: 500px;
+        max-height: 70vh;
+        overflow-y: auto;
+        z-index: 10000;
+        font-family: Arial, sans-serif;
+    `;
+    
+    // Ajouter le contenu sans titre
+    popup.innerHTML = content + `
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="document.getElementById('l4-popup').remove(); document.getElementById('l4-popup-overlay').remove();" 
+                    style="background: #1a237e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                Fermer
+            </button>
+        </div>
+    `;
+    
+    // Ajouter un overlay semi-transparent
+    const overlay = document.createElement('div');
+    overlay.id = 'l4-popup-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+    `;
+    overlay.onclick = () => {
+        popup.remove();
+        overlay.remove();
+    };
+    
+    // Ajouter à la page
+    document.body.appendChild(overlay);
+    document.body.appendChild(popup);
+    
+    // Permettre la fermeture avec Escape
+    const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+            popup.remove();
+            overlay.remove();
+            document.removeEventListener('keydown', handleKeyDown);
+        }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+}
+
+// Fonction pour attacher les event listeners aux blocs L4
+function attachL4BlockEventListeners() {
+    const clickableBlocks = document.querySelectorAll('.l4-block[data-clickable="true"]');
+    
+    clickableBlocks.forEach(block => {
+        block.addEventListener('click', function(event) {
+            event.stopPropagation(); // Empêcher la propagation
+            const l3Id = this.getAttribute('data-l3-id');
+            const implementedL4String = this.getAttribute('data-implemented-l4');
+            const implementedL4 = implementedL4String ? implementedL4String.split(',') : [];
+            
+            // Stocker l'élément target dans la fonction
+            window.currentClickTarget = this;
+            showL4Details(l3Id, implementedL4);
+        });
+    });
+}
 
 // Fonction pour afficher les capabilities d'une application
 function displayApplicationCapabilities(appName, appData) {
-    const infoPanel = document.getElementById('info-panel');
+    // Stocker l'application actuellement affichée
+    currentDisplayedApp = { name: appName, data: appData };
     
-    // Trouver les capabilities de cette application
+    const infoPanel = document.getElementById('info-panel');
+    document.getElementById('sidebar').className = 'l2-expanded';
+    
     const appCapabilities = [];
-    if (appData && appData.capabilities) {
-        appData.capabilities.forEach(capId => {
-            if (capabilities[capId]) {
-                appCapabilities.push({
-                    id: capId,
-                    ...capabilities[capId]
-                });
+    
+    // Combiner les capabilities définies manuellement avec celles dérivées des BC L4
+    let allCapabilities = [...(appData?.capabilities || [])];
+    
+    // Si l'app a des BC L4 implémentés, ajouter automatiquement les L3 correspondants
+    if (appData?.implementedL4) {
+        const derivedL3 = deriveL3FromImplementedL4(appData.implementedL4);
+        // Ajouter les L3 dérivés (en évitant les doublons)
+        derivedL3.forEach(l3Id => {
+            if (!allCapabilities.includes(l3Id)) {
+                allCapabilities.push(l3Id);
             }
         });
     }
     
-    // Générer le HTML pour afficher les capabilities
+    allCapabilities.forEach(capId => {
+        if (capabilities[capId]) {
+            appCapabilities.push({ id: capId, ...capabilities[capId] });
+        }
+    });
+    
     let capabilitiesHTML = `
-        <div style="margin-bottom: 15px;">
-            <h3 style="color: #1976d2; margin: 0 0 10px 0; font-size: 18px;">
-                📋 Capabilities de ${appName}
-            </h3>
-            <button onclick="showAllApplications()" style="
-                background: #6c757d; 
-                color: white; 
-                border: none; 
-                border-radius: 4px; 
-                padding: 4px 8px; 
-                font-size: 13px; 
-                cursor: pointer;
-                margin-bottom: 10px;
-            ">← Retour à la liste</button>
+        <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 class="app-title">📋 Capabilities de ${appName}</h3>
+                <button onclick="showAllApplications()" class="back-button">← Retour à la liste</button>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button id="add-to-comparator-btn" onclick="addCurrentAppToComparator()" style="
+                    background: #2196F3;
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 32px;
+                    height: 32px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    font-weight: bold;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                " title="Ajouter au comparateur">+</button>
+                <button id="open-comparator-btn" onclick="openComparatorPage()" style="
+                    background: #4CAF50;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    font-weight: bold;
+                    display: none;
+                    transition: all 0.2s ease;
+                " title="Ouvrir le comparateur">⚖️ Comparateur</button>
+            </div>
         </div>
     `;
     
     if (appCapabilities.length > 0) {
-        // Grouper par L1
         const l1Groups = {};
         appCapabilities.forEach(cap => {
-            if (!l1Groups[cap.l1_name]) {
-                l1Groups[cap.l1_name] = {};
-            }
-            if (!l1Groups[cap.l1_name][cap.l2_name]) {
-                l1Groups[cap.l1_name][cap.l2_name] = [];
-            }
+            if (!l1Groups[cap.l1_name]) l1Groups[cap.l1_name] = {};
+            if (!l1Groups[cap.l1_name][cap.l2_name]) l1Groups[cap.l1_name][cap.l2_name] = [];
             l1Groups[cap.l1_name][cap.l2_name].push(cap);
         });
         
-        // Générer le HTML hiérarchique
+        const implementedL4 = appData.implementedL4 || [];
+        
         Object.keys(l1Groups).forEach(l1Name => {
-            capabilitiesHTML += `
-                <div style="
-                    margin-bottom: 20px; 
-                    border: 2px solid #1a237e; 
-                    border-radius: 8px; 
-                    padding: 15px;
-                    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-                    box-shadow: 0 2px 8px rgba(26, 35, 126, 0.1);
-                ">
-                    <span style="
-                        color: white !important; 
-                        margin: 0 0 15px 0; 
-                        font-size: 1.2em !important;
-                        font-weight: bold;
-                        padding: 8px 12px;
-                        background: #1a237e;
-                        border-radius: 4px;
-                        text-align: center;
-                        display: block;
-                    ">🎯 ${l1Name}</span>
-            `;
+            capabilitiesHTML += `<div><h3 class="l1-capability">${l1Name}</h3>`;
             
             Object.keys(l1Groups[l1Name]).forEach(l2Name => {
-                capabilitiesHTML += `
-                    <div style="
-                        margin-bottom: 12px; 
-                        padding: 10px 15px; 
-                        border-left: 4px solid #1976d2;
-                        background: rgba(25, 118, 210, 0.05);
-                        border-radius: 0 4px 4px 0;
-                    ">
-                        <h5 style="
-                            color: #1976d2; 
-                            margin: 0 0 8px 0; 
-                            font-size: 1.2em;
-                            font-weight: bold;
-                        ">📌 ${l2Name}</h5>
-                        <div style="padding-left: 20px;">
-                `;
+                capabilitiesHTML += `<h4 class="l2-title">${l2Name}</h4><ul class="l3-list">`;
                 
                 l1Groups[l1Name][l2Name].forEach(cap => {
                     if (cap.l3_name) {
+                        const l4Blocks = createL4Blocks(cap.id, implementedL4);
                         capabilitiesHTML += `
-                            <div style="
-                                color: #666; 
-                                font-size: 14px; 
-                                margin-bottom: 4px;
-                                padding: 4px 8px;
-                                background: white;
-                                border-radius: 3px;
-                                border-left: 3px solid #4caf50;
-                                display: flex;
-                                align-items: center;
-                            ">
-                                <span style="color: #4caf50; margin-right: 8px; font-weight: bold;">✓</span>
-                                <span>${cap.l3_name}</span>
-                            </div>
+                            <li class="l3-item">
+                                <span class="l3-name">${cap.l3_name}</span>
+                                <span class="l4-blocks">${l4Blocks}</span>
+                            </li>
                         `;
                     }
                 });
                 
-                capabilitiesHTML += `</div></div>`;
+                capabilitiesHTML += `</ul>`;
             });
             
             capabilitiesHTML += `</div>`;
         });
     } else {
-        capabilitiesHTML += `<p style="color: #666; font-style: italic;">Aucune capability trouvée pour cette application.</p>`;
+        capabilitiesHTML += `<p>Aucune capability trouvée pour cette application.</p>`;
     }
     
     infoPanel.innerHTML = capabilitiesHTML;
+    
+    // Ajouter les event listeners pour les blocs L4 cliquables
+    attachL4BlockEventListeners();
+    
+    // Mettre à jour l'état des boutons du comparateur
+    updateComparatorButtons(appName);
 }
 
 // Fonction globale pour retourner à la liste complète des applications
@@ -190,7 +469,7 @@ function filterAndShowMarkersByCapabilities() {
 
     let html = '';
     Object.keys(groupedSidebar).forEach(cat => {
-        html += `<div style="margin-bottom:2px;">
+        html += `<div style="margin-bottom:10px;">
             <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
             ${groupedSidebar[cat].map(name =>
                 `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
@@ -286,7 +565,7 @@ function generateCapabilitiesInterface(capData, capabilitiesForm) {
         categoryTitle.textContent = categoryName;
         categoryTitle.setAttribute('data-category', categoryName);
         categoryTitle.style.cursor = 'pointer';
-        categoryTitle.style.fontSize = '1.2em';
+        categoryTitle.style.fontSize = '1.5em';
         categoryTitle.style.fontWeight = 'bold';
         categoryTitle.style.color = 'white';
         categoryTitle.style.background = '#1a237e';
@@ -608,29 +887,6 @@ function setupHybridControls() {
         });
     });
     
-    // Gestion du bouton All spécifique
-    document.querySelectorAll('.all-button-specific').forEach(button => {
-        button.addEventListener('click', function(event) {
-            // Empêcher la propagation
-            event.stopPropagation();
-            
-            const l2Name = this.getAttribute('data-l2-name');
-            const checkboxes = document.querySelectorAll(`.l3-checkbox[data-l2-name="${l2Name}"]`);
-            
-            // Basculer l'état du bouton
-            this.classList.toggle('active');
-            const isActive = this.classList.contains('active');
-            
-            // Cocher/décocher toutes les cases L3 correspondantes
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = isActive;
-            });
-            
-            // Déclencher le filtrage
-            filterAndShowMarkersByCapabilities();
-        });
-    });
-    
     // Gestion des sliders L1 (activent toutes les L3 de la catégorie)
     document.querySelectorAll('.slider-checkbox-l1').forEach(slider => {
         slider.addEventListener('change', function() {
@@ -698,7 +954,10 @@ function setupHybridControls() {
 }
 
 // Initialisation des capabilities
-function initializeCapabilities(capData, appData) {
+async function initializeCapabilities(capData, appData) {
+    // Charger les données BC L4 en premier
+    await loadBCL4Data();
+    
     // Stocker les données globalement
     capabilities = capData;
     allApplications = appData;
@@ -853,6 +1112,15 @@ function initializeSearch() {
 // Exposer les fonctions nécessaires à la portée globale
 window.displayApplicationCapabilities = displayApplicationCapabilities;
 window.initializeCapabilities = initializeCapabilities;
+window.addToComparator = addToComparator;
+window.toggleAppInComparator = toggleAppInComparator;
+window.addCurrentAppToComparator = addCurrentAppToComparator;
+window.openComparatorPage = openComparatorPage;
+window.updateComparatorButtons = updateComparatorButtons;
+window.comparatorApps = comparatorApps;
+
+// Charger le comparateur au démarrage
+loadComparatorFromStorage();
 
 // Initialisation de la liste des catégories avec cases à cocher
 function initializeCategoriesFilter() {
@@ -1001,7 +1269,7 @@ function displayCategoryFilteredApplications(apps, selectedCategories) {
     let html = '';
     
     Object.keys(groupedSidebar).forEach(cat => {
-        html += `<div style="margin-bottom:2px;">
+        html += `<div style="margin-bottom:10px;">
             <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
             ${groupedSidebar[cat].map(name =>
                 `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
