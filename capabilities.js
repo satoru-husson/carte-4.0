@@ -1,7 +1,57 @@
+
+// Utilitaire pour aplatir le mapping hiérarchique L3→L4 à partir de bc-mapping.json
+function flattenL3toL4Mapping(bcMapping) {
+    const l3ToL4 = {};
+    if (!bcMapping || !bcMapping._hierarchy) return l3ToL4;
+    for (const l1 of Object.values(bcMapping._hierarchy)) {
+        for (const l2 of Object.values(l1)) {
+            for (const [l3, l4List] of Object.entries(l2)) {
+                l3ToL4[l3] = l4List;
+            }
+        }
+    }
+    return l3ToL4;
+}
+
+// Chargement du mapping et création du mapping plat L3->L4
+let bcMapping = null;
+let l3ToL4Mapping = {};
+
+async function loadBCMappingAndFlatten() {
+    try {
+        const response = await fetch('bc-mapping.json');
+        if (response.ok) {
+            bcMapping = await response.json();
+            l3ToL4Mapping = flattenL3toL4Mapping(bcMapping);
+            console.log('Mapping L3->L4 prêt:', Object.keys(l3ToL4Mapping).length, 'L3');
+        } else {
+            console.warn('Impossible de charger bc-mapping.json');
+        }
+    } catch (e) {
+        console.warn('Erreur lors du chargement de bc-mapping.json:', e);
+    }
+}
+
+// Appeler ce chargement au démarrage du script ou avant l'affichage des L4
+loadBCMappingAndFlatten();
+
+// Fonction d'affichage des blocs L4 (verts/gris) pour un L3 donné et la liste des L4 implémentés de l'appli
+function createL4BlocksFromUnified(l3Id, appL4List, appName) {
+    if (!l3ToL4Mapping[l3Id]) return '';
+    return l3ToL4Mapping[l3Id].map(l4Id => {
+        const isImplemented = appL4List.includes(l4Id);
+        const color = isImplemented ? '#4CAF50' : '#E0E0E0';
+        return `<span class="l4-block clickable-l4-block" 
+                      style="display:inline-block;width:16px;height:16px;margin:2px;border-radius:3px;background-color:${color};border:1px solid #bbb;cursor:pointer;" 
+                      data-l3-id="${l3Id}" 
+                      data-app-name="${appName}" 
+                      onclick="showL4Details('${l3Id}', '${appName}')">
+                </span>`;
+    }).join('');
+}
 // Gestionnaire des capabilities pour la carte interactive
 
 // Variables globales pour les données
-let capabilities = {};
 let allApplications = [];
 let globalFilterFunction = null;
 let currentFilteredApps = [];
@@ -36,8 +86,7 @@ function toggleAppInComparator(appName, appData) {
         
         comparatorApps.push({
             name: appName,
-            implementedL4: appData.implementedL4 || [],
-            capabilities: appData.capabilities || []
+            data: appData
         });
         console.log(`✅ ${appName} ajouté au comparateur. Total: ${comparatorApps.length}`);
     }
@@ -87,7 +136,7 @@ function updateComparatorButtons(currentAppName) {
     if (comparatorButton) {
         if (comparatorApps.length > 1) {
             comparatorButton.style.display = 'inline-block';
-            comparatorButton.innerHTML = `⚖️ Comparateur (${comparatorApps.length})`;
+            comparatorButton.innerHTML = `⚖️ Assessment (${comparatorApps.length})`;
         } else {
             comparatorButton.style.display = 'none';
         }
@@ -112,21 +161,21 @@ function loadComparatorFromStorage() {
 async function loadBCL4Data() {
     try {
         // Charger le mapping L3 -> L4
-        const mappingResponse = await fetch('bc-l4-mapping.json');
+    const mappingResponse = await fetch('bc-mapping.json');
         if (mappingResponse.ok) {
             bcL4Mapping = await mappingResponse.json();
             console.log('Données BC L4 mapping chargées:', Object.keys(bcL4Mapping).length, 'L3 mappées');
         } else {
-            console.warn('Impossible de charger bc-l4-mapping.json');
+            console.warn('Impossible de charger bc-mapping.json');
         }
         
         // Charger les définitions des L4
-        const definitionsResponse = await fetch('bc-l4-definitions.json');
+    const definitionsResponse = await fetch('bc-definitions.json');
         if (definitionsResponse.ok) {
             bcL4Definitions = await definitionsResponse.json();
             console.log('Définitions BC L4 chargées:', Object.keys(bcL4Definitions).length, 'L4 définis');
         } else {
-            console.warn('Impossible de charger bc-l4-definitions.json');
+            console.warn('Impossible de charger bc-definitions.json');
         }
     } catch (error) {
         console.warn('Erreur lors du chargement des données BC L4:', error);
@@ -134,22 +183,6 @@ async function loadBCL4Data() {
 }
 
 // Fonction helper pour dériver automatiquement les L3 à partir des BC L4
-function deriveL3FromImplementedL4(implementedL4) {
-    if (!implementedL4 || implementedL4.length === 0) return [];
-    
-    const derivedL3 = new Set();
-    
-    // Pour chaque BC L4 implémenté, trouver le L3 parent
-    Object.keys(bcL4Mapping).forEach(l3Id => {
-        const l4List = bcL4Mapping[l3Id];
-        // Si au moins un BC L4 de ce L3 est implémenté, ajouter le L3
-        if (l4List.some(l4Id => implementedL4.includes(l4Id))) {
-            derivedL3.add(l3Id);
-        }
-    });
-    
-    return Array.from(derivedL3);
-}
 
 // Fonction pour obtenir la définition d'un L4 ou son nom par défaut
 function getL4DisplayName(l4Id) {
@@ -157,55 +190,8 @@ function getL4DisplayName(l4Id) {
 }
 
 // Fonction helper pour créer les blocs L4
-function createL4Blocks(l3Id, implementedL4) {
-    if (!bcL4Mapping[l3Id]) return '';
-    
-    return bcL4Mapping[l3Id].map((l4Id, index) => {
-        const isImplemented = implementedL4.includes(l4Id);
-        const color = isImplemented ? '#4CAF50' : '#E0E0E0';
-        const cursor = isImplemented ? 'cursor: pointer;' : '';
-        const title = isImplemented ? 'Cliquez pour voir les détails des L4 implémentés' : '';
-        const dataAttrs = isImplemented ? `data-l3-id="${l3Id}" data-implemented-l4="${implementedL4.join(',')}" data-clickable="true"` : '';
-        
-        return `<span class="l4-block" 
-                      style="background-color: ${color}; ${cursor}" 
-                      ${dataAttrs}
-                      title="${title}"></span>`;
-    }).join('');
-}
 
 // Fonction pour afficher les détails des L4 implémentés
-function showL4Details(l3Id, implementedL4) {
-    console.log('showL4Details appelée avec:', l3Id, implementedL4); // Debug
-    
-    if (!bcL4Mapping[l3Id] || !bcL4Definitions) {
-        console.warn('Données manquantes:', { bcL4Mapping: !!bcL4Mapping[l3Id], bcL4Definitions: !!bcL4Definitions });
-        return;
-    }
-    
-    // Filtrer les L4 qui sont implémentés pour ce L3
-    const implementedL4ForL3 = bcL4Mapping[l3Id].filter(l4Id => implementedL4.includes(l4Id));
-    
-    console.log('L4 implémentés pour ce L3:', implementedL4ForL3); // Debug
-    
-    if (implementedL4ForL3.length === 0) {
-        console.warn('Aucun L4 implémenté trouvé pour ce L3');
-        return;
-    }
-    
-    // Créer le contenu simple avec bullet points
-    let popupContent = `<ul style="margin: 0; padding-left: 20px; list-style-type: disc;">`;
-    
-    implementedL4ForL3.forEach(l4Id => {
-        const l4Name = getL4DisplayName(l4Id);
-        popupContent += `<li style="margin: 8px 0; font-size: 0.9em; line-height: 1.4;">${l4Name}</li>`;
-    });
-    
-    popupContent += `</ul>`;
-    
-    // Afficher la fenêtre centrale
-    showCentralPopup(popupContent);
-}
 
 // Fonction pour afficher une fenêtre centrale simplifiée
 function showCentralPopup(content) {
@@ -215,48 +201,30 @@ function showCentralPopup(content) {
     if (existingPopup) existingPopup.remove();
     if (existingOverlay) existingOverlay.remove();
     
-    // Créer la popup
+    // Créer la popup avec classes CSS
     const popup = document.createElement('div');
     popup.id = 'l4-popup';
-    popup.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        border: 2px solid #1a237e;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        padding: 20px;
-        max-width: 500px;
-        max-height: 70vh;
-        overflow-y: auto;
-        z-index: 10000;
-        font-family: Arial, sans-serif;
-    `;
+    popup.className = 'l4-details-popup';
     
-    // Ajouter le contenu sans titre
-    popup.innerHTML = content + `
-        <div style="text-align: center; margin-top: 20px;">
+    const popupInner = document.createElement('div');
+    popupInner.className = 'l4-popup-inner';
+    
+    // Ajouter le contenu avec bouton de fermeture stylé
+    popupInner.innerHTML = content + `
+        <div class="l4-popup-close-container">
             <button onclick="document.getElementById('l4-popup').remove(); document.getElementById('l4-popup-overlay').remove();" 
-                    style="background: #1a237e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                    class="l4-popup-close-btn">
                 Fermer
             </button>
         </div>
     `;
     
-    // Ajouter un overlay semi-transparent
+    popup.appendChild(popupInner);
+    
+    // Ajouter un overlay semi-transparent avec classe CSS
     const overlay = document.createElement('div');
     overlay.id = 'l4-popup-overlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: 9999;
-    `;
+    overlay.className = 'l4-details-popup';
     overlay.onclick = () => {
         popup.remove();
         overlay.remove();
@@ -279,20 +247,7 @@ function showCentralPopup(content) {
 
 // Fonction pour attacher les event listeners aux blocs L4
 function attachL4BlockEventListeners() {
-    const clickableBlocks = document.querySelectorAll('.l4-block[data-clickable="true"]');
-    
-    clickableBlocks.forEach(block => {
-        block.addEventListener('click', function(event) {
-            event.stopPropagation(); // Empêcher la propagation
-            const l3Id = this.getAttribute('data-l3-id');
-            const implementedL4String = this.getAttribute('data-implemented-l4');
-            const implementedL4 = implementedL4String ? implementedL4String.split(',') : [];
-            
-            // Stocker l'élément target dans la fonction
-            window.currentClickTarget = this;
-            showL4Details(l3Id, implementedL4);
-        });
-    });
+    // (suppression de la gestion implementedL4 et showL4Details)
 }
 
 // Fonction pour afficher les capabilities d'une application
@@ -305,23 +260,12 @@ function displayApplicationCapabilities(appName, appData) {
     
     const appCapabilities = [];
     
-    // Combiner les capabilities définies manuellement avec celles dérivées des BC L4
-    let allCapabilities = [...(appData?.capabilities || [])];
-    
-    // Si l'app a des BC L4 implémentés, ajouter automatiquement les L3 correspondants
-    if (appData?.implementedL4) {
-        const derivedL3 = deriveL3FromImplementedL4(appData.implementedL4);
-        // Ajouter les L3 dérivés (en évitant les doublons)
-        derivedL3.forEach(l3Id => {
-            if (!allCapabilities.includes(l3Id)) {
-                allCapabilities.push(l3Id);
-            }
-        });
-    }
-    
-    allCapabilities.forEach(capId => {
-        if (capabilities[capId]) {
-            appCapabilities.push({ id: capId, ...capabilities[capId] });
+    // Utiliser la propriété l3 de l'application (ex: appData.l3) pour lister les L3 à afficher
+    let allL3 = appData?.l3 || [];
+    let appL4List = appData?.l4 || [];
+    allL3.forEach(l3Id => {
+        if (capabilities[l3Id]) {
+            appCapabilities.push({ id: l3Id, ...capabilities[l3Id] });
         }
     });
     
@@ -358,7 +302,7 @@ function displayApplicationCapabilities(appName, appData) {
                     font-weight: bold;
                     display: none;
                     transition: all 0.2s ease;
-                " title="Ouvrir le comparateur">⚖️ Comparateur</button>
+                " title="Ouvrir l'assessment">⚖️ Assessment</button>
             </div>
         </div>
     `;
@@ -370,18 +314,16 @@ function displayApplicationCapabilities(appName, appData) {
             if (!l1Groups[cap.l1_name][cap.l2_name]) l1Groups[cap.l1_name][cap.l2_name] = [];
             l1Groups[cap.l1_name][cap.l2_name].push(cap);
         });
-        
-        const implementedL4 = appData.implementedL4 || [];
-        
+
         Object.keys(l1Groups).forEach(l1Name => {
             capabilitiesHTML += `<div><h3 class="l1-capability">${l1Name}</h3>`;
-            
+
             Object.keys(l1Groups[l1Name]).forEach(l2Name => {
                 capabilitiesHTML += `<h4 class="l2-title">${l2Name}</h4><ul class="l3-list">`;
-                
+
                 l1Groups[l1Name][l2Name].forEach(cap => {
                     if (cap.l3_name) {
-                        const l4Blocks = createL4Blocks(cap.id, implementedL4);
+                        const l4Blocks = createL4BlocksFromUnified(cap.id, appL4List, appName);
                         capabilitiesHTML += `
                             <li class="l3-item">
                                 <span class="l3-name">${cap.l3_name}</span>
@@ -390,10 +332,10 @@ function displayApplicationCapabilities(appName, appData) {
                         `;
                     }
                 });
-                
+
                 capabilitiesHTML += `</ul>`;
             });
-            
+
             capabilitiesHTML += `</div>`;
         });
     } else {
@@ -419,36 +361,44 @@ window.showAllApplications = function() {
 
 // Filtre et affiche les markers selon les capabilities sélectionnées (tags actifs)
 function filterAndShowMarkersByCapabilities() {
-    let allActiveCapabilities = [];
-    
-    // Collecter les capacités des tags L2/L1 actifs
-    const activeL2Tags = Array.from(document.querySelectorAll('.capability-tag.active'));
-    activeL2Tags.forEach(tag => {
-        const capabilities = tag.getAttribute('data-capabilities');
+    // Collecter les sélections actives L2/L3/L4
+    let activeL2 = new Set();
+    let activeL3 = new Set();
+    let activeL4 = new Set();
+
+    // L2 tags actifs (sliders ou tags) - utiliser data-capabilities au lieu de data-l2-name
+    document.querySelectorAll('.l2-tag.active').forEach(elem => {
+        const capabilities = elem.getAttribute('data-capabilities');
         if (capabilities) {
-            allActiveCapabilities.push(...capabilities.split(','));
+            // data-capabilities contient les IDs séparés par des virgules
+            capabilities.split(',').forEach(id => {
+                if (id.trim()) activeL2.add(id.trim());
+            });
         }
     });
-    
-    // Collecter les capacités des checkboxes L3 cochées
-    const checkedL3Checkboxes = Array.from(document.querySelectorAll('.l3-checkbox:checked'));
-    checkedL3Checkboxes.forEach(checkbox => {
-        const capability = checkbox.getAttribute('data-capability');
-        if (capability) {
-            allActiveCapabilities.push(capability);
-        }
+
+    // L3 cochées
+    document.querySelectorAll('.l3-checkbox:checked').forEach(elem => {
+        const l3Id = elem.getAttribute('data-capability');
+        if (l3Id) activeL3.add(l3Id);
     });
-    
-    // Supprimer les doublons
-    allActiveCapabilities = [...new Set(allActiveCapabilities)];
-    
+
+    // L4 cochées (si jamais il y a des cases L4, à adapter si besoin)
+    document.querySelectorAll('.l4-checkbox:checked').forEach(elem => {
+        const l4Id = elem.getAttribute('data-capability');
+        if (l4Id) activeL4.add(l4Id);
+    });
+
     let filteredApps = [];
-    if (allActiveCapabilities.length === 0) {
+    if (activeL2.size === 0 && activeL3.size === 0 && activeL4.size === 0) {
         filteredApps = allApplications;
     } else {
-        filteredApps = allApplications.filter(app =>
-            app.capabilities.some(cap => allActiveCapabilities.includes(cap))
-        );
+        filteredApps = allApplications.filter(app => {
+            const matchL2 = app.l2 && app.l2.some(l2 => activeL2.has(l2));
+            const matchL3 = app.l3 && app.l3.some(l3 => activeL3.has(l3));
+            const matchL4 = app.l4 && app.l4.some(l4 => activeL4.has(l4));
+            return matchL2 || matchL3 || matchL4;
+        });
     }
     
     // Mettre à jour la liste des applications filtrées pour la recherche
@@ -626,118 +576,55 @@ function generateCapabilitiesInterface(capData, capabilitiesForm) {
         
         // Créer les tags L2 avec leurs L3
         l2Groups.forEach((group, l2Name) => {
+            // Ne pas afficher de ligne si l2Name est vide ou null
+            if (!l2Name || l2Name.trim() === '') return;
+
             const l2Container = document.createElement('div');
             l2Container.className = 'l2-tag-container';
-            
-            // Vérifier si c'est le tag qui a besoin d'un slider
-            if (l2Name === 'Create and manage accounts and contacts') {
-                // Container pour le slider
-                const sliderContainer = document.createElement('div');
-                sliderContainer.className = 'slider-container';
-                
-                // Label pour le slider
-                const sliderLabel = document.createElement('label');
-                sliderLabel.textContent = 'Select All: ';
-                sliderLabel.className = 'slider-label';
-                
-                // Slider switch
-                const sliderWrapper = document.createElement('label');
-                sliderWrapper.className = 'switch';
-                
-                const sliderInput = document.createElement('input');
-                sliderInput.type = 'checkbox';
-                sliderInput.className = 'slider-checkbox';
-                sliderInput.setAttribute('data-l2-name', l2Name);
-                
-                const sliderSpan = document.createElement('span');
-                sliderSpan.className = 'slider round';
-                
-                sliderWrapper.appendChild(sliderInput);
-                sliderWrapper.appendChild(sliderSpan);
-                
-                sliderContainer.appendChild(sliderLabel);
-                sliderContainer.appendChild(sliderWrapper);
-                
-                l2Container.appendChild(sliderContainer);
-                
-                // Container pour tag L2 + bouton All
-                const tagContainer = document.createElement('div');
-                tagContainer.className = 'l2-tag-with-all';
-                
-                // Tag L2 principal
-                const l2Tag = document.createElement('div');
-                l2Tag.className = 'capability-tag l2-tag';
-                l2Tag.textContent = l2Name;
-                
-                const allL2Ids = [...group.l2Capabilities, ...group.l3Capabilities.map(l3 => l3.id)];
-                l2Tag.setAttribute('data-capabilities', allL2Ids.join(','));
-                l2Tag.setAttribute('data-category', categoryName);
-                l2Tag.setAttribute('data-l2-name', l2Name);
-                
-                // Slider à droite
-                const sliderWrapper2 = document.createElement('label');
-                sliderWrapper2.className = 'switch';
-                
-                const sliderInput2 = document.createElement('input');
-                sliderInput2.type = 'checkbox';
-                sliderInput2.className = 'slider-checkbox';
-                sliderInput2.setAttribute('data-l2-name', l2Name);
-                
-                const sliderSpan2 = document.createElement('span');
-                sliderSpan2.className = 'slider round';
-                
-                sliderWrapper2.appendChild(sliderInput2);
-                sliderWrapper2.appendChild(sliderSpan2);
-                
-                tagContainer.appendChild(l2Tag);
-                tagContainer.appendChild(sliderWrapper2);
-                l2Container.appendChild(tagContainer);
-            } else {
-                // Container pour tag L2 + slider
-                const tagContainer = document.createElement('div');
-                tagContainer.className = 'l2-tag-with-all';
-                
-                // Tag L2 normal
-                const l2Tag = document.createElement('div');
-                l2Tag.className = 'capability-tag l2-tag';
-                l2Tag.textContent = l2Name;
-                
-                const allL2Ids = [...group.l2Capabilities, ...group.l3Capabilities.map(l3 => l3.id)];
-                l2Tag.setAttribute('data-capabilities', allL2Ids.join(','));
-                l2Tag.setAttribute('data-category', categoryName);
-                l2Tag.setAttribute('data-l2-name', l2Name);
-                
-                // Slider à droite
-                const sliderWrapper = document.createElement('label');
-                sliderWrapper.className = 'switch';
-                
-                const sliderInput = document.createElement('input');
-                sliderInput.type = 'checkbox';
-                sliderInput.className = 'slider-checkbox';
-                sliderInput.setAttribute('data-l2-name', l2Name);
-                
-                const sliderSpan = document.createElement('span');
-                sliderSpan.className = 'slider round';
-                
-                sliderWrapper.appendChild(sliderInput);
-                sliderWrapper.appendChild(sliderSpan);
-                
-                tagContainer.appendChild(l2Tag);
-                tagContainer.appendChild(sliderWrapper);
-                l2Container.appendChild(tagContainer);
-            }
-            
+
+            // Container pour tag L2 + slider
+            const tagContainer = document.createElement('div');
+            tagContainer.className = 'l2-tag-with-all';
+
+            // Tag L2 normal
+            const l2Tag = document.createElement('div');
+            l2Tag.className = 'capability-tag l2-tag';
+            l2Tag.textContent = l2Name;
+
+            const allL2Ids = [...group.l2Capabilities, ...group.l3Capabilities.map(l3 => l3.id)];
+            l2Tag.setAttribute('data-capabilities', allL2Ids.join(','));
+            l2Tag.setAttribute('data-l2-name', l2Name); // Ajouter l'attribut manquant
+
+            // Slider à droite
+            const sliderWrapper = document.createElement('label');
+            sliderWrapper.className = 'switch';
+
+            const sliderInput = document.createElement('input');
+            sliderInput.type = 'checkbox';
+            sliderInput.className = 'slider-checkbox';
+            sliderInput.setAttribute('data-l2-name', l2Name);
+
+            const sliderSpan = document.createElement('span');
+            sliderSpan.className = 'slider round';
+
+            sliderWrapper.appendChild(sliderInput);
+            sliderWrapper.appendChild(sliderSpan);
+
+            tagContainer.appendChild(l2Tag);
+            tagContainer.appendChild(sliderWrapper);
+            l2Container.appendChild(tagContainer);
+
             // Container pour les L3 (masqué par défaut)
             if (group.l3Capabilities.length > 0) {
                 const l3Container = document.createElement('div');
                 l3Container.className = 'l3-container';
                 l3Container.setAttribute('data-l2-name', l2Name);
-                
+
                 group.l3Capabilities.forEach(l3 => {
                     // Créer le container pour checkbox + label
                     const l3CheckboxContainer = document.createElement('div');
                     l3CheckboxContainer.className = 'l3-checkbox-container';
-                    
+
                     // Créer la checkbox
                     const l3Checkbox = document.createElement('input');
                     l3Checkbox.type = 'checkbox';
@@ -746,22 +633,22 @@ function generateCapabilitiesInterface(capData, capabilitiesForm) {
                     l3Checkbox.setAttribute('data-capability', l3.id);
                     l3Checkbox.setAttribute('data-category', categoryName);
                     l3Checkbox.setAttribute('data-l2-name', l2Name);
-                    
+
                     // Créer le label
                     const l3Label = document.createElement('label');
                     l3Label.className = 'l3-label';
                     l3Label.htmlFor = `l3-${l3.id}`;
                     l3Label.textContent = l3.name;
-                    
+
                     // Assembler
                     l3CheckboxContainer.appendChild(l3Checkbox);
                     l3CheckboxContainer.appendChild(l3Label);
                     l3Container.appendChild(l3CheckboxContainer);
                 });
-                
+
                 l2Container.appendChild(l3Container);
             }
-            
+
             tagsContainer.appendChild(l2Container);
         });
         
@@ -1267,11 +1154,13 @@ function displayCategoryFilteredApplications(apps, selectedCategories) {
     });
 
     let html = '';
-    
+
     Object.keys(groupedSidebar).forEach(cat => {
+        const appNames = groupedSidebar[cat].filter(Boolean);
+        if (appNames.length === 0) return; // Ne pas afficher de bloc vide
         html += `<div style="margin-bottom:10px;">
             <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
-            ${groupedSidebar[cat].map(name =>
+            ${appNames.map(name =>
                 `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
             ).join('<br>')}
         </div>`;
@@ -1284,6 +1173,139 @@ function displayCategoryFilteredApplications(apps, selectedCategories) {
         window.addAppClickEvents(infoPanel, allApplications);
     }
 }
+
+// Fonction pour afficher les détails des L4 dans une popup
+function showL4Details(l3Id, appName) {
+    console.log(`🔍 showL4Details appelée avec l3Id: ${l3Id}, appName: ${appName}`);
+    
+    // Vérifier que window.appCapabilitiesUnified existe
+    if (!window.appCapabilitiesUnified) {
+        console.error('❌ window.appCapabilitiesUnified non défini');
+        alert('Données des applications non chargées. Veuillez recharger la page.');
+        return;
+    }
+    
+    // Récupérer les données de l'application
+    const appData = window.appCapabilitiesUnified[appName];
+    if (!appData) {
+        console.error(`❌ Données non trouvées pour l'application: ${appName}`);
+        console.log('📋 Applications disponibles:', Object.keys(window.appCapabilitiesUnified));
+        alert(`Données de l'application "${appName}" non trouvées`);
+        return;
+    }
+    
+    console.log(`✅ Données trouvées pour ${appName}:`, appData);
+
+    // Récupérer toutes les L4 pour cette L3
+    const l4List = l3ToL4Mapping[l3Id] || [];
+    if (l4List.length === 0) {
+        console.warn(`⚠️ Aucune L4 trouvée pour L3: ${l3Id}`);
+        alert('Aucune L4 trouvée pour cette L3');
+        return;
+    }
+    
+    console.log(`📊 L4 trouvées pour ${l3Id}:`, l4List);
+
+    // Récupérer le nom de la L3 avec les définitions
+    let l3Name = l3Id; // Fallback si pas de définition
+    if (bcL4Definitions && bcL4Definitions.L3 && bcL4Definitions.L3[l3Id]) {
+        l3Name = bcL4Definitions.L3[l3Id];
+    } else if (capabilities[l3Id]?.l3_name) {
+        l3Name = capabilities[l3Id].l3_name;
+    }
+    
+    // Récupérer les L4 implémentées par l'application
+    const appL4List = appData.l4 || [];
+    console.log(`🎯 L4 implémentées par ${appName}:`, appL4List);
+
+    // Créer le contenu de la popup
+    let popupContent = `
+        <div class="l4-popup-content">
+            <h3 class="l4-popup-title">
+                📋 Détails L4 - ${l3Name}
+            </h3>
+            <p class="l4-popup-app-name">
+                Application: ${appName}
+            </p>
+            <div class="l4-popup-table-container">
+                <table class="l4-popup-table">
+                    <thead>
+                        <tr>
+                            <th>L4 Capability</th>
+                            <th class="status-column">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+    // Ajouter chaque L4 avec son statut
+    l4List.forEach(l4Id => {
+        const isImplemented = appL4List.includes(l4Id);
+        
+        // Utiliser les définitions de bc-definitions.json au lieu des codes
+        let l4Name = l4Id; // Fallback si pas de définition
+        if (bcL4Definitions && bcL4Definitions.L4 && bcL4Definitions.L4[l4Id]) {
+            l4Name = bcL4Definitions.L4[l4Id];
+        } else if (capabilities[l4Id]?.l4_name) {
+            l4Name = capabilities[l4Id].l4_name;
+        }
+        
+        const statusIcon = isImplemented ? '✓' : '✗';
+        const statusClass = isImplemented ? 'status-implemented' : 'status-not-implemented';
+        const rowClass = isImplemented ? 'l4-row-implemented' : 'l4-row-not-implemented';
+
+        popupContent += `
+            <tr class="${rowClass}">
+                <td>
+                    <div class="l4-name">${l4Name}</div>
+                </td>
+                <td class="status-cell ${statusClass}">
+                    ${statusIcon}
+                </td>
+            </tr>
+        `;
+    });
+
+    popupContent += `
+                    </tbody>
+                </table>
+            </div>
+            <div class="l4-popup-close-container">
+                <button onclick="closeL4Popup()" class="l4-popup-close-btn">Fermer</button>
+            </div>
+        </div>
+    `;
+
+    // Créer et afficher la popup
+    const popup = document.createElement('div');
+    popup.id = 'l4-details-popup';
+    popup.className = 'l4-details-popup';
+
+    const popupInner = document.createElement('div');
+    popupInner.className = 'l4-popup-inner';
+    
+    popupInner.innerHTML = popupContent;
+    popup.appendChild(popupInner);
+    document.body.appendChild(popup);
+
+    // Fermer la popup en cliquant à l'extérieur
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            closeL4Popup();
+        }
+    });
+}
+
+// Fonction pour fermer la popup L4
+function closeL4Popup() {
+    const popup = document.getElementById('l4-details-popup');
+    if (popup) {
+        popup.remove();
+    }
+}
+
 window.initializeCapabilities = initializeCapabilities;
 window.initializeSearch = initializeSearch;
 window.filterAndShowMarkersByCapabilities = filterAndShowMarkersByCapabilities;
+window.showL4Details = showL4Details;
+window.closeL4Popup = closeL4Popup;

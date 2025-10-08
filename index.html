@@ -398,10 +398,12 @@
         window.addAppClickEvents = addAppClickEvents;
 
         window.addEventListener('DOMContentLoaded', () => {
+
             Promise.all([
                 fetch('capabilities.json').then(r => r.json()),
-                fetch('data.json').then(r => r.json())
-            ]).then(([capData, appData]) => {
+                fetch('data.json').then(r => r.json()),
+                fetch('app-capabilities-unified.json').then(r => r.json())
+            ]).then(([capData, appData, unifiedData]) => {
                 // Expander les régions dans toutes les applications
                 appData.forEach(app => {
                     if (app.countries) {
@@ -424,6 +426,20 @@
                 appData.forEach(app => {
                     if (app.excludeCountries && app.countries) {
                         app.countries = app.countries.filter(c => !app.excludeCountries.includes(c));
+                    }
+                });
+
+                // INJECTION DES L1/L2/L3/L4 POUR TOUTES LES APPLIS
+                // Stocker unifiedData globalement pour l'accès depuis capabilities.js
+                window.appCapabilitiesUnified = unifiedData;
+                
+                appData.forEach(app => {
+                    const caps = unifiedData[app.name];
+                    if (caps) {
+                        app.l1 = caps.l1 || [];
+                        app.l2 = caps.l2 || [];
+                        app.l3 = caps.l3 || [];
+                        app.l4 = caps.l4 || [];
                     }
                 });
 

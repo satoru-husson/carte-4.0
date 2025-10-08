@@ -24,6 +24,12 @@
     "capabilities": ["TM1"]
   },
   {
+    "name": "Agence digitale",
+    "countries": ["Belgium", "Czech Republic", "France", "Germany", "Italy", "Poland", "Portugal", "Slovakia", "Spain", "United Kingdom", "Switzerland"],
+    "category": "Transport Management Systems (TMS)",
+    "capabilities": ["TM1"]
+  },
+  {
     "name": "Allo",
     "countries": ["United States of America"],
     "category": "Route & Planning Optimization",
@@ -159,8 +165,7 @@
     "name": "Chronotruck",
     "countries": ["Europe"],
     "category": "Digital Forwarding",
-    "capabilities": ["OM5","TM2","TM4","TM5","TM6","CM5","CM6","ANM3","FM1","CMAC3","MOS3","MOS6","MPC1","PCS1","PCS2","PCS3","PCS4","PCS5","PCS6","PCS7","PCS8","PCS9","SCOC4","MCCI1","PTC4","MCP1","MME1"],
-    "implementedL4": ["CMAC3_1", "CMAC3_2"]
+    "capabilities": ["OM5","TM2","TM4","TM5","TM6","CM5","CM6","ANM3","FM1","CMAC3","MOS3","MOS6","MPC1","PCS1","PCS2","PCS3","PCS4","PCS5","PCS6","PCS7","PCS8","PCS9","SCOC4","MCCI1","PTC4","MCP1","MME1"]
   },
   {
     "name": "ClaimOVL",
@@ -381,51 +386,7 @@
   {
     "name": "INES",
     "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1","TM2","TM3","TM4","TM4","TM5","TM6","TM7","OM1","OM2","OM3","OM4","OM5"],
-    "implementedL4": [
-      "MBC1_1", "MBC1_2", "MBC1_3", "MBC1_4",
-      "MBC2_1", "MBC2_2", "MBC2_3", 
-      "MBC3_1", "MBC3_2", "MBC3_3", "MBC3_4",
-      "MBC4_1", "MBC4_2", "MBC4_3",
-      "MPD1_1", "MPD1_2", "MPD1_3", "MPD1_4",
-      "MPD2_1", "MPD2_2", "MPD2_3",
-      "MPD3_1", "MPD3_2", "MPD3_3",
-      "MPD4_1", "MPD4_2", "MPD4_3",
-      "MPD5_1", "MPD5_2", "MPD5_3",
-      "MTTFO1_1", "MTTFO1_2", "MTTFO1_3",
-      "TSE1_1", "TSE1_2",
-      "TSE2_1", "TSE2_2",
-      "TSE3_1",
-      "TSE4_1",
-      "TSE5_1",
-      "TSE6_1", "TSE6_2",
-      "TSE7_1",
-      "TSE8_1", "TSE8_2",
-      "MPC1_1", "MPC1_2", "MPC1_3", "MPC1_4", "MPC1_5",
-      "MPC2_1", "MPC2_2", "MPC2_3", "MPC2_4",
-      "MTTFO11_1", "MTTFO11_2", "MTTFO11_3",
-      "PCS1_1", "PCS1_2", "PCS1_3", "PCS1_4", "PCS1_5", "PCS1_6",
-      "PCS2_1", "PCS2_2", "PCS2_3", "PCS2_4",
-      "MTTFO12_1", "MTTFO12_2",
-      "CMAC1_1", "CMAC1_2", "CMAC1_3",
-      "CMAC2_1", "CMAC2_2", "CMAC2_3", "CMAC2_4",
-      "CMAC3_1", "CMAC3_2", "CMAC3_3", "CMAC3_4", "CMAC3_5",
-      "PPQ1_1", "PPQ1_2", "PPQ1_3",
-      "PPQ2_1", "PPQ2_2", "PPQ2_3",
-      "PPQ3_1", "PPQ3_2", "PPQ3_3",
-      "PPQ4_1", "PPQ4_2", "PPQ4_3",
-      "MOS1_1", "MOS1_2",
-      "MOS2_1", "MOS2_2", "MOS2_3",
-      "MOS3_1", "MOS3_2", "MOS3_3",
-      "MOS4_1",
-      "MOS5_1", "MOS5_2", "MOS5_3",
-      "CCCO1_1", "CCCO1_2",
-      "CCCO2_1", "CCCO2_2",
-      "CCCO3_1",
-      "CCCO4_1", "CCCO4_2",
-      "CCCO5_1", "CCCO5_2", "CCCO5_3", "CCCO5_4", "CCCO5_5"
-    ]
+    "category": "Transport Management Systems (TMS)"
   },
   {
     "name": "INSPECTO",
@@ -503,30 +464,7 @@
     "name": "Matrix TMS",
     "countries": ["Netherlands", "Spain", "Turkey", "United States of America", "Canada ", "Mexico", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Philippines", "Vietnam", "Cambodia", "Laos", "Myanmar", "Brunei", "Chile", "Colombia", "Costa Rica", "Guatemala", "Panama", "Peru", "Paraguay", "Uruguay", "India", "United Arab Emirates"],
     "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1","TM2","TM3","OM1","OP1"],
-    "implementedL4": [
-      "MBC1_1", "MBC1_3", "MBC1_4",
-      "MBC2_2", "MBC2_3", 
-      "MBC3_1", "MBC3_3", "MBC3_5",
-      "MBC4_2", "MBC4_4", "MBC4_5",
-      "MPD1_2", "MPD1_3", "MPD1_5",
-      "MPD2_1", "MPD2_4", "MPD2_5",
-      "MPD3_2", "MPD3_4",
-      "MPD4_1", "MPD4_4", "MPD4_5",
-      "MPD5_2", "MPD5_4", "MPD5_5",
-      "MTTFO1_2", "MTTFO1_4", "MTTFO1_5",
-      "MTTFO2_1", "MTTFO2_2", "MTTFO2_3",
-      "MTTFO3_1", "MTTFO3_2", "MTTFO3_4",
-      "MTTFO4_1", "MTTFO4_2", "MTTFO4_3",
-      "MTTFO5_1", "MTTFO5_2", "MTTFO5_4",
-      "MTTFO6_1", "MTTFO6_3", "MTTFO6_4",
-      "MTTFO7_1", "MTTFO7_2", "MTTFO7_5",
-      "CMAC1_2", "CMAC1_4",
-      "CMAC2_1", "CMAC2_3", "CMAC2_5",
-      "CMAC3_2", "CMAC3_4",
-      "DMPRODUCTS_1", "DMPRODUCTS_2", "DMPRODUCTS_3", "DMPRODUCTS_4",
-      "MOF6_5"
-    ]
+    "capabilities": ["TM1","TM2","TM3","OM1","OP1"]
   },
   {
     "name": "Matrix TMS - Core+",

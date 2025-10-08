@@ -1,3 +1,30 @@
+/* Onglets L2 pour niveau 3 */
+.l2-tabs {
+    display: none;
+    background: #f0f4ff;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+}
+.l2-tabs.show {
+    display: block;
+}
+.l2-tab {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 5px 5px 0;
+    background: white;
+    border: 2px solid #1976d2;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #1976d2;
+    transition: background 0.2s, color 0.2s;
+}
+.l2-tab.active {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+}
 /* Styles pour le Comparateur BC L4 */
 
 * {
@@ -111,6 +138,30 @@ body {
     color: white;
 }
 
+.l1-tab, .l2-tab {
+    white-space: normal;
+    line-height: 1.2;
+    max-width: 120px;
+    min-width: 80px;
+    height: auto;
+    min-height: 2.6em;
+    max-height: 2.8em;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+#l1-tabs, #l2-tabs {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: visible;
+  display: block;
+}
+
 /* Styles pour les tableaux multi-niveaux */
 .l1-row {
     background: #e3f2fd !important;
@@ -137,6 +188,13 @@ body {
 .l2-name, .l3-name {
     padding-left: 20px !important;
     font-style: italic;
+}
+
+.capability-table {
+  width: 1400px;
+  max-width: 98vw;
+  border-collapse: collapse;
+  margin-bottom: 1em;
 }
 
 .capability-table tr:nth-child(even) {
@@ -381,6 +439,54 @@ th {
     min-width: 120px;
 }
 
+.coverage {
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #000000;
+}
+
+/* Classes de couleur basées sur les pourcentages - texte seulement */
+.coverage-red {
+    color: #d32f2f;
+}
+
+.coverage-orange {
+    color: #f57c00;
+}
+
+.coverage-black {
+    color: #000000;
+    font-weight: bold;
+}
+
+.coverage-green {
+    color: #1b5e20;
+    font-weight: bold;
+}
+
+/* Tailles de police spécifiques par niveau */
+/* Niveau 1 - L1 (fractions) */
+.l1-row .coverage {
+    font-size: 1.4em;
+}
+
+/* Niveau 1 - L2 (pourcentages) */
+.l2-row .coverage {
+    font-size: 1.3em;
+}
+
+/* Niveau 2 - L2 (fractions) - même police que L1 niveau 1 */
+.l2-row.l2-clickable .coverage {
+    font-size: 1.4em;
+}
+
+/* Niveau 2 - L3 (pourcentages) */
+.l3-row .tick {
+    font-size: 1.3em;
+}
+
 .implemented {
     background: rgba(76, 175, 80, 0.1);
     color: #2e7d32;
@@ -463,6 +569,20 @@ th {
     background: #1565c0;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+/* Style pour les onglets sélectionnés (L1 et L2) */
+.btn.selected {
+    background: #4CAF50 !important;
+    color: white !important;
+    border: 2px solid #388E3C !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.btn.selected:hover {
+    background: #45a049 !important;
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.5) !important;
 }
 
 .btn-secondary {

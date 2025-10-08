@@ -1,0 +1,950 @@
+{
+  "2IC Pallet": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM2"],
+    "l1": ["TM"]
+  },
+  "4flow": {
+    "l4": [],
+    "l3": ["MPC1", "MPC2"],
+    "l2": ["TM6"],
+    "l1": ["TM"]
+  },
+  "ACTUATE": {
+    "l4": [],
+    "l3": ["MOF1", "MOF2", "MOF3", "MOF4", "MOF5", "MOF6", "FM1"],
+    "l2": ["FM1"],
+    "l1": ["FM"]
+  },
+  "ADT TMS": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Agence digitale": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Allo": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM3"],
+    "l1": ["TM"]
+  },
+  "Alpega": {
+    "l4": [],
+    "l3": [],
+    "l2": ["OM5"],
+    "l1": ["OM"]
+  },
+  "ASTAG GU (Ground)": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM4"],
+    "l1": ["TM"]
+  },
+  "B2P": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Brazil Logic": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM5"],
+    "l1": ["TM"]
+  },
+    "Byzaneo": {
+    "l4": [],
+    "l3": [],
+    "l2": ["OM5"],
+    "l1": ["OM"]
+  },
+  "CADIS (R4)": {
+    "l4": [],
+    "l3": [],
+    "l2": ["OM5"],
+    "l1": ["OM"]
+  },
+  "Canada reporting": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM6"],
+    "l1": ["TM"]
+  },
+  "Canada scanning": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM2"],
+    "l1": ["TM"]
+  },
+  "Canada Shipping System": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Canada track": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM2"],
+    "l1": ["TM"]
+  },
+  "Car-O": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Centiro (CLL)": {
+    "l4": [],
+    "l3": [],
+    "l2": ["OM5"],
+    "l1": ["OM"]
+  },
+  "CEVA IOD": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM2"],
+    "l1": ["TM"]
+  },
+  "CEVA Smart": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Chronotruck": {
+    "l4": [],
+    "l3": ["OM5","CM5","CM6","ANM3","FM1","CMAC3","MOS3","MOS6","MPC1","PCS1","PCS2","PCS3","PCS4","PCS5","PCS6","PCS7","PCS8","PCS9","SCOC4","MCCI1","PTC4","MCP1","MME1"],
+    "l2": ["OM5","TM2","TM4","TM5","TM6","CM5","CM6","ANM3","FM1","CMAC3","MOS3","MOS6","MPC1","PCS1","PCS2","PCS3","PCS4","PCS5","PCS6","PCS7","PCS8","PCS9","SCOC4","MCCI1","PTC4","MCP1","MME1"],
+    "l1": ["OM","TM","CM","ANM","FM"]
+  },
+  "ClaimOVL": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM6"],
+    "l1": ["TM"]
+  },
+  "CMS": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Comdata": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM4"],
+    "l1": ["TM"]
+  },
+  "Control Tower": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM5"],
+    "l1": ["TM"]
+  },
+  "C-Portal": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM5"],
+    "l1": ["TM"]
+  },
+  "CrossDock - iSeries": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM2"],
+    "l1": ["TM"]
+  },
+  "CUBE IQ": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "DAGITIM": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "DAR AL BETA - Tech consulting": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Datascope DMS": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM2"],
+    "l1": ["TM"]
+  },
+  "DC BRAIN": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM3"],
+    "l1": ["TM"]
+  },
+  "DEEWAN - SMS": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Descartes GLN (Ground)": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM4"],
+    "l1": ["TM"]
+  },
+  "Digital Archieve": {
+    "l4": [],
+    "l3": [],
+    "l2": ["OM5"],
+    "l1": ["OM"]
+  },
+  "Dispatch": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "DMS": {
+    "l4": [],
+    "l3": [],
+    "l2": ["OM5"],
+    "l1": ["OM"]
+  },
+  "E2Open Booking": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM1"],
+    "l1": ["TM"]
+  },
+  "Docsweb": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM7"],
+    "l1": ["TM"]
+  },
+  "EDICOM iPaaS": {
+    "l4": [],
+    "l3": [],
+    "l2": ["OM5"],
+    "l1": ["OM"]
+  },
+  "Ediel Portale Collaborativo": {
+    "l4": [],
+    "l3": [],
+    "l2": ["TM2"],
+    "l1": ["TM"]
+    },
+    "EGL Scan Executive": {
+      "l4": [],
+      "l3": [],
+      "l2": ["TM5"],
+      "l1": ["TM"]
+    },
+    "EGL Scan Shuttles": {
+      "l4": [],
+      "l3": [],
+      "l2": ["TM5"],
+      "l1": ["TM"]
+    },
+    "ELO ANZ": {
+      "l4": [],
+      "l3": [],
+      "l2": ["OM5"],
+      "l1": ["OM"]
+    },
+    "Fleetwave": {
+      "l4": [],
+      "l3": [],
+      "l2": ["TM2"],
+      "l1": ["TM"]
+    },
+    "Fleetzy": {
+      "l4": [],
+      "l3": [],
+      "l2": ["TM5"],
+      "l1": ["TM"]
+    },
+    "FM May": {
+      "l4": [],
+      "l3": [],
+      "l2": ["TM1"],
+      "l1": ["TM"]
+    },
+    "Galactica": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM7"],
+        "l1": ["TM"]
+      },
+      "Gefcopack": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Genio": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Geoserver": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "GLT": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "GM Customs Webportal": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "GoComet Tracking": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "GS1": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Home Delivery": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM7"],
+        "l1": ["TM"]
+      },
+      "i2 replacement": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "INES": {
+      "l4": ["CCCO4_1","CCCO4_3","CCCO4_5","CCCO5_2","CCCO5_4","CCCO6_1","CCCO6_2","CCCO6_3","CCCO8_1","CCCO8_3","CCCO8_4","CCCO10_1","CCCO10_2","CCCO13_1","CCCO13_4","CCCO14_2","CCCO14_4","MBC1_2","MBC2_1","MBC2_2","MBC2_4","MBC3_3","MBC4_1","MBC4_3","MPD1_2","MPD1_4","MPD2_2","MPD2_4","MPD3_1","MPD3_3","MPD4_1","MPD4_3","MPD4_5","MPD5_2","MPD5_3","MTTFO1_1","MTTFO1_2","MTTFO2_1","MTTFO2_2","MTTFO3_1","MTTFO3_2","MTTFO4_1","MTTFO4_3","MTTFO4_4","MTTFO5_2","MTTFO5_3","MTTFO5_5","MTTFO6_2","MTTFO6_3","MTTFO6_5","MTTFO7_1","MTTFO7_2","MTTFO7_4","MTTFO8_2","MTTFO8_4","MTTFO9_1","MTTFO9_3","MTTFO9_5","MTTFO10_1","MTTFO10_3","MTTFO10_5","MTTFO11_3","MTTFO12_1","MTTFO12_3","MTTFO13_3","MTTFO13_5","MTTFO14_2","MTTFO14_4","MCCRR1_2","MCCRR3_2","TSE1_1","TSE2_2","TSE2_4","TSE4_1","TSE4_3","TSE6_2","TSE6_4","TSE7_3","TSE7_5","TSE8_2","MCP1_5","MCP2_3","DTNSP3_3","DTNSP5_4","MMNP5_3"],
+      "l3": ["CCCO4","CCCO5","CCCO6","CCCO8","CCCO10","CCCO13","CCCO14","MBC1","MBC2","MBC3","MBC4","MPD1","MPD2","MPD3","MPD4","MPD5","MTTFO1","MTTFO2","MTTFO3","MTTFO4","MTTFO5","MTTFO6","MTTFO7","MTTFO8","MTTFO9","MTTFO10","MTTFO11","MTTFO12","MTTFO13","MTTFO14","MCCRR1","MCCRR2","MCCRR3","TSE1","TSE2","TSE4","TSE6","TSE7","TSE8","SCOC2","SCOC4","IC1","IC2","PTC2","MCP1","MCP2","MCR1","DTNSP3","DTNSP4","DTNSP5","MMNP5"],
+      "l2": ["TM1","TM2","TM3","TM4","TM5","OM5","CM1","CM2","CM4","CM5","ANM1","ANM4"],
+      "l1": ["TM","OM","CM","ANM"]
+     },
+      "INSPECTO": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Inter Site Journaling": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM6"],
+        "l1": ["TM"]
+      },
+      "Jasper Reports": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM6"],
+        "l1": ["TM"]
+      },
+      "LA": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Leopard": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Logistix": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "LOSCAM": {
+        "l4": [],
+        "l3": [],
+        "l2": ["CM1", "CM2", "CM3", "CM4", "CM5", "CM6"],
+        "l1": ["CM"]
+      },
+      "Map&Guide": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "Matrix EAI SCM": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Matrix FSS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "Matrix SCI": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Matrix SCM": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+       "Matrix TMS - Core+": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+       "Matrix TMS": {
+       "l4": ["MBC1_1","MBC1_3","MBC1_4","MBC2_2","MBC2_3","MBC3_1","MBC3_3","MBC3_5","MBC4_2","MBC4_4","MBC4_5","MPD1_2","MPD1_3","MPD1_5","MPD2_1","MPD2_4","MPD2_5","MPD3_2","MPD3_4","MPD4_1","MPD4_4","MPD4_5","MPD5_2","MPD5_4","MPD5_5","MTTFO1_2","MTTFO1_4","MTTFO1_5","MTTFO2_1","MTTFO2_2","MTTFO2_3","MTTFO3_1","MTTFO3_2","MTTFO3_4","MTTFO4_1","MTTFO4_2","MTTFO4_3","MTTFO5_1","MTTFO5_2","MTTFO5_4","MTTFO6_1","MTTFO6_3","MTTFO6_4","MTTFO7_1","MTTFO7_2","MTTFO7_5","CMAC1_2","CMAC1_4","CMAC2_1","CMAC2_3","CMAC2_5","CMAC3_2","CMAC3_4","DMPRODUCTS_1","DMPRODUCTS_2","DMPRODUCTS_3","DMPRODUCTS_4"],
+       "l3": ["MBC1","MBC2","MBC3","MBC4","MPD1","MPD2","MPD3","MPD4","MPD5","MTTFO1","MTTFO2","MTTFO3","MTTFO4","MTTFO5","MTTFO6","MTTFO7","CMAC1","CMAC2","CMAC3","DMPRODUCTS","MOF6"],
+       "l2": ["TM1","TM2","TM3","OM1","OP1","FM1"],
+       "l1": ["TM","OM","OP","FM"]
+     },
+      "Matrix TMS Mobile": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Matrix Wiki": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "MazdaEdi": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "MDC Smartphone app": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Metis": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Microlise POD": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "MiQuest": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "MLC Connect": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "MPO eTMS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "MPO SCOS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "MPO SCOS France": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "MS Dynamics": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "MSN 2.0": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "My-Fleet": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "Nike Scanning": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Nortam dimensioning": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "Omprompt": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "OMS 3PL (PFS)": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "One Dispatch": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Oplus": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Oracle - Analytics": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM6"],
+        "l1": ["TM"]
+      },
+      "Oracle BI Solutions": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Oracle-EBS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["FM1"],
+        "l1": ["FM"]
+      },
+      "Oracle-OTM": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Oracle-Siebel": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM1"],
+        "l1": ["OM"]
+      },
+      "ORION ANZ": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "ORION Brazil": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "OVL_INES_BATCH": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "Panoptes (Ex Neopost)": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "Paragon UKIN": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "PARTS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "PathFind": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "PC Miler": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "PCSTrac": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Piattaforma SMS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM7"],
+        "l1": ["TM"]
+      },
+      "Project 44 (Ground)": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "PTV OptiFlow": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "PTV Route Optimizer": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "PTV Xserver": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "Quadient (Ground)": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "Raal Trans": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Rail-Flow": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "REPOM": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "RO e-Transport": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "RouteMax": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Samsara MyFleet": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "SDS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Sertifi": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM7"],
+        "l1": ["TM"]
+      },
+      "Sherlock Waste": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Ship track": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "Shiplify": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM6"],
+        "l1": ["TM"]
+      },
+      "SHIPPER": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Silogtran": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM6"],
+        "l1": ["TM"]
+      },
+      "Smartsheet": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "SOTI MobiControl": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "Speditor.net": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Speed TMS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "SphereWMS": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Stratagi": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Sub-It": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "Surgere": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "Tarot Analytics": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "TC1GDO": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Teliae": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Teranalytics-Linehaul Scheduler": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "Teranalytics-Station Gravity": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM6"],
+        "l1": ["TM"]
+      },
+      "Time Slot Control (Ground)": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Timocom": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1", "OP1", "OP2"],
+        "l1": ["TM", "OP"]
+      },
+      "TMS Customer Web": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "TMS Portal": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "TOSCA": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "Trans.eu": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "TransNET": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Transporeon": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "TraspoJ": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "TV Preview - API": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM2"],
+        "l1": ["TM"]
+      },
+      "Upply": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Vectio": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "Vypex": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM5"],
+        "l1": ["TM"]
+      },
+      "Waplanner": {
+        "l4": [],
+        "l3": [],
+        "l2": ["CM1", "CM2", "CM3", "CM4", "CM5", "CM6"],
+        "l1": ["CM"]
+      },
+      "Winroute": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "Worldport": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM1"],
+        "l1": ["TM"]
+      },
+      "Xcargo": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      },
+      "XMLSpy": {
+        "l4": [],
+        "l3": [],
+        "l2": ["OM5"],
+        "l1": ["OM"]
+      },
+      "XPlanis xGU": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM4"],
+        "l1": ["TM"]
+      },
+      "YMS 3M": {
+        "l4": [],
+        "l3": [],
+        "l2": ["TM3"],
+        "l1": ["TM"]
+      }
+}
