@@ -9,24 +9,40 @@
 <body>
     <div id="sidebar">
         <!-- Bouton d'expansion supprimé -->
-        <form id="capabilities-form" style="margin-bottom: 10px;">
+        <form id="capabilities-form" style="margin-bottom: 0px;">
             <!-- Cases à cocher générées dynamiquement -->
         </form>
-        <div style="border-top: 2px solid #ddd; margin: 10px 0;"></div>
+        
+        <!-- Section Categories sous Finance Management -->
+        <div id="categories-filter-section" style="margin-bottom: 0px;">
+            <div id="categories-list" style="
+                max-height: 120px; 
+                overflow-y: auto; 
+                border: 1px solid #ddd; 
+                border-radius: 4px; 
+                padding: 8px;
+                background: white;
+            ">
+                <!-- Les catégories seront générées ici -->
+            </div>
+        </div>
+        
+        <div style="border-top: 2px solid #ddd; margin: 2px 0;"></div>
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Tapez le nom d'une application..." style="width: 100%; padding: 8px 35px 8px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
             <!-- Bouton toggle supprimé - panneau toujours visible -->
         </div>
-        <div id="info-panel" style="background:#f0f4ff; padding:10px; border-radius:6px; margin-top: 10px;"></div>
+        <div id="info-panel" style="background:#f0f4ff; padding:0px 10px 0px 10px; border-radius:6px; margin-top: 2px;"></div>
     </div>
     <div id="map">
         <div id="selected-app-container" style="
-            position: absolute;
-            top: 20px;
+            position: fixed;
+            top: max(20px, 5vh);
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
             display: none;
+            max-width: 90vw;
         ">
             <div id="selected-app-button" style="
                 background: #1976d2;
@@ -43,27 +59,38 @@
                 min-width: 200px;
             ">
                 <span id="selected-app-name"></span>
-                <span id="deselect-button" style="
-                    margin-left: 12px;
-                    cursor: pointer;
-                    font-size: 18px;
-                    opacity: 0.8;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    background: rgba(255,255,255,0.2);
-                " title="Désélectionner">✕</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="deselect-button" style="
+                        cursor: pointer;
+                        font-size: 18px;
+                        opacity: 0.8;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                        background: rgba(255,255,255,0.2);
+                    " title="Désélectionner">✕</span>
+                </div>
             </div>
         </div>
     </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="filters.js"></script>
     <script src="capabilities.js"></script>
+    <script src="HiddenApps.js"></script>
     <script type="module">
         import { countries } from './countriesList.js';
-        import { expandRegions, regionCenters } from './regions.js';
+
+        // Centres géographiques des régions principales
+        const regionCenters = {
+            "nortam": [45.0, -100.0],
+            "europe": [46.818188, 8.227512],
+            "apac": [15.0, 120.0],
+            "latam": [-15.0, -60.0],
+            "imea": [20.0, 25.0]
+        };
 
         let countryMarkers = [];
         let currentItems = [];
@@ -72,6 +99,24 @@
         
         // Variables globales pour la carte
         window.countryLayers = {};
+
+        // Fonction pour obtenir les applications uniques d'un pays
+        function getUniqueAppsForCountry(countryName) {
+            const allApps = Object.values(window.allApplications).flat();
+            const uniqueApps = allApps.filter(app => 
+                app.countries?.length === 1 && app.countries[0] === countryName
+            ).map(app => app.name);
+            return { count: uniqueApps.length, apps: uniqueApps };
+        }
+
+        // Fonction pour obtenir les applications uniques d'une région
+        function getUniqueAppsForRegion(regionName) {
+            const allApps = Object.values(window.allApplications).flat();
+            const uniqueApps = allApps.filter(app => 
+                app.regions?.length === 1 && app.regions[0] === regionName
+            ).map(app => app.name);
+            return { count: uniqueApps.length, apps: uniqueApps };
+        }
 
         const map = L.map('map').setView([20, 0], 2);
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -122,7 +167,7 @@
                     regionGroups.latam.push(countryData);
                 } else if (['China', 'Japan', 'South Korea', 'Singapore', 'Malaysia', 'Thailand', 'Indonesia', 'Philippines', 'Vietnam', 'Australia', 'New Zealand', 'Cambodia', 'Laos', 'Myanmar', 'Brunei', 'China (Mainland)'].includes(country)) {
                     regionGroups.apac.push(countryData);
-                } else if (['India', 'United Arab Emirates', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman', 'Jordan', 'Lebanon', 'Israel', 'Turkey', 'Iran', 'Iraq', 'Syria', 'Yemen', 'South Africa', 'Nigeria', 'Kenya', 'Ghana', 'Ethiopia', 'Tanzania', 'Uganda'].includes(country)) {
+                } else if (['India', 'United Arab Emirates', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman', 'Jordan', 'Lebanon', 'Israel', 'Iran', 'Iraq', 'Syria', 'Yemen', 'South Africa', 'Nigeria', 'Kenya', 'Ghana', 'Ethiopia', 'Tanzania', 'Uganda'].includes(country)) {
                     regionGroups.imea.push(countryData);
                 } else if (['Morocco', 'Algeria', 'Tunisia', 'Libya', 'Egypt'].includes(country)) {
                     // Maghreb fait partie de l'Europe
@@ -145,15 +190,25 @@
                         uniqueApps.add(app.name);
                     });
                 });
+                
                 const totalApps = uniqueApps.size;
+                
+                // Utiliser la fonction dynamique pour obtenir les apps uniques de cette région
+                const uniqueAppsResult = getUniqueAppsForRegion(regionName);
+                const regionOnlyApps = uniqueAppsResult.count;
+                
+                const progressPercentage = totalApps > 0 ? Math.round((regionOnlyApps / totalApps) * 100) : 0;
                 const regionCenter = regionCenters[regionName];
                 if (!regionCenter) return;
+
+                // Couleur jaune pour le cercle de progression
+                let progressColor = '#FFFF00'; // Jaune uniforme
 
                 const marker = L.marker(regionCenter, {
                     icon: L.divIcon({
                         className: 'region-count-icon',
                         html: `<div style="
-                            background: #d32f2f;
+                            background: #388e3c;
                             color: white;
                             border-radius: 50%;
                             width: 40px;
@@ -162,11 +217,29 @@
                             align-items: center;
                             justify-content: center;
                             font-weight: bold;
-                            font-size: 1.2em;
-                            border: 3px solid #fff;
-                            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                            font-size: 1.1em;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
                             cursor: pointer;
-                        ">${totalApps}</div>`,
+                            position: relative;
+                            background-image: conic-gradient(
+                                ${progressColor} 0deg ${progressPercentage * 3.6}deg,
+                                transparent ${progressPercentage * 3.6}deg 360deg
+                            );
+                            padding: 3px;
+                        " title="Applications région-uniquement: ${progressPercentage}% (${regionOnlyApps}/${totalApps})">
+                            <div style="
+                                background: #388e3c;
+                                color: white;
+                                border-radius: 50%;
+                                width: 34px;
+                                height: 34px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-weight: bold;
+                                font-size: 1.1em;
+                            ">${totalApps}</div>
+                        </div>`,
                         iconSize: [40, 40],
                         iconAnchor: [20, 20]
                     }),
@@ -175,6 +248,7 @@
 
                 // Clic pour une région
                 marker.on('click', function() {
+                    // Pas de pays à mémoriser pour un marker régional
                     showRegionApps(regionName.toUpperCase(), regionCountries, allApps);
                 });
 
@@ -189,6 +263,26 @@
                 const filtered = items.filter(item => item.countries && item.countries.includes(country));
                 if (filtered.length === 0) return;
 
+                // Calculer le pourcentage d'applications uniques pour ce pays
+                let uniquePercentage = 0;
+                let uniqueCount = 0;
+                let totalCount = filtered.length; // Nombre total d'applications filtrées dans ce pays
+                
+                // Utiliser la fonction dynamique pour obtenir les apps uniques
+                const uniqueAppsResult = getUniqueAppsForCountry(country);
+                const uniqueAppsForCountry = uniqueAppsResult.apps;
+                
+                // Compter combien d'apps filtrées sont dans la liste des uniques
+                const filteredAppNames = filtered.map(app => app.name);
+                uniqueCount = filteredAppNames.filter(appName => 
+                    uniqueAppsForCountry.includes(appName)
+                ).length;
+                uniquePercentage = totalCount > 0 ? Math.round((uniqueCount / totalCount) * 100) : 0;
+                
+                // Couleur jaune uniforme pour tous les pays
+                let borderColor = '#FFFF00'; // Jaune pour tous les pays
+                let borderWidth = 3; // Bordure uniforme
+                
                 const marker = L.marker(center, {
                     icon: L.divIcon({
                         className: 'country-count-icon',
@@ -203,10 +297,28 @@
                             justify-content: center;
                             font-weight: bold;
                             font-size: 1.1em;
-                            border: 2px solid #fff;
                             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
                             cursor: pointer;
-                        ">${filtered.length}</div>`,
+                            position: relative;
+                            background-image: conic-gradient(
+                                ${borderColor} 0deg ${uniquePercentage * 3.6}deg,
+                                transparent ${uniquePercentage * 3.6}deg 360deg
+                            );
+                            padding: 3px;
+                        " title="Applications uniques: ${uniquePercentage}% (${uniqueCount}/${totalCount})">
+                            <div style="
+                                background: #388e3c;
+                                color: white;
+                                border-radius: 50%;
+                                width: 26px;
+                                height: 26px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-weight: bold;
+                                font-size: 1.1em;
+                            ">${filtered.length}</div>
+                        </div>`,
                         iconSize: [32, 32],
                         iconAnchor: [16, 16]
                     }),
@@ -215,6 +327,7 @@
 
                 // Clic pour un pays
                 marker.on('click', function() {
+                    HiddenApps.setSelectedCountry(country);
                     showCountryApps(country, filtered, allApps);
                 });
 
@@ -225,7 +338,9 @@
         // Fonction pour afficher les applications d'un pays
         function showCountryApps(country, apps, allApps) {
             const infoPanel = document.getElementById('info-panel');
+            const sidebar = document.getElementById('sidebar');
             
+
             // Grouper les applications par catégorie
             const groupedApps = {};
             apps.forEach(app => {
@@ -234,57 +349,263 @@
                 groupedApps[cat].push(app.name);
             });
 
-            // Créer le HTML pour afficher les applications
-            let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${country}</h4>`;
-            Object.keys(groupedApps).forEach(cat => {
-                html += `<div style="margin-bottom:10px;">
-                    <span style="font-weight:bold;">${cat}</span><br>
-                    ${groupedApps[cat].map(name =>
-                        `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline;">${name}</span>`
-                    ).join('<br>')}
-                </div>`;
+            // Obtenir les applications uniques 
+            const uniqueAppsResult = getUniqueAppsForCountry(country);
+            const uniqueAppsForCountry = uniqueAppsResult.apps;
+            const uniqueAppsFiltered = apps.filter(app => uniqueAppsForCountry.includes(app.name));
+
+            // Grouper les applications uniques par catégorie
+            const groupedUniqueApps = {};
+            uniqueAppsFiltered.forEach(app => {
+                const cat = app.category || "Autre";
+                if (!groupedUniqueApps[cat]) groupedUniqueApps[cat] = [];
+                groupedUniqueApps[cat].push(app.name);
             });
-            html += `<div style="height: 10px;"></div>`;
+
+            // Calculer les applications non-uniques (présentes dans d'autres pays)
+            const nonUniqueAppsFiltered = apps.filter(app => !uniqueAppsForCountry.includes(app.name));
+            const groupedNonUniqueApps = {};
+            nonUniqueAppsFiltered.forEach(app => {
+                const cat = app.category || "Autre";
+                if (!groupedNonUniqueApps[cat]) groupedNonUniqueApps[cat] = [];
+                groupedNonUniqueApps[cat].push(app.name);
+            });
+
+            // Variable pour suivre l'état d'affichage
+            let showingUnique = false;
+            let showingNonUnique = false;
+
+            // Définir les couleurs claires
+            const COLOR_ALL = '#42A5F5';      // Bleu clair
+            const COLOR_UNIQUE = '#66BB6A';   // Vert clair
+            const COLOR_OTHER = '#BA68C8';    // Violet clair
+            const COLOR_ALL_DARK = '#1976D2';
+            const COLOR_UNIQUE_DARK = '#2E7D32';
+            const COLOR_OTHER_DARK = '#8E24AA';
+
+            // Fonction pour générer le HTML de la liste
+            function generateAppList(grouped, color) {
+                let listHtml = '';
+                Object.keys(grouped).forEach(cat => {
+                    let textColor = color ? `color: ${color};` : '';
+                    listHtml += `<div style=\"margin-bottom:10px;\">
+                        <span style=\"font-weight:bold; font-size: 1.1em; ${textColor}\">${cat}</span><br>
+                        ${grouped[cat].map(name =>
+                            `<span class=\"sidebar-item\" data-name=\"${name}\" style=\"margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.5em; ${textColor}\">${name}</span>`
+                        ).join('<br>')}
+                    </div>`;
+                });
+                return listHtml;
+            }
+
+            // Créer le HTML avec bouton retour
+            let html = `<div style=\"display: flex; align-items: center; margin-bottom: 8px;\">
+                <button onclick=\"window.showAllApplications()\" class=\"back-button\" style=\"margin-right: 10px; background: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 4px 10px; font-size: 1em; font-weight: bold; cursor: pointer;\">← Back</button>
+                <h4 style=\"margin: 0; color: #d32f2f; font-size: 1.4em; line-height: 1.2;\">${country}</h4>
+            </div>`;
+
+            // Titre "All Applications" avec trois boutons
+            html += `<div style=\"display: flex; align-items: center; gap: 10px; margin-bottom: 10px;\">
+                <button id=\"toggleAllApps\" style=\"
+                    background: ${COLOR_ALL};
+                    color: white;
+                    border: none;
+                    border-radius: 15px;
+                    padding: 5px 12px;
+                    font-size: 0.9em;
+                    font-weight: bold;
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    transition: background 0.3s;
+                \">All Applications (${apps.length})</button>
+                <button id=\"toggleUniqueApps\" style=\"
+                    background: ${COLOR_UNIQUE};
+                    color: white;
+                    border: none;
+                    border-radius: 15px;
+                    padding: 5px 12px;
+                    font-size: 0.9em;
+                    font-weight: bold;
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    transition: background 0.3s;
+                \">${uniqueAppsFiltered.length} unique</button>
+                <button id=\"toggleNonUniqueApps\" style=\"
+                    background: ${COLOR_OTHER};
+                    color: white;
+                    border: none;
+                    border-radius: 15px;
+                    padding: 5px 12px;
+                    font-size: 0.9em;
+                    font-weight: bold;
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    transition: background 0.3s;
+                \">${nonUniqueAppsFiltered.length} multi countries</button>
+            </div>`;
+
+            // Container pour la liste d'applications
+            html += `<div id=\"appListContainer\">`;
+            html += generateAppList(groupedApps, COLOR_ALL_DARK);
+            html += `</div>`;
 
             infoPanel.innerHTML = html;
+            
+            // Ajouter l'événement de toggle pour les boutons
+            const toggleAllBtn = document.getElementById('toggleAllApps');
+            const toggleBtn = document.getElementById('toggleUniqueApps');
+            const toggleNonUniqueBtn = document.getElementById('toggleNonUniqueApps');
+            const appListContainer = document.getElementById('appListContainer');
+            
+            function setActive(btn, color) {
+                toggleAllBtn.style.background = COLOR_ALL;
+                toggleBtn.style.background = COLOR_UNIQUE;
+                toggleNonUniqueBtn.style.background = COLOR_OTHER;
+                btn.style.background = color;
+            }
+
+            if (toggleAllBtn && toggleBtn && toggleNonUniqueBtn && appListContainer) {
+                toggleAllBtn.addEventListener('click', () => {
+                    setActive(toggleAllBtn, COLOR_ALL_DARK);
+                    appListContainer.innerHTML = generateAppList(groupedApps, COLOR_ALL_DARK);
+                    addAppClickEvents(infoPanel, allApps);
+                });
+                toggleBtn.addEventListener('click', () => {
+                    setActive(toggleBtn, COLOR_UNIQUE_DARK);
+                    appListContainer.innerHTML = generateAppList(groupedUniqueApps, COLOR_UNIQUE_DARK);
+                    addAppClickEvents(infoPanel, allApps);
+                });
+                toggleNonUniqueBtn.addEventListener('click', () => {
+                    setActive(toggleNonUniqueBtn, COLOR_OTHER_DARK);
+                    appListContainer.innerHTML = generateAppList(groupedNonUniqueApps, COLOR_OTHER_DARK);
+                    addAppClickEvents(infoPanel, allApps);
+                });
+            }
+            
             addAppClickEvents(infoPanel, allApps);
         }
 
         // Fonction pour afficher les applications d'une région
         function showRegionApps(regionName, regionCountries, allApps) {
             const infoPanel = document.getElementById('info-panel');
+            const sidebar = document.getElementById('sidebar');
             
-            let html = `<h4 style="margin-bottom:10px; color: #d32f2f;">${regionName}</h4>`;
-            
+            // Collecter toutes les applications de la région (sans doublons)
+            const uniqueAppNames = new Set();
+            const allRegionApps = [];
             regionCountries.forEach(countryData => {
-                if (countryData.apps.length === 0) return;
-                
-                // Grouper les applications par catégorie pour ce pays
-                const groupedApps = {};
-                countryData.apps.forEach(app => {
-                    const cat = app.category || "Autre";
-                    if (!groupedApps[cat]) groupedApps[cat] = [];
-                    groupedApps[cat].push(app.name);
-                });
-
-                html += `<div style="margin-bottom:15px; border-left: 3px solid #1976d2; padding-left: 8px;">
-                    <h5 style="margin: 0 0 5px 0; color: #1976d2;">${countryData.country}</h5>`;
-                
-                Object.keys(groupedApps).forEach(cat => {
-                    html += `<div style="margin-bottom:5px;">
-                        <span style="font-weight:bold; font-size: 0.9em;">${cat}</span><br>
-                        ${groupedApps[cat].map(name =>
-                            `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 0.85em;">${name}</span>`
-                        ).join('<br>')}
-                    </div>`;
-                });
-                
-                html += `</div>`;
+                if (countryData.apps.length > 0) {
+                    countryData.apps.forEach(app => {
+                        if (!uniqueAppNames.has(app.name)) {
+                            uniqueAppNames.add(app.name);
+                            allRegionApps.push(app);
+                        }
+                    });
+                }
+            });
+            // Grouper toutes les applications par catégorie
+            const groupedApps = {};
+            allRegionApps.forEach(app => {
+                const cat = app.category || "Autre";
+                if (!groupedApps[cat]) groupedApps[cat] = [];
+                groupedApps[cat].push(app.name);
             });
             
-            html += `<div style="height: 10px;"></div>`;
+            // Créer le HTML avec bouton retour
+            let html = `<div style=\"display: flex; align-items: center; margin-bottom: 8px;\">
+                <button onclick=\"window.showAllApplications()\" class=\"back-button\" style=\"margin-right: 10px; background: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 4px 10px; font-size: 1em; font-weight: bold; cursor: pointer;\">← Back</button>
+                <h4 style=\"margin: 0; color: #d32f2f; font-size: 1.4em; line-height: 1.2;\">${regionName}</h4>
+            </div>`;
+
+            // Calculer les applications uniques à la région
+            const uniqueRegion = getUniqueAppsForRegion(regionName.toLowerCase());
+            const uniqueCount = uniqueRegion.count;
+            const uniqueNames = uniqueRegion.apps;
+
+            // Calculer les applications multi-régions (présentes dans cette région ET au moins une autre)
+            const allAppsFlat = Object.values(window.allApplications).flat();
+            const multiRegionApps = allAppsFlat.filter(app => Array.isArray(app.regions) && app.regions.length > 1 && app.regions.includes(regionName.toLowerCase()));
+            const multiCount = multiRegionApps.length;
+            const multiNames = multiRegionApps.map(app => app.name);
+
+            // Boutons pour afficher les uniques et multi-régions
+            html += `<div style="display: flex; align-items: center; gap: 10px; margin: 5px 0 8px 0;">
+                <button id="showAllRegionAppsBtn" style="background: #1976d2; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 1em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">All Applications (${allRegionApps.length})</button>
+                <button id="showUniqueRegionAppsBtn" style="background: #66BB6A; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 0.95em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">${uniqueCount} unique</button>
+                <button id="showMultiRegionAppsBtn" style="background: #BA68C8; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 0.95em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">${multiCount} multi regions</button>
+            </div>`;
+
+            // Générer la liste HTML par catégorie
+            function generateAppList(grouped, color) {
+                let listHtml = '';
+                Object.keys(grouped).forEach(cat => {
+                    let textColor = color ? `color: ${color};` : '';
+                    listHtml += `<div style=\"margin-bottom:10px;\">`
+                        + `<span style=\"font-weight:bold; font-size: 1.1em; ${textColor}\">${cat} (${grouped[cat].length})</span><br>`
+                        + grouped[cat].map(name =>
+                            `<span class=\"sidebar-item\" data-name=\"${name}\" style=\"margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.3em; ${textColor}\">${name}</span>`
+                        ).join('<br>')
+                        + `</div>`;
+                });
+                return listHtml;
+            }
+
+            html += `<div id=\"appListContainer\">`;
+            html += generateAppList(groupedApps, '#1976d2');
+            html += `</div>`;
+            html += `<div style=\"height: 10px;\"></div>`;
+
             infoPanel.innerHTML = html;
             addAppClickEvents(infoPanel, allApps);
+
+            // Ajout des événements pour les boutons
+            const appListContainer = document.getElementById('appListContainer');
+            const uniqueBtn = document.getElementById('showUniqueRegionAppsBtn');
+            const multiBtn = document.getElementById('showMultiRegionAppsBtn');
+
+            const allBtn = document.getElementById('showAllRegionAppsBtn');
+            if (allBtn && appListContainer) {
+                allBtn.addEventListener('click', () => {
+                    appListContainer.innerHTML = generateAppList(groupedApps, '#1976d2');
+                    allBtn.style.background = '#1976d2';
+                    uniqueBtn.style.background = '#66BB6A';
+                    multiBtn.style.background = '#BA68C8';
+                    addAppClickEvents(infoPanel, allApps);
+                });
+            }
+            if (uniqueBtn && appListContainer) {
+                uniqueBtn.addEventListener('click', () => {
+                    // Générer la liste des uniques par catégorie
+                    const uniqueApps = allAppsFlat.filter(app => uniqueNames.includes(app.name));
+                    const groupedUnique = {};
+                    uniqueApps.forEach(app => {
+                        const cat = app.category || "Autre";
+                        if (!groupedUnique[cat]) groupedUnique[cat] = [];
+                        groupedUnique[cat].push(app.name);
+                    });
+                    appListContainer.innerHTML = generateAppList(groupedUnique, '#2E7D32');
+                    allBtn.style.background = '#1976d2';
+                    uniqueBtn.style.background = '#2E7D32';
+                    multiBtn.style.background = '#BA68C8';
+                    addAppClickEvents(infoPanel, allApps);
+                });
+            }
+            if (multiBtn && appListContainer) {
+                multiBtn.addEventListener('click', () => {
+                    // Générer la liste des multi-régions par catégorie
+                    const groupedMulti = {};
+                    multiRegionApps.forEach(app => {
+                        const cat = app.category || "Autre";
+                        if (!groupedMulti[cat]) groupedMulti[cat] = [];
+                        groupedMulti[cat].push(app.name);
+                    });
+                    appListContainer.innerHTML = generateAppList(groupedMulti, '#8E24AA');
+                    allBtn.style.background = '#1976d2';
+                    uniqueBtn.style.background = '#66BB6A';
+                    multiBtn.style.background = '#8E24AA';
+                    addAppClickEvents(infoPanel, allApps);
+                });
+            }
         }
 
         // Fonction pour afficher le bouton de sélection
@@ -292,10 +613,19 @@
             const container = document.getElementById('selected-app-container');
             const nameSpan = document.getElementById('selected-app-name');
             const deselectButton = document.getElementById('deselect-button');
-            
+
+            // Gérer l'affichage/masquage des boutons Matrix via HiddenApps
+            if (window.HiddenApps && typeof window.HiddenApps.handleMatrixButtonsOnSelection === 'function') {
+                window.HiddenApps.handleMatrixButtonsOnSelection(appName);
+            }
+
+            // Ne pas afficher le bouton unique pour Matrix
+            if (appName === 'Matrix') {container.style.display = 'none';return;}
+
+            // Affichage normal du bouton sélectionné
             nameSpan.textContent = appName;
             container.style.display = 'block';
-            
+
             // Ajouter l'événement de désélection
             deselectButton.onclick = function() {
                 hideSelectedAppButton();
@@ -310,10 +640,23 @@
             };
         }
         
+        // ...fonction déplacée dans HiddenApps.js...
+        
+        // Fonction pour masquer les boutons Matrix
+        function hideMatrixVariantsButtons() {
+            const matrixContainer = document.getElementById('matrix-variants-container');
+            if (matrixContainer) {
+                matrixContainer.style.display = 'none';
+            }
+        }
+        
         // Fonction pour masquer le bouton de sélection
         function hideSelectedAppButton() {
             const container = document.getElementById('selected-app-container');
             container.style.display = 'none';
+            
+            // Masquer aussi les boutons Matrix si ils sont affichés
+            hideMatrixVariantsButtons();
         }
 
         // Fonction pour ajouter les événements de clic sur les applications
@@ -323,28 +666,33 @@
                 elem.onclick = function() {
                     const itemName = this.getAttribute('data-name');
                     const isCurrentlySelected = this.style.fontWeight === 'bold';
-                    
+                    // Centraliser la gestion des boutons Matrix
+                    if (window.HiddenApps && typeof window.HiddenApps.handleMatrixButtonsOnSelection === 'function') {
+                        window.HiddenApps.handleMatrixButtonsOnSelection(itemName);
+                    }
                     // Réinitialiser tous les styles
                     infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
                         e.style.fontWeight = 'normal';
                     });
-                    
                     // Si l'élément n'était pas sélectionné, le sélectionner
                     if (!isCurrentlySelected) {
                         this.style.fontWeight = 'bold';
-                        
                         // Afficher le bouton de sélection
                         showSelectedAppButton(itemName);
-                        
                         // Trouver l'application dans la liste complète
-                        const item = allApps.find(i => i.name === itemName);
+                        let item = allApps.find(i => i.name === itemName);
+                        // Patch spécial pour Matrix : n'afficher que les variantes du pays sélectionné
+                        if (itemName === 'Matrix' && window.HiddenApps && typeof window.HiddenApps.getCombinedMatrixForCountry === 'function' && window.selectedCountryName) {
+                            const combined = window.HiddenApps.getCombinedMatrixForCountry(window.selectedCountryName, window.allApplications);
+                            if (combined) item = combined;
+                        }
                         if (!item) return;
-                        
                         // Afficher les capabilities de l'application
                         if (typeof window.displayApplicationCapabilities === 'function') {
                             window.displayApplicationCapabilities(itemName, item);
+                        } else {
+                            console.error('❌ window.displayApplicationCapabilities n\'est pas une fonction !');
                         }
-                        
                         // Colorier les pays sur la carte
                         if (item.countries) {
                             resetCountryColors();
@@ -377,21 +725,18 @@
         window.showCountryMarkers = showCountryMarkers;
         window.showSelectedAppButton = showSelectedAppButton;
         window.hideSelectedAppButton = hideSelectedAppButton;
+        window.hideMatrixVariantsButtons = hideMatrixVariantsButtons;
         window.resetCountryColors = resetCountryColors;
         window.addAppClickEvents = addAppClickEvents;
 
         window.addEventListener('DOMContentLoaded', () => {
-            Promise.all([
-                fetch('capabilities.json').then(r => r.json()),
-                fetch('data.json').then(r => r.json())
-            ]).then(([capData, appData]) => {
-                // Expander les régions dans toutes les applications
-                appData.forEach(app => {
-                    if (app.countries) {
-                        app.countries = expandRegions(app.countries);
-                    }
-                });
 
+            Promise.all([
+                fetch('bc-mapping.json').then(r => r.json()),
+                fetch('data.json').then(r => r.json()),
+                fetch('app-capabilities-unified.json').then(r => r.json()),
+                fetch('bc-definitions.json').then(r => r.json())
+            ]).then(([bcMapping, appData, unifiedData, bcDefinitions]) => {
                 // Fusionne les pays si countriesRef est présent
                 appData.forEach(app => {
                     if (app.countriesRef) {
@@ -410,11 +755,36 @@
                     }
                 });
 
-                // Initialiser les capabilities depuis le fichier externe
-                initializeCapabilities(capData, appData);
+                // INJECTION DES L1/L2/L3/L4 POUR TOUTES LES APPLIS
+                // Stocker unifiedData globalement pour l'accès depuis capabilities.js
+                window.appCapabilitiesUnified = unifiedData;
                 
-                // Initialiser la recherche depuis le fichier externe
-                initializeSearch();
+                let injectionCount = 0;
+                appData.forEach(app => {
+                    const caps = unifiedData[app.name];
+                    if (caps) {
+                        app.l1 = caps.l1 || [];
+                        app.l2 = caps.l2 || [];
+                        app.l3 = caps.l3 || [];
+                        app.l4 = caps.l4 || [];
+                        injectionCount++;
+                    } else {
+                        console.warn(`⚠️ Pas de données unifiées pour ${app.name}`);
+                    }
+                });
+                
+                console.log(`✅ Injection terminée: ${injectionCount}/${appData.length} applications ont reçu des données unifiées`);
+
+                // Stocker bcMapping globalement pour l'accès depuis capabilities.js
+                window.bcMapping = bcMapping;
+                
+                // Initialiser les capabilities depuis les définitions BC
+                initializeCapabilities(bcDefinitions, appData);
+                
+                // Initialiser la recherche avec un petit délai pour s'assurer que le DOM est prêt
+                setTimeout(() => {
+                    initializeSearch();
+                }, 100);
                 
                 // Ajouter l'événement de zoom pour regrouper/dégrouper les markers
                 map.on('zoomend', function() {

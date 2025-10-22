@@ -1,1004 +1,1231 @@
 [
   {
     "name": "2IC Pallet",
-    "countries": ["Anz"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM2"]
+    "countries": ["Australia","New Zealand"],
+    "regions": ["apac"],
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "4flow",
-    "countries": ["Europe+"],
-    "category": "Integration & Middleware",
-    "capabilities": ["TM6"]
+    "countries": ["Greece", "Morocco", "Belgium", "Netherlands", "Luxembourg", "Germany",
+        "France", "Spain", "Portugal", "Italy", "United Kingdom", "Ireland",
+        "Turkey", "Slovakia", "Switzerland", "Bulgaria", "Croatia", "Hungary",
+        "Latvia", "Portugal", "Romania", "Serbia", "Slovenia", "Czech Republic",
+        "Tunisia", "Austria", "Poland", "Sweden", "Finland", "Denmark", "Turkey"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "ACTUATE",
     "countries": ["United States of America"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["FM1"]
+    "regions": ["nortam"],
+    "category": "Reporting & BI"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "ADT TMS",
-    "countries": ["Argentina","Uruguay"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "countries": ["Argentina"],
+    "regions": ["latam"],
+    "category": "TMS"
+    ,"itOwner": "PEREIRA BRUNO"
+  },
+  {
+    "name": "Agence digitale",
+    "countries": ["Belgium", "Czech Republic", "France", "Germany", "Italy", "Poland", "Portugal", "Slovakia", "Spain", "United Kingdom", "Switzerland"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Unknown"
   },
   {
     "name": "Allo",
-    "countries": ["Nortam"],
-    "category": "Route & Load Optimization",
-    "capabilities": ["TM3"]
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "Alpega",
-    "countries": ["Europe"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "ASTAG GU (Ground)",
-    "countries": ["Europe+"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "countries": ["Switzerland"],
+    "regions": ["europe"],
+    "category": "Customs"
+    ,"itOwner": "DEBERT, Julien, Santoni Paolo"
   },
   {
     "name": "B2P",
-    "countries": ["France"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1"]
+    "countries": ["France", "Belgium", "Italy", "Portugal", "Spain"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
-  {
-    "name": "Bearwear",
-    "countries": ["United States of America"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["TM1"]
+   {
+    "name": "Boreus",
+    "countries": ["Switzerland"],
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "Santoni Paolo"
   },
   {
     "name": "Brazil Logic",
     "countries": ["Brazil"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "regions": ["latam"],
+    "category": "Track & Trace"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "Byzaneo",
     "countries": ["Poland"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "BERNICOT, Marc"
   },
   {
     "name": "CADIS (R4)",
-    "countries": ["Europe+"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["OM5"]
+    "countries": ["Bulgaria","Czech Republic","France","Hungary","Netherlands","Poland","Romania","Slovakia","Slovenia","Spain"],
+    "regions": ["europe"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "Canada reporting",
     "countries": ["Canada"],
-    "category": "Data",
-    "capabilities": ["TM6"]
+    "regions": ["nortam"],
+    "category": "Reporting & BI"
+    ,"itOwner": "Habara Rudy"
   },
   {
     "name": "Canada scanning",
     "countries": ["Canada"],
-    "category": "Routing & Scheduling",
-    "capabilities": ["TM2"]
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "Habara Rudy"
   },
   {
     "name": "Canada Shipping System",
     "countries": ["Canada"],
-    "category": "Fulfillment & Shipping",
-    "capabilities": ["TM1"]
+    "regions": ["nortam"],
+    "category": "Customer Portal"
+    ,"itOwner": "Habara Rudy"
   },
   {
     "name": "Canada track",
     "countries": ["Canada"],
-    "category": "Routing & Scheduling",
-    "capabilities": ["TM2"]
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "Habara Rudy"
   },
   {
     "name": "Car-O",
-    "countries": ["Austria", "Germany"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "countries": ["Germany"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Seemann, Marco"
   },
   {
     "name": "Centiro (CLL)",
-    "countries": ["Europe"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "countries": ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+        "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
+        "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", 
+        "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", 
+        "Slovenia", "Spain", "Sweden", "United Kingdom", "Switzerland", 
+        "Norway", "Iceland", "Albania", "Bosnia and Herzegovina", "Montenegro", 
+        "North Macedonia", "Serbia", "Turkey"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "CEVA IOD",
     "countries": ["Turkey"],
-    "category": "Track & Trace",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "Mobile Applications"
+    ,"itOwner": "Agir Dilek, RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "CEVA Smart",
-    "countries": ["Europe","Chile","Colombia","Ecuador","Peru","Turkey","Asia"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "countries": ["United Kingdom"],
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "Cano Adolfo, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "CEVA SPOT MODULE",
-    "countries": [
-      "France",
-      "Germany",
-      "Netherlands",
-      "Poland",
-      "Spain",
-      "italy"
-    ],
-    "category": "Customer Service",
-    "capabilities": ["TM1"]
+    "countries": ["Belgium","Netherlands","Luxembourg","France","Germany","Poland","Portugal","Spain"],
+    "regions": ["europe"],
+    "category": "Digital Forwarding"
+    ,"itOwner": "VERRECCHIA Matthieu, DEBERT, Julien"
   },
   {
     "name": "CEVA YMS",
-    "countries": ["United States of America"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM3"]
+    "countries": ["United States of America","Netherlands","Poland"],
+    "regions": ["nortam","europe"],
+    "category": "YMS"
+    ,"itOwner": "Kelly Shawn"
   },
   {
     "name": "CEVACONNECT (PFS)",
-    "countries": [
-      "Slovakia"
-    ],
-    "category": "Customer Service",
-    "capabilities": ["OM5"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Ireland", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Switzerland", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "POUYE Fatou, RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "Cevalution",
-    "countries": [
-      "Turkey"
-    ],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "countries": ["Turkey"],
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "CEVASSETS (BEXTER Trackonline)",
-    "countries": ["Europe"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM2"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "CEVATrack mailing",
-    "countries": ["United Kingdom", "Ireland"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
+    "countries": ["United Kingdom"],
+    "regions": ["europe"],
+    "category": "Documents&Collaboration"
+    ,"itOwner": "Marco Rubini, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Cevatrack-Responsive",
-    "countries": ["United Kingdom", "Ireland"],
-    "category": "CRM/PFS",
-    "capabilities": ["OM5"]
+    "countries": ["United Kingdom"],
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "Marco Rubini, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Chronotruck",
-    "countries": ["Europe+"],
-    "category": "Sales & Marketing",
-    "capabilities": ["TM1"]
+    "countries": ["France"],
+    "regions": ["europe"],
+    "category": "Digital Forwarding"
+    ,"itOwner": "VERRECCHIA Matthieu, DEBERT, Julien"
   },
   {
     "name": "ClaimOVL",
     "countries": ["Turkey"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM6"]
+    "regions": ["europe"],
+    "category": "Claims & Damages"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Agir Dilek"
   },
   {
     "name": "CMS",
-    "countries": ["Europe+"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1"]
-  },
-  {
-    "name": "CNDApps",
-    "countries": ["United States of America"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Carriers Portal"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "Comdata",
     "countries": ["United States of America"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "regions": ["nortam"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "ROGERS Jeff"
   },
   {
     "name": "Control Tower",
     "countries": ["Turkey"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "C-Portal",
     "countries": ["Italy"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Rubini Marco"
   },
   {
     "name": "CrossDock - iSeries",
     "countries": ["United States of America"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM2"]
+    "regions": ["nortam"],
+    "category": "Control & Quality"
+    ,"itOwner": "Kelly Shawn"
   },
   {
     "name": "CUBE IQ",
     "countries": ["Argentina", "Uruguay"],
-    "category": "Track & Trace",
-    "capabilities": ["TM1"]
+    "regions": ["latam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "DAGITIM",
     "countries": ["Turkey"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
+  },
+  {
+    "name": "DAR AL BETA - Tech consulting",
+    "countries": ["Saudi Arabia"],
+    "regions": ["imea"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "Datascope DMS",
-    "countries": ["United Kingdom"],
-    "category": "YMS/Time Slot Management",
-    "capabilities": ["TM2"]
+    "countries": ["United Kingdom","Ireland"],
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Rubini Marco"
   },
   {
     "name": "DC BRAIN",
-    "countries": ["Europe"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM3"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia"],
+    "regions": ["europe"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy"
+  },
+  {
+    "name": "DEEWAN - SMS",
+    "countries": ["Saudi Arabia"],
+    "regions": ["imea"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "Descartes GLN (Ground)",
     "countries": ["United States of America"],
-    "category": "Application",
-    "capabilities": ["TM4"]
+    "regions": ["nortam"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "Digital Archieve",
     "countries": ["Turkey"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "VERRECCHIA Matthieu"
   },
   {
     "name": "Dispatch",
-    "countries": ["France", "Portugal", "Spain","Italy"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "countries": ["France"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "DMS",
     "countries": ["Turkey"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Docsweb",
     "countries": ["Italy"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["TM7"]
+    "regions": ["europe"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Rubini Marco"
+  },
+  {
+    "name": "E2Open Booking",
+    "countries": ["Saudi Arabia"],
+    "regions": ["imea"],
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "EDICOM iPaaS",
-    "countries": ["Europe"],
-    "category": "Application",
-    "capabilities": ["OM5"]
+    "countries": ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", 
+        "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
+        "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", 
+        "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", 
+        "Slovenia", "Spain", "Sweden", "United Kingdom", "Switzerland", 
+        "Norway", "Iceland", "Albania", "Bosnia and Herzegovina", "Montenegro", 
+        "North Macedonia", "Serbia", "Turkey"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "BERNICOT, Marc"
   },
   {
     "name": "Ediel Portale Collaborativo",
     "countries": ["Italy"],
-    "category": "YMS/Time Slot Management",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Rubini Marco"
   },
   {
     "name": "EGL Scan Executive",
     "countries": ["United States of America"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "ROGERS Jeff"
   },
   {
     "name": "EGL Scan Shuttles",
     "countries": ["United States of America"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "ROGERS Jeff"
   },
   {
     "name": "ELO ANZ",
     "countries": ["Australia", "New Zealand"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
-  },
-  {
-    "name": "ELO DE",
-    "countries": ["Germany"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
+    "regions": ["apac"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "Ramasamy Velu"
   },
   {
     "name": "Fleetwave",
-    "countries": ["Nortam","Europe"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM2"]
+    "countries": ["Belgium", "Czech Republic", "France", "Germany", "Netherlands", "Poland", "Spain", "Morocco", "United States of America", "Canada ", "Australia", "Thailand", "India", "Saudi Arabia"],
+    "regions": ["europe","imea","nortam","apac"],
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "Muro, Juan Manuel"
   },
   {
     "name": "Fleetzy",
     "countries": ["Saudi Arabia"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM5"]
+    "regions": ["imea"],
+    "category": "Track & Trace"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "FM May",
     "countries": ["China"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "regions": ["apac"],
+    "category": "TMS"
+    ,"itOwner": "Wang, Bo"
   },
   {
     "name": "Galactica",
     "countries": ["Poland"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM7"]
+    "regions": ["europe"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Gefcopack",
-    "countries": ["Europe+"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM2"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy"
   },
   {
     "name": "Genio",
-    "countries": ["Genio"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
+    "countries": ["Greece", "South Africa", "Cambodia", "Morocco", "Russia", 
+        "United Arab Emirates", "United States of America", "Mexico", "Brazil", 
+        "Argentina", "Uruguay", "Chile", "Belgium", "Netherlands", "Luxembourg", 
+        "Estonia", "Latvia", "Lithuania", "Czech Republic", "Slovakia", "Hungary", 
+        "Poland", "Slovenia", "Croatia", "Austria", "Germany", "France", 
+        "Spain", "Portugal", "Italy", "United Kingdom", "Ireland", "Turkey", 
+        "China", "India", "Australia", "New Zealand", "Poland"],
+    "regions": ["europe","imea","apac","nortam","latam"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "BERNICOT, Marc"
   },
   {
     "name": "Geoserver",
-    "countries": ["Europe+"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["TM3"]
+    "countries": ["Greece", "Morocco", "Belgium", "Netherlands", "Luxembourg", "Germany", 
+        "France", "Spain", "Portugal", "Italy", "United Kingdom", "Ireland", 
+        "Turkey", "Slovakia", "Switzerland", "Bulgaria", "Croatia", "Hungary", 
+        "Latvia", "Portugal", "Romania", "Serbia", "Slovenia", "Czech Republic", 
+        "Tunisia", "Austria", "Poland", "Sweden","Finland","Denmark","Turkey"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "GLT",
-    "countries": ["Europe+"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "countries": ["Spain"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy"
   },
   {
     "name": "GM Customs Webportal",
-    "countries": ["United States of America"],
-    "category": "Track & Trace",
-    "capabilities": ["TM4"]
+    "countries": ["United States of America","Canada"],
+    "regions": ["nortam"],
+    "category": "Customer Portal"
+    ,"itOwner": "Garcia Leiser"
+  },
+  {
+    "name": "GoComet Tracking",
+    "countries": ["Saudi Arabia"],
+    "regions": ["imea"],
+    "category": "Track & Trace"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "GS1",
     "countries": ["France"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "Home Delivery",
-    "countries": ["Canada", "United States of America"],
-    "category": "Track & Trace",
-    "capabilities": ["TM7"]
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Customer Portal"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "i2 replacement",
     "countries": ["United States of America"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "regions": ["nortam"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "INES",
-    "countries": ["Europe+"],
-    "excludeCountries": ["United Kingdom"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1","TM2","TM3","TM4","TM4","TM5","TM6","TM7","OM1","OM2","OM3","OM4","OM5"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy, PAPIN Anne"
   },
   {
     "name": "INSPECTO",
     "countries": ["Poland"],
-    "category": "Track & Trace",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "Control & Quality"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "Inter Site Journaling",
     "countries": ["United Kingdom","Ireland"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM6"]
+    "regions": ["europe"],
+    "category": "Reporting & BI"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Jasper Reports",
-    "countries": ["United Kingdom","Ireland","Benelux"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM6"]
+    "countries": ["United Kingdom","Ireland","Belgium","Netherlands","Luxembourg"],
+    "regions": ["europe"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "LA",
     "countries": ["Turkey"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Leopard",
-    "countriesRef": "Anz",
-    "category": "Track & Trace",
-    "capabilities": ["TM2"]
+    "countries": ["Australia","New Zealand"],
+    "regions": ["apac"],
+    "category": "Track & Trace"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "Logistix",
-    "countries": ["Italy"],
-    "category": "Track & Trace",
-    "capabilities": ["TM2"]
+    "countries": ["Italy","Belgium","Netherlands"],
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "LOSCAM",
     "countries": ["Australia"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["CM1","CM2","CM3","CM4","CM5","CM6"]
+    "regions": ["apac"],
+    "category": "Track & Trace"
+    ,"itOwner": "Kopara Stacey"
   },
   {
     "name": "Map&Guide",
-    "countries": ["Europe+"],
-    "category": "Track & Trace",
-    "capabilities": ["TM3"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy"
   },
   {
     "name": "Matrix EAI SCM",
-    "countries": ["Benelux"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "countries": ["Belgium","Netherlands","Luxembourg"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware",
+    "itOwner": "BIERNACKI Scott",
+    "hidden": true
   },
   {
     "name": "Matrix FSS",
-    "countries": ["Americas","Asia"],
-    "category": "Customer Service",
-    "capabilities": ["TM4"]
+    "countries": ["Netherlands", "Poland", "Spain", "Turkey", "United States of America", "Mexico", "Japan", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Vietnam", "Chile", "Colombia", "Costa Rica", "Guatemala", "Panama", "Peru", "Paraguay", "Uruguay", "India", "United Arab Emirates"],
+    "regions": ["europe", "apac", "nortam","imea","latam"],
+    "category": "Financial & Settlement Systems",
+    "itOwner": "BIERNACKI Scott",
+    "hidden": true
   },
   {
     "name": "Matrix SCI",
-    "countries": ["Americas","Asia"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["OM5"]
+    "countries": ["Netherlands", "Poland", "Spain", "Turkey", "United States of America", "Canada ", "Mexico", "Japan", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Philippines", "Vietnam", "Cambodia", "Laos", "Myanmar", "Brunei", "Chile", "Colombia", "Costa Rica", "Guatemala", "Panama", "Peru", "Paraguay", "Uruguay", "India", "United Arab Emirates"],
+    "regions": ["europe", "apac", "nortam","imea","latam"],
+    "category": "Reporting & BI",
+    "itOwner": "BIERNACKI Scott",
+    "hidden": true
   },
   {
     "name": "Matrix SCM",
-    "countries": ["Americas","Asia"],
-    "category": "Customer Service",
-    "capabilities": ["TM1"]
+    "countries": ["Ireland", "Netherlands", "United Kingdom", "United States of America", "Canada ", "Mexico", "China", "Singapore", "Malaysia", "Thailand", "Philippines", "Cambodia", "Laos", "Myanmar", "Brunei"],
+    "regions": ["europe", "apac", "nortam"],
+    "category": "TMS",
+    "itOwner": "Calhoun, Daniel, Miller, Shanna, BIERNACKI Scott",
+    "hidden": true
   },
   {
     "name": "Matrix TMS",
-    "countries": ["Nortam","Asia","Peru","Chile","Colombia","Ecuador","Turkey"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1","TM2","TM3","OM1","OP1"]
+    "countries": ["Netherlands", "Spain", "Turkey", "United States of America", "Canada ", "Mexico", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Philippines", "Vietnam", "Cambodia", "Laos", "Myanmar", "Brunei", "Chile", "Colombia", "Costa Rica", "Guatemala", "Panama", "Peru", "Paraguay", "Uruguay", "India", "United Arab Emirates"],
+    "regions": ["europe", "apac", "nortam","imea","latam","imea"],
+    "category": "TMS",
+    "itOwner": "PENEAUD Cyril (ADM)",
+    "hidden": true
   },
   {
     "name": "Matrix TMS - Core+",
-    "countries": ["Turkey","Nortam","Apac"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "countries": ["Canada ", "Mexico", "China", "Singapore", "Malaysia", "Thailand", "Philippines", "Vietnam", "Cambodia", "Laos", "Myanmar", "Brunei", "India", "United Arab Emirates"],
+    "regions": ["apac","nortam","imea"],
+    "category": "TMS",
+    "itOwner": "BIERNACKI Scott",
+    "hidden": true
   },
   {
     "name": "Matrix TMS Mobile",
-    "countries": ["Americas","Asia"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM2"]
+    "countries": ["Turkey", "United States of America", "Canada ", "Mexico", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Philippines", "Vietnam", "Cambodia", "Laos", "Myanmar", "Brunei", "Chile", "Colombia", "Costa Rica", "Guatemala", "Panama", "Peru", "Paraguay", "Uruguay", "United Arab Emirates"],
+    "regions": ["apac","nortam","imea","europe"],
+    "category": "TMS",
+    "itOwner": "BIERNACKI Scott",
+    "hidden": true
   },
   {
-    "name": "MazdaEdi",
+    "name": "Matrix Wiki",
+    "countries": ["Netherlands", "Poland", "Spain", "Turkey", "United States of America", "Mexico", "Japan", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Vietnam", "Chile", "Colombia", "Costa Rica", "Guatemala", "Panama", "Peru", "Paraguay", "Uruguay", "India", "United Arab Emirates"],
+    "regions": ["europe", "apac", "nortam","imea","latam"],
+    "category": "Documents & Collaboration",
+    "itOwner": "BIERNACKI Scott",
+    "hidden": true
+  },
+  {
+    "name": "MazdaEdi", 
     "countries": ["Turkey"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "Integration & Middleware",
+    "itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "MDC Smartphone app",
     "countries": ["Italy"],
-    "category": "Last Mile Distribution",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Last Mile Distribution"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Metis",
-    "countries": ["Europe+"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy"
   },
   {
     "name": "Microlise POD",
     "countries": ["United Kingdom","Ireland"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM5"]
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "MiQuest",
     "countries": ["United Kingdom","Ireland"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "MLC Connect",
     "countries": ["Saudi Arabia"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "regions": ["imea"],
+    "category": "Customer Portal"
+    ,"itOwner": "Yousef, Yousef Kamal"
   },
   {
     "name": "MPO eTMS",
     "countries": ["Netherlands"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Rodriguez, Guillermo Gomez, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "MPO SCOS",
     "countries": ["Netherlands"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien, Forget Paul"
   },
   {
     "name": "MPO SCOS France",
     "countries": ["France"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Rodriguez, Guillermo Gomez, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "MS Dynamics",
-    "countries": ["United Kingdom","Ireland"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM2"]
+    "countries": ["United Kingdom"],
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "MSN 2.0",
     "countries": ["Italy"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "My-Fleet",
     "countries": ["Australia"],
-    "category": "Transportation",
-    "capabilities": ["TM5"]
+    "regions": ["apac"],
+    "category": "Track & Trace"
+    ,"itOwner": "Ramasamy Velu"
   },
   {
     "name": "Nike Scanning",
     "countries": ["United Kingdom","Ireland"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Nortam dimensioning",
     "countries": ["Canada"],
-    "category": "Fulfillment & Shipping",
-    "capabilities": ["TM3"]
+    "regions": ["nortam"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "Habara Rudy"
   },
   {
     "name": "Omprompt",
-    "countries": ["United Kingdom","Ireland","Benelux"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
+    "countries": ["United Kingdom","Ireland","Belgium","Netherlands","Luxembourg"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "BIHR, Gerald"
   },
   {
     "name": "OMS 3PL (PFS)",
-    "countries": ["Europe+"],
-    "category": "CRM/PFS",
-    "capabilities": ["OM5"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Order Management Systems (OMS)"
+    ,"itOwner": "POUYE Fatou, DEBERT, Julien, RAUCH, Nancy"
   },
   {
     "name": "One Dispatch",
     "countries": ["Canada"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "regions": ["nortam"],
+    "category": "TMS"
+    ,"itOwner": "Habara Rudy"
   },
   {
     "name": "Oplus",
-    "countries": ["Europe+"],
-    "category": "Routing & Scheduling",
-    "capabilities": ["TM1"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy"
   },
   {
     "name": "Oracle - Analytics",
     "countries": ["Saudi Arabia"],
-    "category": "Data",
-    "capabilities": ["TM6"]
+    "regions": ["imea"],
+    "category": "Reporting & BI"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "Oracle BI Solutions",
-    "countries": ["Turkey"],
-    "category": "Data",
-    "capabilities": ["OM5"]
+    "countries": ["Turkey","Saudi Arabia"],
+    "regions": ["europe","imea"],
+    "category": "Reporting & BI"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Oracle-EBS",
     "countries": ["Saudi Arabia"],
-    "category": "Finance",
-    "capabilities": ["FM1"]
+    "regions": ["imea"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "Oracle-OTM",
     "countries": ["Saudi Arabia"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["OM5"]
+    "regions": ["imea"],
+    "category": "TMS"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "Oracle-Siebel",
     "countries": ["Saudi Arabia"],
-    "category": "Customer Service",
-    "capabilities": ["OM1"]
+    "regions": ["imea"],
+    "category": "CRM"
+    ,"itOwner": "Kamal, Mohammed Maher"
   },
   {
     "name": "ORION ANZ",
-    "countries": ["Anz"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "countries": ["Australia","New Zealand"],
+    "regions": ["apac"],
+    "category": "TMS"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "ORION Brazil",
-    "countries": ["Brazil"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "countries": ["Brazil","Argentina"],
+    "regions": ["latam"],
+    "category": "TMS"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "ORS",
     "countries": ["Poland"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "OVL_INES_BATCH",
     "countries": ["Turkey"],
-    "category": "Integration & Middleware",
-    "capabilities": ["TM4"]
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Panoptes (Ex Neopost)",
-    "countries": ["Europe+"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "POUYE Fatou, DEBERT, Julien, RAUCH, Nancy"
   },
   {
     "name": "Paragon UKIN",
-    "countries": ["United States of America","United Kingdom","Ireland","Italy"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM2"]
+    "countries": ["United States of America","United Kingdom","Ireland"],
+    "regions": ["europe","nortam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "PARTS",
-    "countries": ["Anz"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "countries": ["Australia","New Zealand"],
+    "regions": ["apac"],
+    "category": "TMS"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "PathFind",
     "countries": ["Brazil"],
-    "category": "Route & Load Optimization",
-    "capabilities": ["TM3"]
+    "regions": ["latam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "PC Miler",
-    "countries": ["Americas","Asia"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "countries": ["United States of America","Canada","Mexico"],
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "Gatiganti Ram"
   },
   {
     "name": "PCSTrac",
     "countries": ["United States of America"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["TM1"]
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "Gatiganti Ram"
   },
   {
     "name": "Piattaforma SMS",
     "countries": ["Italy"],
-    "category": "Track & Trace",
-    "capabilities": ["TM7"]
+    "regions": ["europe"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Project 44 (Ground)",
-    "countries": ["Europe+"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "countries": ["Australia","Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "United States of America", "Mexico", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Vietnam", "Cambodia", "Brazil", "Argentina", "Chile", "Colombia", "Peru", "India", "Saudi Arabia","United Arab Emirates"],
+    "regions": ["europe","nortam","apac","latam","imea"],
+    "category": "Track & Trace"
+    ,"itOwner": "Muro, Juan Manuel"
   },
   {
     "name": "PTV OptiFlow",
-    "countries": ["Anz"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
-  },
-  {
-    "name": "PTV OptiFlow",
-    "countries": ["Anz"],
-    "category": "Routing & Scheduling",
-    "capabilities": ["TM3"]
+    "countries": ["Australia"],
+    "regions": ["apac"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "Saruva, Sundaramoorthy"
   },
   {
     "name": "PTV Route Optimizer",
     "countries": ["Italy"],
-    "category": "Route & Load Optimization",
-    "capabilities": ["TM3"]
+    "regions": ["europe"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "PTV Xserver",
-    "countries": ["Europe+"],
-    "category": "Track & Trace",
-    "capabilities": ["TM3"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey", "Morocco", "Tunisia"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "DEBERT, Julien, RAUCH, Nancy"
+  },
+  {
+    "name": "Quadient (Ground)",
+    "countries": ["Germany","Switzerland"],
+    "regions": ["europe"],
+    "category": "CRM"
+    ,"itOwner": "DEBERT, Julien, Santoni Paolo"
   },
   {
     "name": "Raal Trans",
-    "countries": ["Europe+"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1"]
+    "countries": ["Czech Republic", "Italy", "Slovakia", "United Kingdom", "Turkey"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "Rail-Flow",
     "countries": ["Germany"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM4"]
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "REPOM",
     "countries": ["Brazil"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "regions": ["latam"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "RO e-Transport",
     "countries": ["Romania"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "regions": ["europe"],
+    "category": "Legal Compliance"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "RouteMax",
-    "countries": ["Nortam"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM2"]
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "Samsara MyFleet",
-    "countries": ["United States of America","Europe"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM5"]
+    "countries": ["Belgium", "Czech Republic", "France", "Germany", "Netherlands", "Poland", "Spain", "United Kingdom", "Morocco", "United States of America", "Canada ", "Australia", "Thailand", "India", "Saudi Arabia"],
+    "regions": ["europe","imea","nortam","apac"],    
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "Muro, Juan Manuel"
   },
   {
     "name": "SDS",
-    "countries": ["France", "Turkey"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["TM2"]
+    "countries": ["France"],
+    "regions": ["europe"],
+    "category": "Asset & Fleet Management"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Sertifi",
     "countries": ["United States of America"],
-    "category": "Track & Trace",
-    "capabilities": ["TM7"]
-  },
-  {
-    "name": "Sharenet",
-    "countries": ["United Kingdom","Ireland"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM2","ANM1","ANM2","ANM3","ANM4"]
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "Sherlock Waste",
-    "countries": ["Europe"],
-    "category": "Collaboration & Project Management",
-    "capabilities": ["OM5"]
+    "countries": ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", 
+        "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
+        "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", 
+        "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", 
+        "Slovenia", "Spain", "Sweden", "United Kingdom", "Switzerland", 
+        "Norway", "Iceland", "Albania", "Bosnia and Herzegovina", "Montenegro", 
+        "North Macedonia", "Serbia", "Turkey"],
+    "regions": ["europe"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "RAUCH, Nancy"
   },
   {
     "name": "Ship track",
     "countries": ["Canada"],
-    "category": "Routing & Scheduling",
-    "capabilities": ["TM5"]
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "Habara Rudy"
   },
   {
     "name": "Shiplify",
-    "countries": ["Nortam"],
-    "category": "Passengers & Commodities",
-    "capabilities": ["TM6"]
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "SHIPPER",
     "countries": ["Switzerland"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien"
+  },
+  {
+    "name": "Silogtran",
+    "countries": ["Colombia"],
+    "regions": ["latam"],
+    "category": "Legal Compliance"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "Smartsheet",
-    "countries": ["Anz"],
-    "category": "Strategy & Planning",
-    "capabilities": ["OM5"]
+    "countries": ["Australia"],
+    "regions": ["apac"],
+    "category": "Documents & Collaboration"
+    ,"itOwner": "Ramasamy Velu"
   },
   {
     "name": "SOTI MobiControl",
-    "countries": ["Anz"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "countries": ["Australia"],
+    "regions": ["apac"],
+    "category": "Track & Trace"
+    ,"itOwner": "Hossen Sayeed"
+  },
+  {
+    "name": "Speditor.net",
+    "countries": ["Greece", "Bulgaria"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "Speed TMS",
-    "countries": ["Europe+"],
-    "category": "Manufacturing & Delivery",
-    "capabilities": ["TM1"]
+    "countries": ["Poland"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "SphereWMS",
     "countries": ["United States of America"],
-    "category": "Manufacturing & DeliveryMS",
-    "capabilities": ["TM2"]
+    "regions": ["nortam"],
+    "category": "WMS"
+    ,"itOwner": "Gatiganti Ram"
   },
   {
     "name": "Stratagi",
     "countries": ["United States of America"],
-    "category": "Track & Trace",
-    "capabilities": ["TM1"]
+    "regions": ["nortam"],
+    "category": "TMS"
+    ,"itOwner": "Gatiganti Ram"
   },
   {
     "name": "Sub-It",
     "countries": ["United Kingdom"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "regions": ["europe"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Surgere",
-    "countries": ["Nortam"],
-    "category": "Routing & Scheduling",
-    "capabilities": ["TM5"]
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Track & Trace"
+    ,"itOwner": "BIERNACKI Scott"
   },
   {
     "name": "Tarot Analytics",
-    "countries": ["United Kingdom","Ireland","Benelux"],
-    "category": "Last Mile Distribution",
-    "capabilities": ["OM5"]
+    "countries": ["Netherlands"],
+    "regions": ["europe"],
+    "category": "Last Mile Distribution"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "TC1GDO",
     "countries": ["Italy"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Rubini Marco"
+  },
+  {
+    "name": "Telerik DevCraft",
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "Heilmann Pat"
   },
   {
     "name": "Teliae",
     "countries": ["France"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Last Mile Distribution"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "Teranalytics-Linehaul Scheduler",
-    "countries": ["Nortam"],
-    "category": "Route & Load Optimization",
-    "capabilities": ["TM3"]
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "ROGERS Jeff"
   },
   {
     "name": "Teranalytics-Station Gravity",
-    "countries": ["Nortam"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM6"]
+    "countries": ["United States of America"],
+    "regions": ["nortam"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "ROGERS Jeff"
   },
   {
     "name": "Time Slot Control (Ground)",
     "countries": ["Poland"],
-    "category": "YMS/Time Slot Management",
-    "capabilities": ["TM2"]
+    "regions": ["europe"],
+    "category": "Track & Trace"
+    ,"itOwner": "Li Ye"
   },
   {
     "name": "Timocom",
-    "countries": ["Europe+"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1","OP1","OP2"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia", "Turkey"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "TMS Customer Web",
     "countries": ["Turkey"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Customer Portal"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "TMS Portal",
-    "countries": ["Anz"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM5"]
+    "countries": ["Australia","New Zealand"],
+    "regions": ["apac"],
+    "category": "Customer Portal"
+    ,"itOwner": "Agir Dilek, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "TOSCA",
-    "countries": ["Europe"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "countries": ["Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", 
+        "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
+        "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", 
+        "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", 
+        "Slovenia", "Spain", "Sweden", "United Kingdom", "Switzerland", 
+        "Norway", "Iceland", "Albania", "Bosnia and Herzegovina", "Montenegro", 
+        "North Macedonia", "Serbia", "Turkey"],
+    "excludeCountries": ["Italy", "United Kingdom", "Turkey"],
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "PEREIRA BRUNO"
   },
   {
     "name": "Trans.eu",
-    "countries": ["Poland"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM1"]
+    "countries": ["Poland", "Germany", "Latvia", "Lithuania"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "RAUCH, Nancy"
   },
   {
     "name": "TransNET",
-    "countries": ["United Kingdom","Ireland","Benelux"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "countries": ["United Kingdom","Ireland"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "Transporeon",
-    "countries": ["France"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "countries": ["Belgium", "Bulgaria", "Croatia", "Czech Republic", "France", "Germany", "Greece", "Hungary", "Italy", "Latvia", "Lithuania", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "United Kingdom", "Switzerland", "Bosnia and Herzegovina", "Serbia"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Rubini Marco"
   },
   {
     "name": "TraspoJ",
     "countries": ["Italy"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
-  },
-  {
-    "name": "Trucker Tools",
-    "countries": ["United States of America"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["TM1"]
+    "regions": ["europe"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "TV Preview - API",
     "countries": ["Czech Republic"],
-    "category": "YMS/Time Slot Management",
-    "capabilities": ["TM2"]
-  },
-  {
-    "name": "UM",
-    "countries": ["France"],
-    "category": "Application",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien, Rubini Marco"
   },
   {
     "name": "Upply",
-    "countriesRef": "4flow",
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "countries": ["France","Poland"],
+    "regions": ["europe"],
+    "category": "Freight Marketplaces & Tendering"
+    ,"itOwner": "Rubini Marco, Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Vectio",
-    "countries": ["Poland"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
-  },
-  {
-    "name": "Vision +",
-    "countries": ["Europe+"],
-    "category": "Track & Trace",
-    "capabilities": ["TM5"]
+    "countries": ["Czech Republic","Germany","Poland","Slovakia","Switzerland"],
+    "regions": ["europe"],
+    "category": "Carriers Portal"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "Vypex",
     "countries": ["Australia"],
-    "category": "Transportation",
-    "capabilities": ["TM5"]
+    "regions": ["apac"],
+    "category": "Track & Trace"
+    ,"itOwner": "Santoni Paolo, DEBERT, Julien"
   },
   {
     "name": "Waplanner",
-    "countries": ["France"],
-    "category": "Asset & Fleet Management",
-    "capabilities": ["CM1","CM2","CM3","CM4","CM5","CM6"]
+    "countries": ["France","Poland"],
+    "regions": ["europe"],
+    "category": "TMS"
+    ,"itOwner": "Kopara Stacey"
   },
   {
     "name": "Winroute",
     "countries": ["France"],
-    "category": "Route & Load Optimization",
-    "capabilities": ["TM3"]
+    "regions": ["europe"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
     "name": "Worldport",
     "countries": ["United States of America"],
-    "category": "Transport Management Systems (TMS)",
-    "capabilities": ["TM1"]
+    "regions": ["nortam"],
+    "category": "TMS"
+    ,"itOwner": "Gatiganti Ram"
   },
   {
     "name": "Xcargo",
-    "countries": ["Europe+"],
-    "category": "Freight Marketplaces & Tendering",
-    "capabilities": ["TM3"]
+    "countries": ["France","Italy","United Kingdom","Turkey"],
+    "regions": ["europe"],
+    "category": "Route & Planning Optimization"
+    ,"itOwner": "RAUCH, Nancy, DEBERT, Julien"
   },
   {
-    "name": "XMLSpy",
+    "name": "XMLSpy", 
     "countries": ["France"],
-    "category": "Integration & Middleware",
-    "capabilities": ["OM5"]
+    "regions": ["europe"],
+    "category": "Integration & Middleware"
+    ,"itOwner": "DEBERT, Julien"
   },
   {
     "name": "XPlanis xGU",
-    "countries": ["Europe+"],
-    "category": "Financial & Settlement Systems",
-    "capabilities": ["TM4"]
+    "countries": ["Switzerland"],
+    "regions": ["europe"],
+    "category": "Financial & Settlement Systems"
+    ,"itOwner": "DEBERT, Julien, Santoni Paolo"
   },
   {
     "name": "YMS 3M",
     "countries": ["United States of America"],
-    "category": "YMS/Time Slot Management",
-    "capabilities": ["TM3"]
+    "regions": ["nortam"],
+    "category": "YMS"
+    ,"itOwner": "Kelly Shawn"
+  },
+    {
+    "name": "Matrix",
+    "countries": ["Belgium", "Netherlands", "Luxembourg", "Poland", "Spain", "Turkey", "United States of America", "Mexico", "Japan", "China", "Singapore", "Malaysia", "Thailand", "Indonesia", "Vietnam", "Chile", "Colombia", "Costa Rica", "Guatemala", "Panama", "Peru", "Paraguay", "Uruguay", "India", "United Arab Emirates", "Canada ", "Philippines", "Cambodia", "Laos", "Myanmar", "Brunei", "Ireland", "United Kingdom"],
+    "regions": ["europe", "apac", "nortam", "imea", "latam"],
+    "category": "Matrix"
   }
 ]

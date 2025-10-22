@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Comparateur Applications - L1/L2/L3</title>
+  <link rel="stylesheet" href="comparator-styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Application Assessment</h1>
+      <p>Compare the business capabilities of your applications</p>
+      <div class="detail-level-container" style="margin-bottom:1em;">
+        <div id="selected-apps-info" style="margin-bottom:0.5em; font-style:italic; color:#666;"></div>
+        <label style="margin-left:2em;">Application 1 <select id="app1" class="search-input"></select></label>
+        <label style="margin-left:1em;">Application 2 <select id="app2" class="search-input"></select></label>
+      </div>
+      
+      <!-- Slider de niveau de détail -->
+      <div class="detail-level-slider">
+        <span class="level-label">Level of Business Capabilities:</span>
+        <div class="level-indicator">
+          <div class="level-step active" data-level="1" id="level-1">1</div>
+          <div class="level-step" data-level="2" id="level-2">2</div>
+          <div class="level-step" data-level="3" id="level-3">3</div>
+        </div>
+      </div>
+    </div>
+    <div class="comparison-area">
+      <div id="result"></div>
+    </div>
+  </div>
+  <script>
+  let data, bc, level=1, l1Tab=null;
+    let l2Tab=null;
+    const app1 = document.getElementById('app1');
+    const app2 = document.getElementById('app2');
+
+  let bcdefs = {};
+  let l3Descriptions = {};
+  fetch('bc-definitions.json').then(r=>r.json()).then(d=>{ bcdefs=d; maybeInit(); });
+  fetch('app-capabilities-unified.json').then(r=>r.json()).then(d=>{ data=d; maybeInit(); });
+  fetch('bc-mapping.json').then(r=>r.json()).then(d=>{ bc=d._hierarchy; maybeInit(); });
+  fetch('l3-descriptions.json').then(r=>r.json()).then(d=>{ l3Descriptions=d.L3_DESCRIPTIONS||{}; maybeInit(); });
+
+  function maybeInit() {
+    if (data && bc && bcdefs && Object.keys(bcdefs).length > 0) fillSelects();
+  }
+    function fillSelects() {
+      let apps=Object.keys(data);
+      app1.innerHTML = app2.innerHTML = apps.map(a=>`<option>${a}</option>`).join('');
+      
+      // Récupérer les applications sélectionnées depuis localStorage
+      const savedApps = localStorage.getItem('comparatorApps');
+      const infoDiv = document.getElementById('selected-apps-info');
+      
+      if (savedApps) {
+        try {
+          const comparatorApps = JSON.parse(savedApps);
+          console.log('📋 Applications récupérées du comparateur:', comparatorApps);
+          
+          // Présélectionner les applications si elles existent
+          if (comparatorApps.length >= 1) {
+            app1.value = comparatorApps[0].name;
+          }
+          if (comparatorApps.length >= 2) {
+            app2.value = comparatorApps[1].name;
+          }
+        } catch (e) {
+          console.error('Erreur lors de la récupération des applications du comparateur:', e);
+          infoDiv.innerHTML = '';
+          // Valeurs par défaut
+          if (!app1.value) app1.value = apps[0];
+          if (!app2.value) app2.value = apps[1] || apps[0];
+        }
+      } else {
+        // Aucune application sauvegardée
+        infoDiv.innerHTML = '';
+        if (!app1.value) app1.value = apps[0];
+        if (!app2.value) app2.value = apps[1] || apps[0];
+      }
+      
+      app1.onchange=app2.onchange=show;
+      
+      // Gestionnaires d'événements pour le slider de niveau
+      document.getElementById('level-1').onclick = function() {
+        l1Tab = null;
+        l2Tab = null;
+        show();
+      };
+      
+      document.getElementById('level-2').onclick = function() {
+        if (l1Tab) {
+          // Si on a déjà un L1 sélectionné, on revient au niveau 2
+          l2Tab = null;
+          show();
+        }
+        // Si aucun L1 n'est sélectionné, on ne peut pas aller au niveau 2
+      };
+      
+      document.getElementById('level-3').onclick = function() {
+        // On ne peut aller au niveau 3 que si on a déjà L1 et L2
+        // Cette fonctionnalité est gérée par les clics sur les L2
+      };
+      
+      show();
+    }
+    function getDef(code, level) {
+      if(!bcdefs) return code;
+      if(level===1 && bcdefs.L1 && bcdefs.L1[code]) return bcdefs.L1[code];
+      if(level===2 && bcdefs.L2 && bcdefs.L2[code]) return bcdefs.L2[code];
+      if(level===3 && bcdefs.L3 && bcdefs.L3[code]) return bcdefs.L3[code];
+      if(level===4 && bcdefs.L4 && bcdefs.L4[code]) return bcdefs.L4[code];
+      return code;
+    }
+    
+    // Fonction pour déterminer la classe de couleur basée sur le pourcentage
+    function getColorClass(percentage) {
+      if (percentage < 20) return 'coverage coverage-red';
+      if (percentage < 50) return 'coverage coverage-orange';
+      if (percentage < 80) return 'coverage coverage-black';
+      return 'coverage coverage-green';
+    }
+    
+    // Fonction pour mettre à jour le slider de niveau
+    function updateLevelSlider() {
+      const level1 = document.getElementById('level-1');
+      const level2 = document.getElementById('level-2');
+      const level3 = document.getElementById('level-3');
+      
+      // Reset all levels
+      [level1, level2, level3].forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // Determine current level and update slider
+      if (!l1Tab) {
+        // Niveau 1: Vue d'ensemble
+        level1.classList.add('active');
+      } else if (l1Tab && !l2Tab) {
+        // Niveau 2: Détail L1 avec L2s
+        level2.classList.add('active');
+      } else if (l1Tab && l2Tab) {
+        // Niveau 3: Détail L2 avec L3s/L4s
+        level3.classList.add('active');
+      }
+    }
+    
+    function show() {
+  if(!data||!bc||!bcdefs) return;
+      let a1=data[app1.value], a2=data[app2.value];
+        let html='<div class="comparison-table"><div class="table-header">';
+        if(l1Tab){
+        html += `<h3>${getDef(l1Tab,1)}</h3>`;
+        } else {
+          html += '<h3>Assessment Transport Applications</h3>';
+        }
+        html+='</div>';
+      html+='<table class="capability-table"><thead><tr><th>Business Capabilities</th><th>'+app1.value+'</th><th>'+app2.value+'</th></tr></thead><tbody>';
+        // Onglets L1
+        let l1s = Object.keys(bc);
+        if(l1Tab && l2Tab){
+  html += `<button id="btn-back-l2" class="btn btn-secondary" style="margin-bottom:1em;">&larr; Retour</button>`;
+  // Boutons horizontaux L2
+  let l2s = Object.keys(bc[l1Tab]);
+  let l2Buttons = l2s.map(l2 => `<button class="btn l2btn${l2Tab===l2?' selected':''}" data-l2="${l2}" style="margin-right:0.5em;">${getDef(l2,2)}</button>`).join('');
+  html += `<div id="l2-buttons" style="margin-bottom:1em;">${l2Buttons}</div>`;
+        // Tableau L3/L4 pour la L2 sélectionnée
+        Object.keys(bc[l1Tab][l2Tab]).forEach(l3=>{
+          const l3Def = getDef(l3,3);
+          
+          // Calculer le nombre de L4 couvertes pour cette L3
+          const l4s = bc[l1Tab][l2Tab][l3] || [];
+          const l4Count = l4s.length;
+          const a1L4Count = l4s.filter(l4 => a1.l4 && a1.l4.includes(l4)).length;
+          const a2L4Count = l4s.filter(l4 => a2.l4 && a2.l4.includes(l4)).length;
+          
+          // Vérifier si les applications ont une liste L4 complètement vide
+          const a1HasAnyL4 = a1.l4 && a1.l4.length > 0;
+          const a2HasAnyL4 = a2.l4 && a2.l4.length > 0;
+          const a1L3Display = a1HasAnyL4 ? `${a1L4Count}/${l4Count}` : `-/${l4Count}`;
+          const a2L3Display = a2HasAnyL4 ? `${a2L4Count}/${l4Count}` : `-/${l4Count}`;
+          
+          // Récupérer la description L3 pour le tooltip
+          const l3Description = l3Descriptions[l3] || '';
+          const tooltipAttr = l3Description ? ` title="${l3Description.replace(/"/g, '&quot;').replace(/<br><br>/g, '\n\n').replace(/<br>/g, '\n')}"` : '';
+          
+          html+=`<tr class="l3-row"${tooltipAttr}><td><b>${l3Def}</b></td><td class="coverage app-column">${a1L3Display}</td><td class="coverage app-column">${a2L3Display}</td></tr>`;
+          if(Array.isArray(bc[l1Tab][l2Tab][l3])){
+            bc[l1Tab][l2Tab][l3].forEach(l4=>{
+              const l4Def = getDef(l4,4);
+              // Afficher un trait si l'app n'a aucune donnée L4, sinon coche ou vide
+              const a1HasAnyL4 = a1.l4 && a1.l4.length > 0;
+              const a2HasAnyL4 = a2.l4 && a2.l4.length > 0;
+              const a1HasThisL4 = a1HasAnyL4 && a1.l4.includes(l4);
+              const a2HasThisL4 = a2HasAnyL4 && a2.l4.includes(l4);
+              
+              const a1L4Display = a1HasAnyL4 ? (a1HasThisL4 ? '✓' : '') : '-';
+              const a2L4Display = a2HasAnyL4 ? (a2HasThisL4 ? '✓' : '') : '-';
+              
+              // Ajouter les classes de couleur pour toutes les coches (vert comme au niveau 2)
+              const a1ColorClass = (a1L4Display === '✓') ? getColorClass(100) : '';
+              const a2ColorClass = (a2L4Display === '✓') ? getColorClass(100) : '';
+              
+              html+=`<tr class="l4-row"><td style='padding-left:2em;'>${l4Def}</td><td class="tick app-column ${a1ColorClass}">${a1L4Display}</td><td class="tick app-column ${a2ColorClass}">${a2L4Display}</td></tr>`;
+            });
+          }
+        });
+        } else if(l1Tab){
+          html += `<button id="btn-back-l1" class="btn btn-secondary" style="margin-bottom:1em;">&larr; Retour</button>`;
+          // Boutons horizontaux L1 - ne montrer que ceux avec des capabilities L3
+          let l1Buttons = Object.keys(bc).filter(l1 => {
+            // Vérifier si au moins une des deux applications a des L3 dans ce L1
+            let hasApp1L3 = false;
+            let hasApp2L3 = false;
+            
+            Object.keys(bc[l1]).forEach(l2 => {
+              Object.keys(bc[l1][l2]).forEach(l3 => {
+                if (a1.l3 && a1.l3.includes(l3)) hasApp1L3 = true;
+                if (a2.l3 && a2.l3.includes(l3)) hasApp2L3 = true;
+              });
+            });
+            
+            return hasApp1L3 || hasApp2L3;
+          }).map(l1 => `<button class="btn l1btn${l1Tab===l1?' selected':''}" data-l1="${l1}" style="margin-right:0.5em;">${getDef(l1,1)}</button>`).join('');
+          html += `<div id="l1-buttons" style="margin-bottom:1em;">${l1Buttons}</div>`;
+          Object.keys(bc[l1Tab]).forEach(l2=>{
+            const l2Def = getDef(l2,2);
+            
+            // Calculer le nombre de L3 filles qui ont plus de 20% de couverture L4 (même référence que L1 niveau 1)
+            const l3Children = Object.keys(bc[l1Tab][l2]);
+            const totalL3 = l3Children.length;
+            let a1L3Above20 = 0;
+            let a2L3Above20 = 0;
+            
+            // Vérifier si au moins une des deux applications a des L3 dans cette L2
+            let hasApp1L3 = false;
+            let hasApp2L3 = false;
+            
+            l3Children.forEach(l3 => {
+              const l4s = bc[l1Tab][l2][l3] || [];
+              const l4Count = l4s.length;
+              const a1L4Count = l4s.filter(l4 => a1.l4 && a1.l4.includes(l4)).length;
+              const a2L4Count = l4s.filter(l4 => a2.l4 && a2.l4.includes(l4)).length;
+              const a1Percentage = l4Count > 0 ? Math.round((a1L4Count / l4Count) * 100) : 0;
+              const a2Percentage = l4Count > 0 ? Math.round((a2L4Count / l4Count) * 100) : 0;
+              
+              // Vérifier si cette L3 est couverte par les applications
+              if (a1.l3 && a1.l3.includes(l3)) hasApp1L3 = true;
+              if (a2.l3 && a2.l3.includes(l3)) hasApp2L3 = true;
+              
+              if (a1Percentage >= 20) a1L3Above20++;
+              if (a2Percentage >= 20) a2L3Above20++;
+            });
+            
+            // N'afficher la L2 que si au moins une des deux applications a des L3 dans cette L2
+            if (hasApp1L3 || hasApp2L3) {
+              // Afficher les fractions normalement (basées sur le comptage L3 > 20%)
+              html+=`<tr class="l2-row l2-clickable" data-l2="${l2}"><td><b>${l2Def}</b></td><td class="coverage app-column">${a1L3Above20}/${totalL3}</td><td class="coverage app-column">${a2L3Above20}/${totalL3}</td></tr>`;
+              Object.keys(bc[l1Tab][l2]).forEach(l3=>{
+                const l3Def = getDef(l3,3);
+                // Calculer le pourcentage de L4 filles couvertes pour cette L3
+                const l4s = bc[l1Tab][l2][l3] || [];
+                const l4Count = l4s.length;
+                const a1L4Count = l4s.filter(l4 => a1.l4 && a1.l4.includes(l4)).length;
+                const a2L4Count = l4s.filter(l4 => a2.l4 && a2.l4.includes(l4)).length;
+                
+                // Vérifier si l'application a cette L3 déclarée et si elle a des L3/L4
+                const a1HasThisL3 = a1.l3 && a1.l3.includes(l3);
+                const a2HasThisL3 = a2.l3 && a2.l3.includes(l3);
+                const a1HasL4Data = a1.l4 && a1.l4.length > 0;
+                const a2HasL4Data = a2.l4 && a2.l4.length > 0;
+                const a1HasAnyL3 = a1.l3 && a1.l3.length > 0;
+                const a2HasAnyL3 = a2.l3 && a2.l3.length > 0;
+                
+                // Calculer les pourcentages normalement pour les L3 (basés sur L4)
+                const a1Percentage = l4Count > 0 ? Math.round((a1L4Count / l4Count) * 100) : 0;
+                const a2Percentage = l4Count > 0 ? Math.round((a2L4Count / l4Count) * 100) : 0;
+                
+                // Logique d'affichage :
+                // - Si l'app n'a pas de L3 du tout : afficher un trait -
+                // - Si l'app a des L4 : afficher le pourcentage normal
+                // - Si l'app n'a pas de L4 mais a cette L3 : afficher une coche ✓
+                // - Si l'app a des L3 mais pas cette L3 spécifique : afficher 0%
+                let a1Display, a2Display, a1EffectivePercent, a2EffectivePercent;
+                
+                if (!a1HasAnyL3) {
+                  a1Display = '-';
+                  a1EffectivePercent = null;
+                } else if (a1HasL4Data) {
+                  a1Display = `${a1Percentage}%`;
+                  a1EffectivePercent = a1Percentage;
+                } else if (a1HasThisL3) {
+                  a1Display = '✓';
+                  a1EffectivePercent = 100; // Coche = 100% de couverture
+                } else {
+                  a1Display = '0%';
+                  a1EffectivePercent = 0;
+                }
+                
+                if (!a2HasAnyL3) {
+                  a2Display = '-';
+                  a2EffectivePercent = null;
+                } else if (a2HasL4Data) {
+                  a2Display = `${a2Percentage}%`;
+                  a2EffectivePercent = a2Percentage;
+                } else if (a2HasThisL3) {
+                  a2Display = '✓';
+                  a2EffectivePercent = 100; // Coche = 100% de couverture
+                } else {
+                  a2Display = '0%';
+                  a2EffectivePercent = 0;
+                }
+                
+                const a1ColorClass = (a1EffectivePercent !== null) ? getColorClass(a1EffectivePercent) : '';
+                const a2ColorClass = (a2EffectivePercent !== null) ? getColorClass(a2EffectivePercent) : '';
+                
+                // Récupérer la description L3 pour le tooltip (niveau 2)
+                const l3Description = l3Descriptions[l3] || '';
+                const tooltipAttr = l3Description ? ` title="${l3Description.replace(/"/g, '&quot;').replace(/<br><br>/g, '\n\n').replace(/<br>/g, '\n')}"` : '';
+                
+                html+=`<tr class="l3-row"${tooltipAttr}><td>${l3Def}</td><td class="tick app-column ${a1ColorClass}">${a1Display}</td><td class="tick app-column ${a2ColorClass}">${a2Display}</td></tr>`;
+              });
+            }
+          });
+        } else {
+          // Vue niveau 1 : tableau global sans boutons
+          Object.keys(bc).forEach(l1=>{
+            const l1Def = getDef(l1,1);
+            
+            // Calculer le pourcentage de L2 filles qui dépassent 20% de couverture
+            const l2Keys = Object.keys(bc[l1]);
+            const totalL2 = l2Keys.length;
+            let app1L2Above20 = 0;
+            let app2L2Above20 = 0;
+            
+            // Vérifier si au moins une des deux applications a des L2 dans cette catégorie L1
+            let hasApp1L2 = false;
+            let hasApp2L2 = false;
+            
+            l2Keys.forEach(l2 => {
+              const l3Children = Object.keys(bc[l1][l2]);
+              const totalL3 = l3Children.length;
+              
+              if (totalL3 > 0) {
+                const app1CoveredL3 = l3Children.filter(l3 => a1.l3 && a1.l3.includes(l3)).length;
+                const app2CoveredL3 = l3Children.filter(l3 => a2.l3 && a2.l3.includes(l3)).length;
+                
+                const app1PercentL2 = (app1CoveredL3 / totalL3) * 100;
+                const app2PercentL2 = (app2CoveredL3 / totalL3) * 100;
+                
+                // Marquer qu'il y a au moins une L2 concernée si au moins une L3 est couverte
+                if (app1CoveredL3 > 0) hasApp1L2 = true;
+                if (app2CoveredL3 > 0) hasApp2L2 = true;
+                
+                if (app1PercentL2 >= 20) app1L2Above20++;
+                if (app2PercentL2 >= 20) app2L2Above20++;
+              }
+            });
+            
+            // N'afficher le L1 que si au moins une des deux applications a des L2 concernés
+            if (hasApp1L2 || hasApp2L2) {
+              // Afficher les fractions normalement (basées sur les L3, pas L4)
+              html+=`<tr class="l1-row" data-l1="${l1}"><td><b>${l1Def}</b></td><td class="coverage app-column">${app1L2Above20}/${totalL2}</td><td class="coverage app-column">${app2L2Above20}/${totalL2}</td></tr>`;
+            }
+            // N'afficher les L2 que si le L1 parent a été affiché
+            if (hasApp1L2 || hasApp2L2) {
+              Object.keys(bc[l1]).forEach(l2=>{
+                const l2Def = getDef(l2,2);
+                
+                // Calculer le nombre de L3 filles de cette L2
+                const l3Children = Object.keys(bc[l1][l2]);
+                const totalL3 = l3Children.length;
+                
+                // Calculer combien de L3 sont couvertes par chaque application
+                const app1CoveredL3 = l3Children.filter(l3 => a1.l3 && a1.l3.includes(l3)).length;
+                const app2CoveredL3 = l3Children.filter(l3 => a2.l3 && a2.l3.includes(l3)).length;
+                
+                // Calculer les pourcentages arrondis (basés sur la couverture L3)
+                const app1PercentL2 = totalL3 > 0 ? Math.round((app1CoveredL3 / totalL3) * 100) : 0;
+                const app2PercentL2 = totalL3 > 0 ? Math.round((app2CoveredL3 / totalL3) * 100) : 0;
+                
+                // Pour les pourcentages L3, afficher normalement (INES a des L3)
+                const app1Display = `${app1PercentL2}%`;
+                const app2Display = `${app2PercentL2}%`;
+                
+                // Déterminer les classes de couleur
+                const app1ColorClass = getColorClass(app1PercentL2);
+                const app2ColorClass = getColorClass(app2PercentL2);
+                
+                html+=`<tr class="l2-row l2-clickable" data-l1="${l1}" data-l2="${l2}"><td>${l2Def}</td><td class="${app1ColorClass} app-column">${app1Display}</td><td class="${app2ColorClass} app-column">${app2Display}</td></tr>`;
+              });
+            }
+          });
+        }
+      html+='</tbody></table></div>';
+      document.getElementById('result').innerHTML=html;
+      // Ajoute les handlers pour les boutons et le bouton retour
+      if(l1Tab && l2Tab){
+        let btnBack = document.getElementById('btn-back-l2');
+        if(btnBack) btnBack.onclick = function(){ l2Tab = null; show(); };
+        Array.from(document.querySelectorAll('#l2-buttons button')).forEach(btn => {
+          btn.onclick = function() {
+            l2Tab = this.getAttribute('data-l2');
+            show();
+          };
+        });
+      } else if(l1Tab){
+        let btnBack = document.getElementById('btn-back-l1');
+        if(btnBack) btnBack.onclick = function(){ l1Tab = null; show(); };
+        Array.from(document.querySelectorAll('#l1-buttons button')).forEach(btn => {
+          btn.onclick = function() {
+            l1Tab = this.getAttribute('data-l1');
+            l2Tab = null;
+            show();
+          };
+        });
+        // L2 cliquables
+        Array.from(document.querySelectorAll('.l2-row.l2-clickable')).forEach((row) => {
+          row.style.cursor = 'pointer';
+          row.onclick = function() {
+            l2Tab = this.getAttribute('data-l2');
+            show();
+          };
+        });
+      } else {
+        // En niveau 1, chaque L1 est cliquable (ligne du tableau)
+        Array.from(document.querySelectorAll('.l1-row')).forEach(row => {
+          row.style.cursor = 'pointer';
+          row.onclick = function() {
+            l1Tab = this.getAttribute('data-l1');
+            l2Tab = null;
+            show();
+          };
+        });
+        // L2 cliquables
+        Array.from(document.querySelectorAll('.l2-row.l2-clickable')).forEach(row => {
+          row.style.cursor = 'pointer';
+          row.onclick = function() {
+            l1Tab = this.getAttribute('data-l1');
+            l2Tab = this.getAttribute('data-l2');
+            show();
+          };
+        });
+      }
+      
+      // Mettre à jour le slider de niveau
+      updateLevelSlider();
+    }
+  </script>
+</body>
+</html>
