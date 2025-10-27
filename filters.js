@@ -263,7 +263,8 @@ function filterAndShowMarkersByCapabilities() {
 
     let filteredApps = [];
     if (activeL2.size === 0 && activeL3.size === 0 && activeL4.size === 0) {
-        filteredApps = window.allApplications;
+        // Toujours exclure les hidden même sans filtre actif
+        filteredApps = window.allApplications.filter(app => app.hidden !== true);
     } else {
         filteredApps = window.allApplications.filter(app => {
             if (app.hidden === true) return false;

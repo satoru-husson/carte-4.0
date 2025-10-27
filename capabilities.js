@@ -109,15 +109,12 @@ function addCurrentAppToComparator() {
 // Nouvelle fonction : ajoute l'app courante au comparateur et ouvre la page comparateur
 function addCurrentAppAndOpenComparator() {
     if (currentDisplayedApp) {
-        // Vérifier si l'app est déjà dans le comparateur
-        const existingIndex = comparatorApps.findIndex(app => app.name === currentDisplayedApp.name);
-        if (existingIndex === -1) {
-            comparatorApps.push({
-                name: currentDisplayedApp.name,
-                data: currentDisplayedApp.data
-            });
-            localStorage.setItem('comparatorApps', JSON.stringify(comparatorApps));
-        }
+        // Réinitialiser le comparateur pour ne garder que l'app courante
+        comparatorApps = [{
+            name: currentDisplayedApp.name,
+            data: currentDisplayedApp.data
+        }];
+        localStorage.setItem('comparatorApps', JSON.stringify(comparatorApps));
         openComparatorPage();
     }
 }
