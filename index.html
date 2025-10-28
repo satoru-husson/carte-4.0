@@ -77,8 +77,8 @@
         </div>
     </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="filters.js"></script>
     <script src="capabilities.js"></script>
+    <script src="filters.js"></script>
     <script src="HiddenApps.js"></script>
     <script type="module">
         import { countries } from './countriesList.js';
@@ -249,6 +249,8 @@
                 // Clic pour une région
                 marker.on('click', function() {
                     // Pas de pays à mémoriser pour un marker régional
+                    window.selectedRegionName = regionName.toUpperCase();
+                    window.selectedCountryName = null;
                     showRegionApps(regionName.toUpperCase(), regionCountries, allApps);
                 });
 
@@ -260,34 +262,24 @@
             countries.forEach(countryObj => {
                 const country = countryObj.name;
                 const center = countryObj.center;
+                // Filtrer les apps de la sélection courante (items) présentes dans ce pays
                 const filtered = items.filter(item => item.countries && item.countries.includes(country));
                 if (filtered.length === 0) return;
 
-                // Calculer le pourcentage d'applications uniques pour ce pays
-                let uniquePercentage = 0;
-                let uniqueCount = 0;
-                let totalCount = filtered.length; // Nombre total d'applications filtrées dans ce pays
-                
-                // Utiliser la fonction dynamique pour obtenir les apps uniques
+                // Calcul du ratio d'applications uniques
                 const uniqueAppsResult = getUniqueAppsForCountry(country);
                 const uniqueAppsForCountry = uniqueAppsResult.apps;
-                
-                // Compter combien d'apps filtrées sont dans la liste des uniques
                 const filteredAppNames = filtered.map(app => app.name);
-                uniqueCount = filteredAppNames.filter(appName => 
-                    uniqueAppsForCountry.includes(appName)
-                ).length;
-                uniquePercentage = totalCount > 0 ? Math.round((uniqueCount / totalCount) * 100) : 0;
-                
-                // Couleur jaune uniforme pour tous les pays
-                let borderColor = '#FFFF00'; // Jaune pour tous les pays
-                let borderWidth = 3; // Bordure uniforme
-                
+                const uniqueCount = filteredAppNames.filter(appName => uniqueAppsForCountry.includes(appName)).length;
+                const totalCount = filtered.length;
+                const uniqueRatio = totalCount > 0 ? Math.round((uniqueCount / totalCount) * 100) : 0;
+
+                // Marker : cercle principal vert, ratio unique en cercle jaune
                 const marker = L.marker(center, {
                     icon: L.divIcon({
                         className: 'country-count-icon',
                         html: `<div style="
-                            background: #388e3c;
+                            background: #43a047;
                             color: white;
                             border-radius: 50%;
                             width: 32px;
@@ -301,13 +293,12 @@
                             cursor: pointer;
                             position: relative;
                             background-image: conic-gradient(
-                                ${borderColor} 0deg ${uniquePercentage * 3.6}deg,
-                                transparent ${uniquePercentage * 3.6}deg 360deg
+                                #FFFF00 0deg ${uniqueRatio * 3.6}deg,
+                                transparent ${uniqueRatio * 3.6}deg 360deg
                             );
-                            padding: 3px;
-                        " title="Applications uniques: ${uniquePercentage}% (${uniqueCount}/${totalCount})">
+                            padding: 3px;">
                             <div style="
-                                background: #388e3c;
+                                background: #43a047;
                                 color: white;
                                 border-radius: 50%;
                                 width: 26px;
@@ -316,8 +307,9 @@
                                 align-items: center;
                                 justify-content: center;
                                 font-weight: bold;
-                                font-size: 1.1em;
-                            ">${filtered.length}</div>
+                                font-size: 1.1em;">
+                                ${filtered.length}
+                            </div>
                         </div>`,
                         iconSize: [32, 32],
                         iconAnchor: [16, 16]
@@ -328,6 +320,7 @@
                 // Clic pour un pays
                 marker.on('click', function() {
                     HiddenApps.setSelectedCountry(country);
+                    window.selectedRegionName = null;
                     showCountryApps(country, filtered, allApps);
                 });
 

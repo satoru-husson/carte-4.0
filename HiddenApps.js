@@ -144,12 +144,18 @@ function showMatrixVariantsButtons() {
         let isHighlighted = false;
         if (selectedCountry && Array.isArray(variant.countries) && variant.countries.includes(selectedCountry)) {
             isHighlighted = true;
-        } else if (selectedRegion && Array.isArray(variant.regions) && variant.regions.includes(selectedRegion)) {
+        } else if (
+            selectedRegion &&
+            Array.isArray(variant.regions) &&
+            variant.regions.map(r => (r + '').toUpperCase()).includes(selectedRegion.toUpperCase())
+        ) {
             isHighlighted = true;
         }
+        // On ajoute une classe pour pouvoir cibler les boutons région déployés
+        const extraClass = isHighlighted ? ' matrix-variant-deployed' : '';
         const buttonColor = isHighlighted ? '#d32f2f' : '#1976d2';
         buttonsHTML += `
-            <button class="matrix-variant-button" data-variant='${JSON.stringify(variant)}' 
+            <button class="matrix-variant-button${extraClass}" data-variant='${JSON.stringify(variant)}' 
                     style="background: ${buttonColor}; color: white; border: none; border-radius: 25px; padding: 12px 18px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s ease; text-align: center; white-space: nowrap; min-width: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <div style=\"font-size: 14px; font-weight: bold;\">${shortName}</div>
                 <div style=\"font-size: 12px; margin-top: 2px; opacity: 0.9;\">${variant.category}</div>
@@ -184,25 +190,35 @@ function showMatrixVariantsButtons() {
     // Ajouter les événements aux boutons Matrix
     matrixContainer.querySelectorAll('.matrix-variant-button').forEach(btn => {
         btn.onmouseover = function() {
-            this.style.background = '#1565c0';
             this.style.transform = 'translateY(-2px)';
             this.style.boxShadow = '0 6px 16px rgba(0,0,0,0.4)';
         };
         btn.onmouseout = function() {
-            this.style.background = '#1976d2';
+            // Si ce bouton est sélectionné (vert), on ne change pas la couleur
+            if (this.style.background === 'rgb(67, 160, 71)' || this.style.background === '#43a047') {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+                return;
+            }
+            // Sinon, on remet rouge si déployé dans la région, sinon bleu
+            if (this.classList.contains('matrix-variant-deployed')) {
+                this.style.background = '#d32f2f';
+            } else {
+                this.style.background = '#1976d2';
+            }
             this.style.transform = 'translateY(0)';
             this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
         };
         btn.onclick = function() {
             const variant = JSON.parse(this.getAttribute('data-variant'));
-            // Réinitialiser le style de tous les boutons Matrix
+            // Tous les boutons redeviennent bleu (jamais rouge)
             matrixContainer.querySelectorAll('.matrix-variant-button').forEach(b => {
                 b.style.background = '#1976d2';
                 b.style.transform = 'translateY(0)';
                 b.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
             });
-            // Marquer ce bouton comme sélectionné
-            this.style.background = '#1565c0';
+            // Marquer ce bouton comme sélectionné (vert)
+            this.style.background = '#43a047';
             this.style.transform = 'translateY(-2px)';
             this.style.boxShadow = '0 6px 16px rgba(0,0,0,0.4)';
             // Afficher les capabilities de cette variante dans la sidebar

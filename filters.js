@@ -14,8 +14,14 @@ function displayApplicationCapabilities(appName, appData) {
         let unifiedData = null;
         if (window.appCapabilitiesUnified[appName]) {
             unifiedData = window.appCapabilitiesUnified[appName];
-        } else if (appName.startsWith('Matrix ') && window.appCapabilitiesUnified["Matrix"]?.variants?.[appName]) {
-            unifiedData = window.appCapabilitiesUnified["Matrix"].variants[appName];
+        } else {
+            // Recherche générique d'un parent à variantes
+            for (const parent in window.appCapabilitiesUnified) {
+                if (window.appCapabilitiesUnified[parent]?.variants?.[appName]) {
+                    unifiedData = window.appCapabilitiesUnified[parent].variants[appName];
+                    break;
+                }
+            }
         }
         if (unifiedData) {
             allL3 = unifiedData.l3 || [];
@@ -59,6 +65,7 @@ function displayApplicationCapabilities(appName, appData) {
         });
     }
     let appTitle = `📋 Capabilities of ${appName}`;
+    // Code spécifique à Matrix pour afficher le pays ou la région sélectionnée
     if (appName === 'Matrix') {
         let selectedCountry = window.selectedCountryName;
         let selectedRegion = window.selectedRegionName;
@@ -131,61 +138,6 @@ function displayApplicationCapabilities(appName, appData) {
 
 window.displayApplicationCapabilities = displayApplicationCapabilities;
 // Fonction pour filtrer les applications selon les catégories sélectionnées
-function filterBySelectedCategories() {
-    const checkedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
-        .map(checkbox => checkbox.value);
-    // Collecter toutes les capabilities actives
-    let allActiveCapabilities = [];
-    // Collecter les capacités des tags L2/L1 actifs
-    const activeL2Tags = Array.from(document.querySelectorAll('.capability-tag.active'));
-    activeL2Tags.forEach(tag => {
-        const capabilities = tag.getAttribute('data-capabilities');
-        if (capabilities) {
-            allActiveCapabilities.push(...capabilities.split(','));
-        }
-    });
-    // Collecter les capacités des checkboxes L3 cochées
-    const checkedL3Checkboxes = Array.from(document.querySelectorAll('.l3-checkbox:checked'));
-    checkedL3Checkboxes.forEach(checkbox => {
-        const capability = checkbox.getAttribute('data-capability');
-        if (capability) {
-            allActiveCapabilities.push(capability);
-        }
-    });
-    // Supprimer les doublons
-    allActiveCapabilities = [...new Set(allActiveCapabilities)];
-    let filteredApps = [];
-    if (checkedCategories.length === 0 && allActiveCapabilities.length === 0) {
-        // Aucun filtre actif, afficher toutes les applications
-        filteredApps = allApplications;
-    } else {
-        // Appliquer un filtre "OU" : applications qui correspondent aux catégories OU aux capabilities
-        filteredApps = allApplications.filter(app => {
-            if (app.hidden === true) return false;
-            // Vérifier si l'app correspond aux catégories sélectionnées
-            const matchesCategory = checkedCategories.length === 0 || checkedCategories.includes(app.category);
-            // Vérifier si l'app correspond aux capabilities sélectionnées
-            const matchesCapabilities = allActiveCapabilities.length === 0 || 
-                (app.l2 && app.l2.some(l2 => allActiveCapabilities.includes(l2))) ||
-                (app.l3 && app.l3.some(l3 => allActiveCapabilities.includes(l3))) ||
-                (app.l4 && app.l4.some(l4 => allActiveCapabilities.includes(l4)));
-            // Retourner true si SOIT catégorie SOIT capabilities correspondent (filtre OU)
-            return (checkedCategories.length === 0 || matchesCategory) && 
-                   (allActiveCapabilities.length === 0 || matchesCapabilities);
-        });
-    }
-    console.log(`🔍 Filtre combiné: ${checkedCategories.length} catégories, ${allActiveCapabilities.length} capabilities → ${filteredApps.length} applications`);
-    // Mettre à jour la liste des applications filtrées
-    currentFilteredApps = filteredApps;
-    // Afficher les résultats sur la carte
-    if (typeof window.showCountryMarkers === 'function') {
-        window.showCountryMarkers(filteredApps, allApplications);
-    }
-    // Afficher la liste dans la sidebar
-    window.displayCategoryFilteredApplications(filteredApps, checkedCategories);
-}
-
-window.filterBySelectedCategories = filterBySelectedCategories;
 // Fonction pour afficher les applications filtrées par catégories dans la sidebar
 function displayCategoryFilteredApplications(apps, selectedCategories) {
     const infoPanel = document.getElementById('info-panel');
@@ -205,9 +157,30 @@ function displayCategoryFilteredApplications(apps, selectedCategories) {
         groupedSidebar[cat].push(item.name);
     });
     let html = '';
-    Object.keys(groupedSidebar).forEach(cat => {
+    const categoryOrder = [
+        "TMS", "Asset & Fleet Management", "Track & Trace", "Matrix", "Integration & Middleware", "Financial & Settlement Systems",
+        "Reporting & BI", "Route & Planning Optimization", "Customs",
+        "Freight Marketplace", "Customer Portal", "Documents & Collaboration",
+        "Digital Forwarding", "YMS", "Warehouse Management Systems (WMS)", "Customer Relationship Management (CRM)", "Order Management System (OMS)", "Last Mile Distribution",
+        "Claims & Damages", "Carriers Portal", "Control & Quality",
+        "Mobile App", "Legal Compliance"
+    ];
+    categoryOrder.forEach(cat => {
+        if (!groupedSidebar[cat]) return;
         const appNames = groupedSidebar[cat].filter(Boolean);
-        if (appNames.length === 0) return; // Ne pas afficher de bloc vide
+        if (appNames.length === 0) return;
+        html += `<div style="margin-bottom:10px;">
+            <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
+            ${appNames.map(name =>
+                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
+            ).join('<br>')}
+        </div>`;
+    });
+    // Afficher les catégories non listées dans categoryOrder à la fin
+    Object.keys(groupedSidebar).forEach(cat => {
+        if (categoryOrder.includes(cat)) return;
+        const appNames = groupedSidebar[cat].filter(Boolean);
+        if (appNames.length === 0) return;
         html += `<div style="margin-bottom:10px;">
             <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
             ${appNames.map(name =>
@@ -226,97 +199,146 @@ window.displayCategoryFilteredApplications = displayCategoryFilteredApplications
 // filters.js
 // Extraction progressive : export de la fonction principale de filtrage
 
-function filterAndShowMarkersByCapabilities() {
-    // Vérifier s'il y a des catégories sélectionnées
+// Nouvelle fonction commune pour filtrer et afficher les applications selon catégories et capabilities
+function filterAndShowApplications() {
+    // 1. Récupérer les catégories sélectionnées
     const checkedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
         .map(checkbox => checkbox.value);
-    
-    if (checkedCategories.length > 0) {
-        // Si des catégories sont sélectionnées, utiliser le filtre combiné
-        if (typeof window.filterBySelectedCategories === 'function') {
-            window.filterBySelectedCategories();
-        }
-        return;
-    }
-    
-    // Sinon, filtrage normal par capabilities uniquement
-    let activeL2 = new Set();
-    let activeL3 = new Set();
-    let activeL4 = new Set();
-
-    document.querySelectorAll('.l2-tag.active').forEach(elem => {
-        const capabilities = elem.getAttribute('data-capabilities');
+    // 2. Récupérer les capabilities sélectionnées (L2/L3/L4)
+    let allActiveCapabilities = [];
+    // L2/L1 tags actifs
+    const activeL2Tags = Array.from(document.querySelectorAll('.capability-tag.active, .l2-tag.active'));
+    activeL2Tags.forEach(tag => {
+        const capabilities = tag.getAttribute('data-capabilities');
         if (capabilities) {
-            capabilities.split(',').forEach(id => {
-                if (id.trim()) activeL2.add(id.trim());
-            });
+            allActiveCapabilities.push(...capabilities.split(','));
         }
     });
-    document.querySelectorAll('.l3-checkbox:checked').forEach(elem => {
-        const l3Id = elem.getAttribute('data-capability');
-        if (l3Id) activeL3.add(l3Id);
+    // L3 checkboxes
+    const checkedL3Checkboxes = Array.from(document.querySelectorAll('.l3-checkbox:checked'));
+    checkedL3Checkboxes.forEach(checkbox => {
+        const capability = checkbox.getAttribute('data-capability');
+        if (capability) {
+            allActiveCapabilities.push(capability);
+        }
     });
-    document.querySelectorAll('.l4-checkbox:checked').forEach(elem => {
-        const l4Id = elem.getAttribute('data-capability');
-        if (l4Id) activeL4.add(l4Id);
+    // L4 checkboxes
+    const checkedL4Checkboxes = Array.from(document.querySelectorAll('.l4-checkbox:checked'));
+    checkedL4Checkboxes.forEach(checkbox => {
+        const capability = checkbox.getAttribute('data-capability');
+        if (capability) {
+            allActiveCapabilities.push(capability);
+        }
     });
+    // Supprimer les doublons
+    allActiveCapabilities = [...new Set(allActiveCapabilities)];
 
+    // 3. Appliquer la logique de filtrage (par défaut OU, à adapter si besoin)
     let filteredApps = [];
-    if (activeL2.size === 0 && activeL3.size === 0 && activeL4.size === 0) {
-        // Toujours exclure les hidden même sans filtre actif
+    if (checkedCategories.length === 0 && allActiveCapabilities.length === 0) {
         filteredApps = window.allApplications.filter(app => app.hidden !== true);
-    } else {
+    } else if (checkedCategories.length > 0 && allActiveCapabilities.length > 0) {
+        // Filtre ET : apps qui correspondent à la catégorie ET à la capability
         filteredApps = window.allApplications.filter(app => {
             if (app.hidden === true) return false;
-            const matchL2 = app.l2 && app.l2.some(l2 => activeL2.has(l2));
-            const matchL3 = app.l3 && app.l3.some(l3 => activeL3.has(l3));
-            const matchL4 = app.l4 && app.l4.some(l4 => activeL4.has(l4));
-            return matchL2 || matchL3 || matchL4;
+            const matchesCategory = checkedCategories.includes(app.category);
+            const matchesCapabilities =
+                (app.l2 && app.l2.some(l2 => allActiveCapabilities.includes(l2))) ||
+                (app.l3 && app.l3.some(l3 => allActiveCapabilities.includes(l3))) ||
+                (app.l4 && app.l4.some(l4 => allActiveCapabilities.includes(l4)));
+            return matchesCategory && matchesCapabilities;
+        });
+    } else if (checkedCategories.length > 0) {
+        // Catégorie seule
+        filteredApps = window.allApplications.filter(app => {
+            if (app.hidden === true) return false;
+            return checkedCategories.includes(app.category);
+        });
+    } else {
+        // Capability seule
+        filteredApps = window.allApplications.filter(app => {
+            if (app.hidden === true) return false;
+            return (
+                (app.l2 && app.l2.some(l2 => allActiveCapabilities.includes(l2))) ||
+                (app.l3 && app.l3.some(l3 => allActiveCapabilities.includes(l3))) ||
+                (app.l4 && app.l4.some(l4 => allActiveCapabilities.includes(l4)))
+            );
         });
     }
     window.currentFilteredApps = filteredApps;
-    if (typeof window.showCountryMarkers === 'function') {
-        window.showCountryMarkers(filteredApps, window.allApplications);
+
+    // 4. Reset les couleurs
+    if (typeof window.resetCountryColors === 'function') {
+        window.resetCountryColors();
     }
-    const groupedSidebar = {};
-    filteredApps.forEach(item => {
-        const cat = item.category || "Autre";
-        if (!groupedSidebar[cat]) groupedSidebar[cat] = [];
-        groupedSidebar[cat].push(item.name);
-    });
-    let html = '';
-    Object.keys(groupedSidebar).forEach(cat => {
-        html += `<div style="margin-bottom:10px;">
-            <span style="font-weight:bold; font-size: 1.3em;">${cat}</span><br>
-            ${groupedSidebar[cat].map(name =>
-                `<span class="sidebar-item" data-name="${name}" style="margin-left:10px; cursor:pointer; text-decoration:underline; font-size: 1.2em;">${name}</span>`
-            ).join('<br>')}
-        </div>`;
-    });
-    let infoPanel = document.getElementById('info-panel');
-    infoPanel.innerHTML = html;
-    infoPanel.querySelectorAll('.sidebar-item').forEach(elem => {
-        elem.onclick = function() {
-            const itemName = this.getAttribute('data-name');
-            const isCurrentlySelected = this.style.fontWeight === 'bold';
-            infoPanel.querySelectorAll('.sidebar-item').forEach(e => {
-                e.style.fontWeight = 'normal';
+
+    // 5. Coloriage capability si au moins une capability cochée
+    if (allActiveCapabilities.length > 0) {
+        // --- Coloration parent/variante généralisée (copié de filterAndShowMarkersByCapabilities) ---
+        const selectedCapabilities = allActiveCapabilities;
+        const parentNames = window.allApplications
+            .filter(app => !app.parent)
+            .map(app => app.name)
+            .filter(parentName => window.allApplications.some(a => a.parent === parentName));
+        parentNames.forEach(parentName => {
+            const parentApp = window.allApplications.find(app => app.name === parentName);
+            const parentCountries = parentApp && parentApp.countries ? parentApp.countries.map(c => c.trim()) : [];
+            const variants = window.allApplications.filter(app => app.parent === parentName && app.countries);
+            // Pays où une variante couvre la capability (bleu)
+            const countriesWithVariant = new Set();
+            variants.forEach(variant => {
+                const covers =
+                    (variant.l2 && variant.l2.some(l2 => selectedCapabilities.includes(l2))) ||
+                    (variant.l3 && variant.l3.some(l3 => selectedCapabilities.includes(l3))) ||
+                    (variant.l4 && variant.l4.some(l4 => selectedCapabilities.includes(l4)));
+                if (covers) {
+                    variant.countries.forEach(c => countriesWithVariant.add(c.trim()));
+                }
             });
-            if (!isCurrentlySelected) {
-                this.style.fontWeight = 'bold';
-                if (typeof window.showSelectedAppButton === 'function') {
-                    window.showSelectedAppButton(itemName);
+            // Pays où le parent global couvre la capability (mais aucune variante ne la couvre) => orange
+            const parentGlobalCovers =
+                (parentApp && (
+                    (parentApp.l2 && parentApp.l2.some(l2 => selectedCapabilities.includes(l2))) ||
+                    (parentApp.l3 && parentApp.l3.some(l3 => selectedCapabilities.includes(l3))) ||
+                    (parentApp.l4 && parentApp.l4.some(l4 => selectedCapabilities.includes(l4)))
+                ));
+            let countriesOrange = [];
+            if (parentGlobalCovers) {
+                countriesOrange = parentCountries.filter(c => !countriesWithVariant.has(c));
+            }
+            // Exclure les pays où une autre app (hors ce parent/variante) couvre la capability
+            const selectedApps = window.allApplications.filter(app => {
+                if (app.name === parentName || app.parent === parentName) return false;
+                return (
+                    (app.l2 && app.l2.some(l2 => selectedCapabilities.includes(l2))) ||
+                    (app.l3 && app.l3.some(l3 => selectedCapabilities.includes(l3))) ||
+                    (app.l4 && app.l4.some(l4 => selectedCapabilities.includes(l4)))
+                );
+            });
+            countriesOrange = countriesOrange.filter(countryName => {
+                return !selectedApps.some(app => app.countries && app.countries.map(c => c.trim()).includes(countryName));
+            });
+            // Pays couverts par d'autres apps (bleu)
+            const paysAvecCapability = new Set();
+            countriesWithVariant.forEach(countryName => paysAvecCapability.add(countryName));
+            selectedApps.forEach(app => {
+                if (app.countries) app.countries.map(c => c.trim()).forEach(c => paysAvecCapability.add(c));
+            });
+            // Bleu : pays où une variante couvre la capability
+            countriesWithVariant.forEach(countryName => {
+                if (window.countryLayers && window.countryLayers[countryName]) {
+                    window.countryLayers[countryName].setStyle({
+                        fillColor: "#1976d2",
+                        fillOpacity: 0.5,
+                        color: "#1976d2",
+                        weight: 2
+                    });
                 }
-                const item = filteredApps.find(i => i.name === itemName);
-                if (!item) return;
-                if (typeof window.displayApplicationCapabilities === 'function') {
-                    window.displayApplicationCapabilities(itemName, item);
-                }
-                if (item.countries) {
-                    if (typeof window.resetCountryColors === 'function') {
-                        window.resetCountryColors();
-                    }
-                    item.countries.forEach(countryName => {
+            });
+            // Bleu : pays où une autre application couvre la capability
+            selectedApps.forEach(app => {
+                if (app.countries) {
+                    app.countries.map(c => c.trim()).forEach(countryName => {
                         if (window.countryLayers && window.countryLayers[countryName]) {
                             window.countryLayers[countryName].setStyle({
                                 fillColor: "#1976d2",
@@ -327,15 +349,28 @@ function filterAndShowMarkersByCapabilities() {
                         }
                     });
                 }
-            } else {
-                if (typeof window.hideSelectedAppButton === 'function') {
-                    window.hideSelectedAppButton();
+            });
+            // Orange : pays où le parent global couvre mais aucune variante ne couvre
+            countriesOrange.forEach(countryName => {
+                if (window.countryLayers && window.countryLayers[countryName]) {
+                    window.countryLayers[countryName].setStyle({
+                        fillColor: "orange",
+                        fillOpacity: 0.5,
+                        color: "orange",
+                        weight: 2
+                    });
                 }
-                if (typeof window.resetCountryColors === 'function') {
-                    window.resetCountryColors();
-                }
-            }
-        };
-    });
+            });
+        });
+    }
+
+    // 6. Afficher les markers sur la carte
+    if (typeof window.showCountryMarkers === 'function') {
+        window.showCountryMarkers(filteredApps, window.allApplications);
+    }
+    // 7. Afficher la liste dans la sidebar
+    if (typeof window.displayCategoryFilteredApplications === 'function') {
+        window.displayCategoryFilteredApplications(filteredApps, checkedCategories);
+    }
 }
-window.filterAndShowMarkersByCapabilities = filterAndShowMarkersByCapabilities;
+window.filterAndShowApplications = filterAndShowApplications;

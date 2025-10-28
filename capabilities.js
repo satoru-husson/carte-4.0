@@ -153,7 +153,6 @@ async function loadBCL4Data() {
     const mappingResponse = await fetch('bc-mapping.json');
         if (mappingResponse.ok) {
             bcL4Mapping = await mappingResponse.json();
-            console.log('Données BC L4 mapping chargées:', Object.keys(bcL4Mapping).length, 'L3 mappées');
         } else {
             console.warn('Impossible de charger bc-mapping.json');
         }
@@ -162,7 +161,6 @@ async function loadBCL4Data() {
     const definitionsResponse = await fetch('bc-definitions.json');
         if (definitionsResponse.ok) {
             bcL4Definitions = await definitionsResponse.json();
-            console.log('Définitions BC L4 chargées:', Object.keys(bcL4Definitions).length, 'L4 définis');
         } else {
             console.warn('Impossible de charger bc-definitions.json');
         }
@@ -258,18 +256,16 @@ window.showAllApplications = function() {
 
 // génère l'interface à partir de la hiérarchie de bc-mapping.json
 function generateCapabilitiesInterface(bcMapping, capabilitiesForm) {
-    console.log('🔧 generateCapabilitiesInterface appelée');
-    console.log('🔧 bcMapping reçu:', !!bcMapping);
-    console.log('🔧 capabilitiesForm trouvé:', !!capabilitiesForm);
+    // ...
+    // ...
     
     if (!bcMapping || !bcMapping._hierarchy) {
         console.error('❌ bcMapping ou bcMapping._hierarchy manquant !');
-        console.log('🔧 bcMapping:', bcMapping);
+    // ...
         return;
     }
     
     const hierarchy = bcMapping._hierarchy;
-    console.log('🔧 Hiérarchie trouvée, nombre de L1:', Object.keys(hierarchy).length);
     // Pour chaque L1
     Object.entries(hierarchy).forEach(([l1Id, l2s]) => {
         // Utiliser bcL4Definitions.L1 pour le nom L1
@@ -456,7 +452,8 @@ function setupHybridControls() {
                 document.getElementById('sidebar').classList.remove('l2-expanded');
             }
             
-            window.filterAndShowMarkersByCapabilities();
+            // ...removed duplicate call...
+                window.filterAndShowApplications();
         });
     });
     
@@ -497,15 +494,14 @@ function setupHybridControls() {
             if (checkedL3Checkboxes.length > 0) {
                 // Au moins une L3 cochée → Activer le L2
                 l2Tag.classList.add('active');
-                console.log(`✅ L2 "${l2Name}" activé automatiquement (${checkedL3Checkboxes.length}/${allL3Checkboxes.length} L3 cochées)`);
             } else {
                 // Aucune L3 cochée → Désactiver le L2
                 l2Tag.classList.remove('active');
-                console.log(`❌ L2 "${l2Name}" désactivé (aucune L3 cochée)`);
             }
             
             // Déclencher le filtrage pour afficher sur la carte
-            filterAndShowMarkersByCapabilities();
+            // ...removed duplicate call...
+                filterAndShowApplications();
         });
     });
     
@@ -527,7 +523,8 @@ function setupHybridControls() {
             this.classList.toggle('active');
             
             // Déclencher le filtrage
-            filterAndShowMarkersByCapabilities();
+            // ...removed duplicate call...
+                filterAndShowApplications();
         });
     });
     
@@ -560,10 +557,9 @@ function setupHybridControls() {
                 l2Slider.checked = isChecked;
             });
             
-            console.log(`${isChecked ? '✅' : '❌'} Slider L1 "${categoryName}" ${isChecked ? 'activé' : 'désactivé'} → ${allL3Checkboxes.length} L3 et ${allL2Tags.length} L2 ${isChecked ? 'activés' : 'désactivés'}`);
-            
             // Déclencher le filtrage
-            filterAndShowMarkersByCapabilities();
+            // ...removed duplicate call...
+                filterAndShowApplications();
         });
     });
     
@@ -584,15 +580,14 @@ function setupHybridControls() {
             if (isChecked) {
                 // Slider activé → Cases L3 cochées → L2 activé
                 l2Tag.classList.add('active');
-                console.log(`✅ Slider L2 activé → L2 "${l2Name}" activé automatiquement`);
             } else {
                 // Slider désactivé → Cases L3 décochées → L2 désactivé
                 l2Tag.classList.remove('active');
-                console.log(`❌ Slider L2 désactivé → L2 "${l2Name}" désactivé automatiquement`);
             }
             
             // Déclencher le filtrage
-            filterAndShowMarkersByCapabilities();
+            // ...removed duplicate call...
+                filterAndShowApplications();
         });
     });
 }
@@ -604,6 +599,15 @@ async function initializeCapabilities(capData, appData) {
     
     // Stocker les données globalement
     capabilities = capData;
+    // Enrichir chaque application avec le champ parent (et autres champs du mapping si besoin)
+    if (window.appCapabilitiesUnified) {
+        appData.forEach(app => {
+            const mapping = window.appCapabilitiesUnified[app.name];
+            if (mapping && mapping.parent) {
+                app.parent = mapping.parent;
+            }
+        });
+    }
     window.allApplications = appData; // toutes les applications, y compris hidden:true
     allApplications = appData.filter(app => app.hidden !== true); // uniquement les visibles
     
@@ -618,54 +622,40 @@ async function initializeCapabilities(capData, appData) {
     currentFilteredApps = [...allApplications];
     
     // Assigner la fonction à la variable globale pour l'accès depuis d'autres scopes
-    globalFilterFunction = filterAndShowMarkersByCapabilities;
+    // ...removed duplicate assignment...
+        globalFilterFunction = filterAndShowApplications;
     
     // Configurer les contrôles hybrides
     setupHybridControls();
     
     // Associer la fonction de filtrage au formulaire
-    capabilitiesForm.onchange = filterAndShowMarkersByCapabilities;
+    // ...removed duplicate assignment...
+        capabilitiesForm.onchange = filterAndShowApplications;
     
     // Filtrage initial
-    filterAndShowMarkersByCapabilities();
+    // ...removed duplicate call...
+        filterAndShowApplications();
 }
 
 // Recherche d'applications
 function initializeSearch() {
-    console.log('🔍 initializeSearch appelée');
-    console.log('🔍 DOM ready state:', document.readyState);
     
     // Debug complet de la structure DOM
     const sidebar = document.getElementById('sidebar');
     const searchContainer = document.querySelector('.search-container');
     const searchInput = document.getElementById('search-input');
-    
-    console.log('🔍 Sidebar trouvé:', !!sidebar);
-    console.log('🔍 Search container trouvé:', !!searchContainer);
-    console.log('🔍 Search input trouvé:', !!searchInput);
-    
-    if (sidebar) {
-        console.log('🔍 Sidebar innerHTML:', sidebar.innerHTML.substring(0, 500));
-        console.log('🔍 Sidebar className:', sidebar.className);
-    }
-    
-    if (searchContainer) {
-        console.log('🔍 Search container style:', searchContainer.style.cssText);
-        console.log('🔍 Search container display:', window.getComputedStyle(searchContainer).display);
-        console.log('🔍 Search container visibility:', window.getComputedStyle(searchContainer).visibility);
-    }
-    
+        
     if (!searchInput) {
-        console.error('❌ Élément search-input introuvable !');
-        console.log('🔍 Tous les inputs dans sidebar:', sidebar ? sidebar.querySelectorAll('input') : 'pas de sidebar');
-        return;
+    console.error('❌ Élément search-input introuvable !');
+    return;
     }
     let searchResults = [];
     
     function searchApplications(searchTerm) {
         if (!searchTerm.trim()) {
             searchResults = [];
-            filterAndShowMarkersByCapabilities();
+            // ...removed duplicate call...
+                filterAndShowApplications();
             return;
         }
         
@@ -849,15 +839,13 @@ function initializeCategoriesFilter() {
         `;
         
         // Événement de changement pour filtrer
-        checkbox.addEventListener('change', filterBySelectedCategories);
+    checkbox.addEventListener('change', filterAndShowApplications);
         
         checkboxContainer.appendChild(checkbox);
         checkboxContainer.appendChild(label);
         categoriesList.appendChild(checkboxContainer);
     });
 }
-
-
 
 // Fonction pour afficher les détails des L4 dans une popup
 function showL4Details(l3Id, appName) {
@@ -986,6 +974,6 @@ function closeL4Popup() {
 
 window.initializeCapabilities = initializeCapabilities;
 window.initializeSearch = initializeSearch;
-window.filterAndShowMarkersByCapabilities = filterAndShowMarkersByCapabilities;
+window.filterAndShowMarkersByCapabilities = filterAndShowApplications;
 window.showL4Details = showL4Details;
 window.closeL4Popup = closeL4Popup;
