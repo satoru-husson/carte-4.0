@@ -183,20 +183,19 @@
                 const regionCountries = regionGroups[regionName];
                 if (regionCountries.length === 0) return;
 
-                // Calculer le nombre d'applications distinctes dans la région
-                const uniqueApps = new Set();
+                // 1. Récupérer toutes les applications distinctes de la région selon la sélection courante (items)
+                const regionAppsSet = new Set();
                 regionCountries.forEach(countryData => {
-                    countryData.apps.forEach(app => {
-                        uniqueApps.add(app.name);
-                    });
+                    countryData.apps.forEach(app => regionAppsSet.add(app.name));
                 });
-                
-                const totalApps = uniqueApps.size;
-                
-                // Utiliser la fonction dynamique pour obtenir les apps uniques de cette région
-                const uniqueAppsResult = getUniqueAppsForRegion(regionName);
-                const regionOnlyApps = uniqueAppsResult.count;
-                
+                const allRegionApps = Array.from(regionAppsSet);
+                const allAppsFlat = Object.values(window.allApplications).flat();
+                // 2. Calculer les applications uniques à la région (présentes uniquement dans cette région)
+                const uniqueRegionApps = allRegionApps.map(name => allAppsFlat.find(app => app.name === name))
+                    .filter(app => Array.isArray(app.regions) && app.regions.length === 1 && app.regions[0] === regionName);
+                const totalApps = allRegionApps.length;
+                const regionOnlyApps = uniqueRegionApps.length;
+                // 3. Ratio unique/total
                 const progressPercentage = totalApps > 0 ? Math.round((regionOnlyApps / totalApps) * 100) : 0;
                 const regionCenter = regionCenters[regionName];
                 if (!regionCenter) return;
@@ -483,19 +482,14 @@
             const infoPanel = document.getElementById('info-panel');
             const sidebar = document.getElementById('sidebar');
             
-            // Collecter toutes les applications de la région (sans doublons)
-            const uniqueAppNames = new Set();
-            const allRegionApps = [];
+            // Collecter toutes les applications distinctes de la région
+            const allAppsFlat = Object.values(window.allApplications).flat();
+            const regionAppsSet = new Set();
             regionCountries.forEach(countryData => {
-                if (countryData.apps.length > 0) {
-                    countryData.apps.forEach(app => {
-                        if (!uniqueAppNames.has(app.name)) {
-                            uniqueAppNames.add(app.name);
-                            allRegionApps.push(app);
-                        }
-                    });
-                }
+                countryData.apps.forEach(app => regionAppsSet.add(app.name));
             });
+            const allRegionApps = Array.from(regionAppsSet).map(name => allAppsFlat.find(app => app.name === name));
+
             // Grouper toutes les applications par catégorie
             const groupedApps = {};
             allRegionApps.forEach(app => {
@@ -503,30 +497,31 @@
                 if (!groupedApps[cat]) groupedApps[cat] = [];
                 groupedApps[cat].push(app.name);
             });
-            
-            // Créer le HTML avec bouton retour
-            let html = `<div style=\"display: flex; align-items: center; margin-bottom: 8px;\">
-                <button onclick=\"window.showAllApplications()\" class=\"back-button\" style=\"margin-right: 10px; background: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 4px 10px; font-size: 1em; font-weight: bold; cursor: pointer;\">← Back</button>
-                <h4 style=\"margin: 0; color: #d32f2f; font-size: 1.4em; line-height: 1.2;\">${regionName}</h4>
-            </div>`;
 
-            // Calculer les applications uniques à la région
-            const uniqueRegion = getUniqueAppsForRegion(regionName.toLowerCase());
-            const uniqueCount = uniqueRegion.count;
-            const uniqueNames = uniqueRegion.apps;
+            // Créer le HTML avec bouton retour
+            let html = `<div style=\"display: flex; align-items: center; margin-bottom: 8px;\">`
+                + `<button onclick=\"window.showAllApplications()\" class=\"back-button\" style=\"margin-right: 10px; background: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 4px 10px; font-size: 1em; font-weight: bold; cursor: pointer;\">← Back</button>`
+                + `<h4 style=\"margin: 0; color: #d32f2f; font-size: 1.4em; line-height: 1.2;\">${regionName}</h4>`
+                + `</div>`;
+
+            // Calculer les applications uniques à la région (exclusives)
+            const uniqueRegionApps = allRegionApps.filter(app =>
+                Array.isArray(app.regions) && app.regions.length === 1 && app.regions[0] === regionName.toLowerCase()
+            );
+            const uniqueCount = uniqueRegionApps.length;
 
             // Calculer les applications multi-régions (présentes dans cette région ET au moins une autre)
-            const allAppsFlat = Object.values(window.allApplications).flat();
-            const multiRegionApps = allAppsFlat.filter(app => Array.isArray(app.regions) && app.regions.length > 1 && app.regions.includes(regionName.toLowerCase()));
+            const multiRegionApps = allRegionApps.filter(app =>
+                Array.isArray(app.regions) && app.regions.length > 1 && app.regions.includes(regionName.toLowerCase())
+            );
             const multiCount = multiRegionApps.length;
-            const multiNames = multiRegionApps.map(app => app.name);
 
             // Boutons pour afficher les uniques et multi-régions
-            html += `<div style="display: flex; align-items: center; gap: 10px; margin: 5px 0 8px 0;">
-                <button id="showAllRegionAppsBtn" style="background: #1976d2; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 1em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">All Applications (${allRegionApps.length})</button>
-                <button id="showUniqueRegionAppsBtn" style="background: #66BB6A; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 0.95em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">${uniqueCount} unique</button>
-                <button id="showMultiRegionAppsBtn" style="background: #BA68C8; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 0.95em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">${multiCount} multi regions</button>
-            </div>`;
+            html += `<div style=\"display: flex; align-items: center; gap: 10px; margin: 5px 0 8px 0;\">`
+                + `<button id=\"showAllRegionAppsBtn\" style=\"background: #1976d2; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 1em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);\">All Applications (${allRegionApps.length})</button>`
+                + `<button id=\"showUniqueRegionAppsBtn\" style=\"background: #66BB6A; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 0.95em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);\">${uniqueCount} unique</button>`
+                + `<button id=\"showMultiRegionAppsBtn\" style=\"background: #BA68C8; color: white; border: none; border-radius: 15px; padding: 3px 10px; font-size: 0.95em; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);\">${multiCount} multi regions</button>`
+                + `</div>`;
 
             // Générer la liste HTML par catégorie
             function generateAppList(grouped, color) {
@@ -555,7 +550,6 @@
             const appListContainer = document.getElementById('appListContainer');
             const uniqueBtn = document.getElementById('showUniqueRegionAppsBtn');
             const multiBtn = document.getElementById('showMultiRegionAppsBtn');
-
             const allBtn = document.getElementById('showAllRegionAppsBtn');
             if (allBtn && appListContainer) {
                 allBtn.addEventListener('click', () => {
@@ -569,9 +563,8 @@
             if (uniqueBtn && appListContainer) {
                 uniqueBtn.addEventListener('click', () => {
                     // Générer la liste des uniques par catégorie
-                    const uniqueApps = allAppsFlat.filter(app => uniqueNames.includes(app.name));
                     const groupedUnique = {};
-                    uniqueApps.forEach(app => {
+                    uniqueRegionApps.forEach(app => {
                         const cat = app.category || "Autre";
                         if (!groupedUnique[cat]) groupedUnique[cat] = [];
                         groupedUnique[cat].push(app.name);

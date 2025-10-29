@@ -53,42 +53,35 @@
   fetch('bc-mapping.json').then(r=>r.json()).then(d=>{ bc=d._hierarchy; maybeInit(); });
   fetch('l3-descriptions.json').then(r=>r.json()).then(d=>{ l3Descriptions=d.L3_DESCRIPTIONS||{}; maybeInit(); });
 
+  document.addEventListener('DOMContentLoaded', function() {
+  });
+
   function maybeInit() {
     if (data && bc && bcdefs && Object.keys(bcdefs).length > 0) fillSelects();
   }
     function fillSelects() {
       let apps=Object.keys(data);
       app1.innerHTML = app2.innerHTML = apps.map(a=>`<option>${a}</option>`).join('');
-      
-      // Récupérer les applications sélectionnées depuis localStorage
-      const savedApps = localStorage.getItem('comparatorApps');
       const infoDiv = document.getElementById('selected-apps-info');
-      
-      if (savedApps) {
-        try {
-          const comparatorApps = JSON.parse(savedApps);
-          console.log('📋 Applications récupérées du comparateur:', comparatorApps);
-          
-          // Présélectionner les applications si elles existent
-          if (comparatorApps.length >= 1) {
-            app1.value = comparatorApps[0].name;
-          }
-          if (comparatorApps.length >= 2) {
-            app2.value = comparatorApps[1].name;
-          }
-        } catch (e) {
-          console.error('Erreur lors de la récupération des applications du comparateur:', e);
-          infoDiv.innerHTML = '';
-          // Valeurs par défaut
-          if (!app1.value) app1.value = apps[0];
-          if (!app2.value) app2.value = apps[1] || apps[0];
-        }
-      } else {
-        // Aucune application sauvegardée
-        infoDiv.innerHTML = '';
-        if (!app1.value) app1.value = apps[0];
-        if (!app2.value) app2.value = apps[1] || apps[0];
+
+      // --- Présélection via URL UNIQUEMENT ---
+      function getUrlParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
       }
+      const urlApp1 = getUrlParam('app1');
+      const urlApp2 = getUrlParam('app2');
+      if (urlApp1 && apps.includes(urlApp1)) {
+        app1.value = urlApp1;
+      } else {
+        app1.value = apps[0];
+      }
+      if (urlApp2 && apps.includes(urlApp2)) {
+        app2.value = urlApp2;
+      } else {
+        app2.value = apps[1] || apps[0];
+      }
+      infoDiv.innerHTML = '';
       
       app1.onchange=app2.onchange=show;
       

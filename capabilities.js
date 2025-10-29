@@ -114,7 +114,6 @@ function addCurrentAppAndOpenComparator() {
             name: currentDisplayedApp.name,
             data: currentDisplayedApp.data
         }];
-        localStorage.setItem('comparatorApps', JSON.stringify(comparatorApps));
         openComparatorPage();
     }
 }
@@ -125,26 +124,12 @@ function addToComparator(appName, appData) {
 }
 
 function openComparatorPage() {
-    // Sauvegarder les applications dans localStorage
-    localStorage.setItem('comparatorApps', JSON.stringify(comparatorApps));
     
     // Ouvrir le comparateur dans un nouvel onglet
     window.open('comparateur.html', '_blank');
 }
 
 
-// Charger les applications du comparateur depuis localStorage
-function loadComparatorFromStorage() {
-    try {
-        const saved = localStorage.getItem('comparatorApps');
-        if (saved) {
-            comparatorApps = JSON.parse(saved);
-        }
-    } catch (error) {
-        console.warn('Erreur lors du chargement du comparateur:', error);
-        comparatorApps = [];
-    }
-}
 
 // Fonction pour charger les données BC L4
 async function loadBCL4Data() {
@@ -781,8 +766,6 @@ window.openComparatorPage = openComparatorPage;
 window.updateComparatorButtons = updateComparatorButtons;
 window.comparatorApps = comparatorApps;
 
-// Charger le comparateur au démarrage
-loadComparatorFromStorage();
 
 // Initialisation de la liste des catégories avec cases à cocher
 function initializeCategoriesFilter() {

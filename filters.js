@@ -82,7 +82,7 @@ function displayApplicationCapabilities(appName, appData) {
                 <button onclick="showAllApplicationsAndRecolor()" class="back-button">← Back</button>
             </div>
             <div style="display: flex; gap: 8px; align-items: center;">
-                <button id="open-comparator-btn" onclick="addCurrentAppAndOpenComparator()" style="
+                <button id="open-comparator-btn" style="
                     background: #4CAF50;
                     color: white;
                     border: none;
@@ -133,6 +133,13 @@ function displayApplicationCapabilities(appName, appData) {
         capabilitiesHTML += `<p>Aucune capability trouvée pour cette application.</p>`;
     }
     infoPanel.innerHTML = capabilitiesHTML;
+    // Remplacer le comportement du bouton pour ouvrir comparateur.html avec INES et Matrix
+    const assessmentBtn = document.getElementById('open-comparator-btn');
+    if (assessmentBtn) {
+        assessmentBtn.onclick = function() {
+            window.open('comparateur.html?app1=INES&app2=Matrix', '_blank');
+        };
+    }
     attachL4BlockEventListeners();
 }
 
