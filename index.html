@@ -622,7 +622,8 @@
             // Ajouter l'événement de désélection
             deselectButton.onclick = function() {
                 hideSelectedAppButton();
-                resetCountryColors();
+                // Recolorier la carte selon les filtres actifs
+                if (typeof filterAndShowApplications === 'function') filterAndShowApplications();
                 // Réinitialiser tous les styles des applications
                 document.querySelectorAll('.sidebar-item').forEach(e => {
                     e.style.fontWeight = 'normal';
@@ -766,8 +767,6 @@
                     }
                 });
                 
-                console.log(`✅ Injection terminée: ${injectionCount}/${appData.length} applications ont reçu des données unifiées`);
-
                 // Stocker bcMapping globalement pour l'accès depuis capabilities.js
                 window.bcMapping = bcMapping;
                 

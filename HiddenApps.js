@@ -88,6 +88,10 @@ function getUniqueAppsForRegion(regionName, allApps) {
         console.warn('[getUniqueAppsForRegion] allApps n\'est pas un tableau');
         return { count: 0, apps: [] };
     }
+    // Permet de masquer les boutons Matrix de l'extérieur (ex: bouton Back)
+    window.hideMatrixFloatingButtons = function() {
+        container.style.display = 'none';
+    };
     // Filtrer les apps qui ont regions comme tableau et qui ne sont présentes que dans cette région
     const uniqueApps = allApps.filter(app => {
         if (!Array.isArray(app.regions)) return false;
@@ -96,167 +100,6 @@ function getUniqueAppsForRegion(regionName, allApps) {
         return regionsNorm.length === 1 && regionsNorm[0] === regionName.trim().toLowerCase();
     }).map(app => app.name);
     return { count: uniqueApps.length, apps: uniqueApps };
-}
-/**
- * Affiche les boutons flottants des variantes Matrix sur la carte (8 boutons)
- * Cette fonction remplace l'ancienne showMatrixVariantsButtons de index.html
- */
-function showMatrixVariantsButtons() {
-    // Masquer le container du bouton normal
-    const normalContainer = document.getElementById('selected-app-container');
-    if (normalContainer) normalContainer.style.display = 'none';
-
-    // Chercher les variantes Matrix dans la liste globale (hidden: true, nom commence par 'Matrix ')
-    let matrixVariants = [];
-    if (window.allApplications) {
-        matrixVariants = window.allApplications.filter(app => app.hidden === true && app.name.startsWith('Matrix '));
-    }
-    if (!matrixVariants || matrixVariants.length === 0) {
-        return;
-    }
-    // Créer ou récupérer le container des boutons Matrix
-    let matrixContainer = document.getElementById('matrix-variants-container');
-    if (!matrixContainer) {
-        matrixContainer = document.createElement('div');
-        matrixContainer.id = 'matrix-variants-container';
-        matrixContainer.style.cssText = `
-            position: fixed;
-            top: max(20px, 5vh);
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            max-width: 90vw;
-        `;
-        document.body.appendChild(matrixContainer);
-    }
-    // Déterminer le pays sélectionné (si présent)
-    let selectedCountry = window.selectedCountryName;
-    let selectedRegion = window.selectedRegionName;
-    // Afficher tous les boutons, mais colorier ceux qui couvrent le pays ou la région sélectionné(e)
-    let buttonsHTML = '';
-    matrixVariants.forEach(variant => {
-        const shortName = variant.name.replace('Matrix ', '');
-        let isHighlighted = false;
-        if (selectedCountry && Array.isArray(variant.countries) && variant.countries.includes(selectedCountry)) {
-            isHighlighted = true;
-        } else if (
-            selectedRegion &&
-            Array.isArray(variant.regions) &&
-            variant.regions.map(r => (r + '').toUpperCase()).includes(selectedRegion.toUpperCase())
-        ) {
-            isHighlighted = true;
-        }
-        // On ajoute une classe pour pouvoir cibler les boutons région déployés
-        const extraClass = isHighlighted ? ' matrix-variant-deployed' : '';
-        const buttonColor = isHighlighted ? '#d32f2f' : '#1976d2';
-        buttonsHTML += `
-            <button class="matrix-variant-button${extraClass}" data-variant='${JSON.stringify(variant)}' 
-                    style="background: ${buttonColor}; color: white; border: none; border-radius: 25px; padding: 12px 18px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s ease; text-align: center; white-space: nowrap; min-width: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <div style=\"font-size: 14px; font-weight: bold;\">${shortName}</div>
-                <div style=\"font-size: 12px; margin-top: 2px; opacity: 0.9;\">${variant.category}</div>
-            </button>
-        `;
-    });
-    // Ajouter un bouton de fermeture discret à la fin
-    const closeButton = document.createElement('button');
-    closeButton.id = 'close-matrix-variants';
-    closeButton.innerHTML = '×';
-    closeButton.style.cssText = `
-        background: rgba(0,0,0,0.1);
-        color: #666;
-        border: none;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        font-size: 18px;
-        font-weight: normal;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-        margin-left: 10px;
-    `;
-
-    matrixContainer.innerHTML = buttonsHTML;
-    matrixContainer.appendChild(closeButton);
-    matrixContainer.style.display = 'flex';
-
-    // Ajouter les événements aux boutons Matrix
-    matrixContainer.querySelectorAll('.matrix-variant-button').forEach(btn => {
-        btn.onmouseover = function() {
-            this.style.transform = 'translateY(-2px)';
-            this.style.boxShadow = '0 6px 16px rgba(0,0,0,0.4)';
-        };
-        btn.onmouseout = function() {
-            // Si ce bouton est sélectionné (vert), on ne change pas la couleur
-            if (this.style.background === 'rgb(67, 160, 71)' || this.style.background === '#43a047') {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-                return;
-            }
-            // Sinon, on remet rouge si déployé dans la région, sinon bleu
-            if (this.classList.contains('matrix-variant-deployed')) {
-                this.style.background = '#d32f2f';
-            } else {
-                this.style.background = '#1976d2';
-            }
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-        };
-        btn.onclick = function() {
-            const variant = JSON.parse(this.getAttribute('data-variant'));
-            // Tous les boutons redeviennent bleu (jamais rouge)
-            matrixContainer.querySelectorAll('.matrix-variant-button').forEach(b => {
-                b.style.background = '#1976d2';
-                b.style.transform = 'translateY(0)';
-                b.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-            });
-            // Marquer ce bouton comme sélectionné (vert)
-            this.style.background = '#43a047';
-            this.style.transform = 'translateY(-2px)';
-            this.style.boxShadow = '0 6px 16px rgba(0,0,0,0.4)';
-            // Afficher les capabilities de cette variante dans la sidebar
-            if (typeof window.displayApplicationCapabilities === 'function') {
-                window.displayApplicationCapabilities(variant.name, variant);
-            }
-            // Colorier les pays sur la carte pour cette variante spécifique
-            if (typeof window.resetCountryColors === 'function') window.resetCountryColors();
-            variant.countries.forEach(countryName => {
-                if (window.countryLayers && window.countryLayers[countryName]) {
-                    window.countryLayers[countryName].setStyle({
-                        fillColor: "#1976d2",
-                        fillOpacity: 0.5,
-                        color: "#1976d2",
-                        weight: 2
-                    });
-                }
-            });
-        };
-    });
-
-    // Événement de fermeture pour le bouton discret
-    closeButton.onmouseover = function() {
-        this.style.background = 'rgba(0,0,0,0.2)';
-        this.style.color = '#333';
-    };
-    closeButton.onmouseout = function() {
-        this.style.background = 'rgba(0,0,0,0.1)';
-        this.style.color = '#666';
-    };
-    closeButton.onclick = function() {
-        if (typeof window.hideMatrixVariantsButtons === 'function') window.hideMatrixVariantsButtons();
-        if (typeof window.resetCountryColors === 'function') window.resetCountryColors();
-        // Réinitialiser la sélection dans la sidebar
-        document.querySelectorAll('.sidebar-item').forEach(e => {
-            e.style.fontWeight = 'normal';
-        });
-    };
 }
 // HiddenApps.js
 // Utilitaires pour gérer les applications principales et leurs variantes cachées (hidden:true)
@@ -344,15 +187,31 @@ function renderFloatingButtons(mainAppName, selectedCountry, allApps, containerI
         document.body.appendChild(container);
     }
     let buttonsHTML = '';
+    const selectedVariantName = window.selectedMatrixVariantName;
     matrixVariants.forEach(variant => {
         const shortName = variant.name.replace(mainAppName + ' ', '');
         let isInCountry = false;
+        let isInRegion = false;
         if (selectedCountry && Array.isArray(variant.countries)) {
             isInCountry = variant.countries.includes(selectedCountry);
         }
-        const buttonColor = isInCountry ? '#d32f2f' : '#1976d2';
+        if (window.selectedRegionName && Array.isArray(variant.regions)) {
+            isInRegion = variant.regions.map(r => (r + '').toUpperCase()).includes(window.selectedRegionName.toUpperCase());
+        }
+        let buttonColor;
+        let extraClass = '';
+        // Always give priority to selected (green)
+        if (selectedVariantName === variant.name) {
+            buttonColor = '#43a047';
+            extraClass = ' matrix-variant-selected';
+        } else if (isInCountry || isInRegion) {
+            buttonColor = '#d32f2f';
+            extraClass = ' matrix-variant-deployed';
+        } else {
+            buttonColor = '#1976d2';
+        }
         buttonsHTML += `
-            <button class="matrix-variant-button" data-variant='${JSON.stringify(variant)}'
+            <button class="matrix-variant-button${extraClass}" data-variant='${JSON.stringify(variant)}'
                 style="background: ${buttonColor}; color: white; border: none; border-radius: 25px; padding: 12px 18px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s ease; text-align: center; white-space: nowrap; min-width: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                 <div style=\"font-size: 14px; font-weight: bold;\">${shortName}</div>
                 <div style=\"font-size: 12px; margin-top: 2px; opacity: 0.9;\">${variant.category}</div>
@@ -367,9 +226,48 @@ function renderFloatingButtons(mainAppName, selectedCountry, allApps, containerI
     container.querySelectorAll('.matrix-variant-button').forEach(btn => {
         btn.onclick = function() {
             const variant = JSON.parse(this.getAttribute('data-variant'));
+            // Si déjà sélectionné, on désélectionne
+            if (window.selectedMatrixVariantName === variant.name) {
+                window.selectedMatrixVariantName = null;
+                renderFloatingButtons(mainAppName, selectedCountry, allApps, containerId, onClick);
+                // Callback custom si fourni (optionnel, peut être appelé aussi à la désélection)
+                if (typeof onClick === 'function') onClick(null);
+                // Réafficher la sidebar (optionnel, peut être adapté)
+                if (typeof window.displayApplicationCapabilities === 'function') {
+                    window.displayApplicationCapabilities(null, null);
+                }
+                // Recolorier la carte selon le filtre général
+                if (typeof window.filterAndShowApplications === 'function') window.filterAndShowApplications();
+                return;
+            }
+            // Sinon, sélectionner comme avant
+            window.selectedMatrixVariantName = variant.name;
+            renderFloatingButtons(mainAppName, selectedCountry, allApps, containerId, onClick);
             if (typeof onClick === 'function') onClick(variant);
+            if (typeof window.displayApplicationCapabilities === 'function') {
+                window.displayApplicationCapabilities(variant.name, variant);
+            }
+            if (typeof window.resetCountryColors === 'function') window.resetCountryColors();
+            variant.countries.forEach(countryName => {
+                if (window.countryLayers && window.countryLayers[countryName]) {
+                    window.countryLayers[countryName].setStyle({
+                        fillColor: "#1976d2",
+                        fillOpacity: 0.5,
+                        color: "#1976d2",
+                        weight: 2
+                    });
+                }
+            });
         };
         btn.onmouseover = function() {
+            // On survole : si sélectionné (vert), ne pas changer la couleur
+            const variant = JSON.parse(this.getAttribute('data-variant'));
+            if (window.selectedMatrixVariantName === variant.name) {
+                this.style.background = '#43a047';
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 6px 16px rgba(0,0,0,0.4)';
+                return;
+            }
             this.style.background = '#1565c0';
             this.style.transform = 'translateY(-2px)';
             this.style.boxShadow = '0 6px 16px rgba(0,0,0,0.4)';
@@ -377,10 +275,21 @@ function renderFloatingButtons(mainAppName, selectedCountry, allApps, containerI
         btn.onmouseout = function() {
             const variant = JSON.parse(this.getAttribute('data-variant'));
             let isInCountry = false;
+            let isInRegion = false;
             if (selectedCountry && Array.isArray(variant.countries)) {
                 isInCountry = variant.countries.includes(selectedCountry);
             }
-            this.style.background = isInCountry ? '#d32f2f' : '#1976d2';
+            if (window.selectedRegionName && Array.isArray(variant.regions)) {
+                isInRegion = variant.regions.map(r => (r + '').toUpperCase()).includes(window.selectedRegionName.toUpperCase());
+            }
+            // Si ce bouton est sélectionné (vert), on ne change pas la couleur
+            if (window.selectedMatrixVariantName === variant.name) {
+                this.style.background = '#43a047';
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+                return;
+            }
+            this.style.background = (isInCountry || isInRegion) ? '#d32f2f' : '#1976d2';
             this.style.transform = '';
             this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
         };
@@ -390,6 +299,8 @@ function renderFloatingButtons(mainAppName, selectedCountry, allApps, containerI
     if (closeBtn) {
         closeBtn.onclick = function() {
             container.style.display = 'none';
+            // Recolorier la carte selon les filtres actifs
+            if (typeof window.filterAndShowApplications === 'function') window.filterAndShowApplications();
         };
     }
 }
@@ -413,9 +324,8 @@ function handleMatrixButtonsOnSelection(appName) {
             window.hideMatrixVariantsButtons();
         }
     } else {
-        if (typeof window.showMatrixVariantsButtons === 'function') {
-            window.showMatrixVariantsButtons();
-        }
+        // Appel direct à la fonction généraliste
+        renderFloatingButtons('Matrix', window.selectedCountryName, window.allApplications, 'matrix-variants-container');
     }
 }
 
@@ -492,7 +402,6 @@ window.HiddenApps = {
     renderFloatingButtons,
     setSelectedCountry,
     handleMatrixButtonsOnSelection,
-    showMatrixVariantsButtons,
     getUniqueAppsForRegion,
     getCombinedMatrixForCountry,
     getCombinedMatrixForRegion,

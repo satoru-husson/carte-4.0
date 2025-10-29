@@ -79,7 +79,7 @@ function displayApplicationCapabilities(appName, appData) {
         <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h3 class="app-title">${appTitle}</h3>
-                <button onclick="showAllApplications()" class="back-button">← Back</button>
+                <button onclick="showAllApplicationsAndRecolor()" class="back-button">← Back</button>
             </div>
             <div style="display: flex; gap: 8px; align-items: center;">
                 <button id="open-comparator-btn" onclick="addCurrentAppAndOpenComparator()" style="
@@ -137,6 +137,18 @@ function displayApplicationCapabilities(appName, appData) {
 }
 
 window.displayApplicationCapabilities = displayApplicationCapabilities;
+// Ajoute une fonction globale pour revenir à la liste et recolorer
+function showAllApplicationsAndRecolor() {
+    if (typeof showAllApplications === 'function') showAllApplications();
+    if (typeof filterAndShowApplications === 'function') filterAndShowApplications();
+    // Masquer le container Matrix (robuste)
+    var matrixContainer = document.getElementById('matrix-variants-container');
+    if (matrixContainer) matrixContainer.style.display = 'none';
+    if (window.hideMatrixFloatingButtons) window.hideMatrixFloatingButtons();
+    // Masquer aussi le bouton flottant de sélection d'application
+    if (typeof hideSelectedAppButton === 'function') hideSelectedAppButton();
+}
+window.showAllApplicationsAndRecolor = showAllApplicationsAndRecolor;
 // Fonction pour filtrer les applications selon les catégories sélectionnées
 // Fonction pour afficher les applications filtrées par catégories dans la sidebar
 function displayCategoryFilteredApplications(apps, selectedCategories) {

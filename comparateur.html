@@ -26,10 +26,20 @@
         </div>
       </div>
     </div>
-    <div class="comparison-area">
-      <div id="result"></div>
+    <div class="comparison-area" style="margin-top:1.5em;">
+      <div style="display:flex; align-items:center; gap:18px; margin-bottom:10px;">
+        <label style="font-weight:bold;">Affichage :</label>
+        <input type="range" id="toggle-slider" min="0" max="1" value="0" style="width:80px;">
+        <span id="slider-label" style="font-weight:bold; color:#1976d2;">Tableau</span>
+      </div>
+      <div id="result" style="display:block;"></div>
+      <div id="radar-charts" style="display:none; flex-direction:column; gap:32px; align-items:center; justify-content:flex-start; min-width:1174px; min-height:1174px; background:#fff; border:1px solid #ddd; border-radius:16px; box-shadow:0 2px 12px #0002; padding:40px 20px; margin:auto;">
+        <canvas id="radar-app-combo" width="1174" height="1174"></canvas>
+      </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="radarChart.js"></script>
   <script>
   let data, bc, level=1, l1Tab=null;
     let l2Tab=null;
@@ -149,7 +159,7 @@
     function show() {
   if(!data||!bc||!bcdefs) return;
       let a1=data[app1.value], a2=data[app2.value];
-        let html='<div class="comparison-table"><div class="table-header">';
+      let html='<div class="comparison-table"><div class="table-header">';
         if(l1Tab){
         html += `<h3>${getDef(l1Tab,1)}</h3>`;
         } else {
@@ -328,7 +338,7 @@
           Object.keys(bc).forEach(l1=>{
             const l1Def = getDef(l1,1);
             
-            // Calculer le pourcentage de L2 filles qui dépassent 20% de couverture
+            // Calculer le pourcentage de L2 filles qui ont plus de 20% de couverture
             const l2Keys = Object.keys(bc[l1]);
             const totalL2 = l2Keys.length;
             let app1L2Above20 = 0;
@@ -446,6 +456,109 @@
       
       // Mettre à jour le slider de niveau
       updateLevelSlider();
+      // --- RADAR CHART ---
+      let radarLabels = [];
+      let app1Data = [];
+      let app2Data = [];
+      let radarTitle = '';
+      if (!l1Tab && !l2Tab) {
+        // Level 1: axes = L1
+        radarLabels = Object.keys(bc).map(l1 => getDef(l1,1));
+        radarTitle = 'Coverage by L1';
+        app1Data = radarLabels.map((_,i) => {
+          const l1 = Object.keys(bc)[i];
+          // % de L2 >20% couverts
+          const l2Keys = Object.keys(bc[l1]);
+          let app1L2Above20 = 0;
+          l2Keys.forEach(l2 => {
+            const l3Children = Object.keys(bc[l1][l2]);
+            const totalL3 = l3Children.length;
+            if (totalL3 > 0) {
+              const app1CoveredL3 = l3Children.filter(l3 => a1.l3 && a1.l3.includes(l3)).length;
+              const app1PercentL2 = (app1CoveredL3 / totalL3) * 100;
+              if (app1PercentL2 >= 20) app1L2Above20++;
+            }
+          });
+          return l2Keys.length > 0 ? Math.round((app1L2Above20 / l2Keys.length) * 100) : 0;
+        });
+        app2Data = radarLabels.map((_,i) => {
+          const l1 = Object.keys(bc)[i];
+          const l2Keys = Object.keys(bc[l1]);
+          let app2L2Above20 = 0;
+          l2Keys.forEach(l2 => {
+            const l3Children = Object.keys(bc[l1][l2]);
+            const totalL3 = l3Children.length;
+            if (totalL3 > 0) {
+              const app2CoveredL3 = l3Children.filter(l3 => a2.l3 && a2.l3.includes(l3)).length;
+              const app2PercentL2 = (app2CoveredL3 / totalL3) * 100;
+              if (app2PercentL2 >= 20) app2L2Above20++;
+            }
+          });
+          return l2Keys.length > 0 ? Math.round((app2L2Above20 / l2Keys.length) * 100) : 0;
+        });
+      } else if (l1Tab && !l2Tab) {
+        // Level 2: axes = L2 du L1 sélectionné
+        radarLabels = Object.keys(bc[l1Tab]).map(l2 => getDef(l2,2));
+        radarTitle = getDef(l1Tab,1) + ' - Coverage by L2';
+        app1Data = radarLabels.map((_,i) => {
+          const l2 = Object.keys(bc[l1Tab])[i];
+          const l3Children = Object.keys(bc[l1Tab][l2]);
+          const totalL3 = l3Children.length;
+          const app1CoveredL3 = l3Children.filter(l3 => a1.l3 && a1.l3.includes(l3)).length;
+          return totalL3 > 0 ? Math.round((app1CoveredL3 / totalL3) * 100) : 0;
+        });
+        app2Data = radarLabels.map((_,i) => {
+          const l2 = Object.keys(bc[l1Tab])[i];
+          const l3Children = Object.keys(bc[l1Tab][l2]);
+          const totalL3 = l3Children.length;
+          const app2CoveredL3 = l3Children.filter(l3 => a2.l3 && a2.l3.includes(l3)).length;
+          return totalL3 > 0 ? Math.round((app2CoveredL3 / totalL3) * 100) : 0;
+        });
+      } else if (l1Tab && l2Tab) {
+        // Level 3: axes = L3 du L2 sélectionné
+        radarLabels = Object.keys(bc[l1Tab][l2Tab]).map(l3 => getDef(l3,3));
+        radarTitle = getDef(l1Tab,1) + ' / ' + getDef(l2Tab,2) + ' - Coverage by L3';
+        app1Data = radarLabels.map((_,i) => {
+          const l3 = Object.keys(bc[l1Tab][l2Tab])[i];
+          const l4s = bc[l1Tab][l2Tab][l3] || [];
+          const l4Count = l4s.length;
+          const a1L4Count = l4s.filter(l4 => a1.l4 && a1.l4.includes(l4)).length;
+          return l4Count > 0 ? Math.round((a1L4Count / l4Count) * 100) : 0;
+        });
+        app2Data = radarLabels.map((_,i) => {
+          const l3 = Object.keys(bc[l1Tab][l2Tab])[i];
+          const l4s = bc[l1Tab][l2Tab][l3] || [];
+          const l4Count = l4s.length;
+          const a2L4Count = l4s.filter(l4 => a2.l4 && a2.l4.includes(l4)).length;
+          return l4Count > 0 ? Math.round((a2L4Count / l4Count) * 100) : 0;
+        });
+      }
+      // Afficher les radars
+      if (window.renderRadarChart) {
+        renderRadarChart('radar-app-combo', radarLabels, [
+          {label: app1.value, data: app1Data, color: '#1976d2'},
+          {label: app2.value, data: app2Data, color: '#d32f2f'}
+        ], radarTitle);
+      }
+      // --- FIN RADAR ---
+      // Affichage par défaut : tableau visible, radar caché
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('radar-charts').style.display = 'none';
+      // Gestion du slider
+      const slider = document.getElementById('toggle-slider');
+      const sliderLabel = document.getElementById('slider-label');
+      slider.value = 0;
+      slider.oninput = function() {
+        if (slider.value == '0') {
+          document.getElementById('result').style.display = 'block';
+          document.getElementById('radar-charts').style.display = 'none';
+          sliderLabel.textContent = 'Tableau';
+        } else {
+          document.getElementById('result').style.display = 'none';
+          document.getElementById('radar-charts').style.display = 'flex';
+          sliderLabel.textContent = 'Radar';
+        }
+      };
     }
   </script>
 </body>
